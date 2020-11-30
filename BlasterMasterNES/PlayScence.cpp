@@ -20,8 +20,11 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define SCENE_SECTION_SPRITES 3
 #define SCENE_SECTION_ANIMATIONS 4
 #define SCENE_SECTION_ANIMATION_SETS	5
-#define SCENE_SECTION_OBJECTS	6
-#define SCENE_SECTION_MAP	7
+#define Scene_Section_Objects	6
+#define Scene_Section_Map	7
+
+#define Scene_Section_AreaOnMap	8
+
 
 #define OBJECT_TYPE_MARIO	0
 #define OBJECT_TYPE_BRICK	1
@@ -36,8 +39,7 @@ void CPlayScene::_ParseSection_TEXTURES(string line)
 {
 	vector<string> tokens = split(line);
 
-	if (tokens.size() < 5) return; // skip invalid lines
-
+	if (tokens.size() < 5) return; 
 	int texID = atoi(tokens[0].c_str());
 	wstring path = ToWSTR(tokens[1]);
 	int R = atoi(tokens[2].c_str());
@@ -51,7 +53,7 @@ void CPlayScene::_ParseSection_SPRITES(string line)
 {
 	vector<string> tokens = split(line);
 
-	if (tokens.size() < 6) return; // skip invalid lines
+	if (tokens.size() < 6) return; 
 
 	int ID = atoi(tokens[0].c_str());
 	int l = atoi(tokens[1].c_str());
@@ -74,14 +76,11 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 {
 	vector<string> tokens = split(line);
 
-	if (tokens.size() < 3) return; // skip invalid lines - an animation must at least has 1 frame and 1 frame time
-
-	//DebugOut(L"--> %s\n",ToWSTR(line).c_str());
-
+	if (tokens.size() < 3) return; 
 	LPANIMATION ani = new CAnimation();
 
 	int ani_id = atoi(tokens[0].c_str());
-	for (int i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time
+	for (int i = 1; i < tokens.size(); i += 2)
 	{
 		int sprite_id = atoi(tokens[i].c_str());
 		int frame_time = atoi(tokens[i + 1].c_str());
@@ -95,7 +94,7 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 {
 	vector<string> tokens = split(line);
 
-	if (tokens.size() < 2) return; // skip invalid lines - an animation set must at least id and one animation id
+	if (tokens.size() < 2) return;
 
 	int ani_set_id = atoi(tokens[0].c_str());
 
@@ -117,60 +116,22 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 void CPlayScene::_ParseSection_OBJECTS(string line)
 {
 	vector<string> tokens = split(line);
-
-	//DebugOut(L"--> %s\n",ToWSTR(line).c_str());
-
-	if (tokens.size() < 3) return; // skip invalid lines - an object set must have at least id, x, y
+	if (tokens.size() < 3) return; 
 
 	int object_type = atoi(tokens[0].c_str());
 	float x = atof(tokens[1].c_str());
 	float y = atof(tokens[2].c_str());
-
 	int ani_set_id = atoi(tokens[3].c_str());
 
+	if (player == NULL)
+	{
+		player = new CHero(x, y);
+	}
+	player->SetPosition(x, y);
 	CAnimationSets * animation_sets = CAnimationSets::GetInstance();
-
-	CGameObject *obj = NULL;
-
-	switch (object_type)
-	{
-	case OBJECT_TYPE_MARIO:
-		if (player != NULL)
-		{
-			DebugOut(L"[ERROR] MARIO object was created before!\n");
-			return;
-		}
-		obj = new CHero(x, y);
-		player = (CHero*)obj;
-		obj->SetPosition(x, y);
-		DebugOut(L"[INFO] Player object created!\n");
-		break;
-
-	case OBJECT_TYPE_BRICK:
-		obj = new CBrick();
-		obj->SetPosition(x*16.f, y*16.f);
-		obj->state = atoi(tokens[6].c_str());
-		((CBrick*)obj)->SetRB(atof(tokens[4].c_str()) * 16, atof(tokens[5].c_str()) * 16);
-
-		break;
-
-	case OBJECT_TYPE_PORTAL:
-	{
-		float r = atof(tokens[4].c_str());
-		float b = atof(tokens[5].c_str());
-		int scene_id = atoi(tokens[6].c_str());
-		obj = new CPortal(x * 16, y * 16, r * 16, b * 16, scene_id);
-	}
-	break;
-	default:
-		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
-		return;
-	}
-
 	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
-
-	obj->SetAnimationSet(ani_set);
-	objects.push_back(obj);
+	player->SetAnimationSet(ani_set);
+	
 }
 
 void CPlayScene::_ParseSeciton_MAP(string line)
@@ -188,6 +149,24 @@ void CPlayScene::_ParseSeciton_MAP(string line)
 	map->LoadMatrix(mt.c_str());
 	map->CreateTilesFromTileSet();
 	DebugOut(L"[INFO] ----------------------------------\n");
+}
+
+void CPlayScene::_ParseSeciton_AreaOnMap(string line)
+{
+	vector<string> tokens = split(line);
+	if (tokens.size() < 2) return;
+
+	int index = atoi(tokens[0].c_str());
+	LPCWSTR path = ToLPCWSTR(tokens[1]);
+
+	CAreaOnMap * areaOnMap = new CAreaOnMap(index, path);
+	areaOnMap->GetAreaOnMap_Load();
+
+
+	listAreaOnMap[index] = areaOnMap;
+
+	//DebugOut(L"id: %d     size: %d\n", index, listAreaOnMap[index]->GetAreaOnMap_ListObj()->size());
+	//DebugOut(L"Playscence___   add areaonmap___id: %d___link: %s\n", atoi(tokens[0].c_str()), ToLPCWSTR(tokens[1]));
 }
 
 void CPlayScene::Load()
@@ -216,12 +195,17 @@ void CPlayScene::Load()
 			section = SCENE_SECTION_ANIMATION_SETS; continue;
 		}
 		if (line == "[OBJECTS]") {
-			section = SCENE_SECTION_OBJECTS; continue;
+			section = Scene_Section_Objects; continue;
 		}
 		if (line == "[MAP]") {
-			section = SCENE_SECTION_MAP; continue;
+			section = Scene_Section_Map; continue;
 		}
+		if (line == "[AREAONMAP]"){
+			section = Scene_Section_AreaOnMap; continue;
+		}
+
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
+
 
 		switch (section)
 		{
@@ -229,8 +213,9 @@ void CPlayScene::Load()
 		case SCENE_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
 		case SCENE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
 		case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
-		case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
-		case SCENE_SECTION_MAP:_ParseSeciton_MAP(line); break;
+		case Scene_Section_Objects: _ParseSection_OBJECTS(line); break;
+		case Scene_Section_Map:_ParseSeciton_MAP(line); break;
+		case Scene_Section_AreaOnMap: _ParseSeciton_AreaOnMap(line); break;
 		}
 	}
 
@@ -246,7 +231,7 @@ void CPlayScene::Update(DWORD dt)
 	if (player == NULL) return;
 
 	//Tính toán cx/cy
-	player->GetPosition(cx, cy);
+	/*player->GetPosition(cx, cy);
 	CGame *game = CGame::GetInstance();
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
@@ -260,27 +245,31 @@ void CPlayScene::Update(DWORD dt)
 	t1 = cy - 50;
 	r1 = cx + game->GetScreenWidth() + 100;
 	b1 = cy + game->GetScreenHeight() + 100;
-	float l2, t2, r2, b2;
+	float l2, t2, r2, b2;*/
 
 
 
 	
+	curObjects->clear();
+	curObjects->push_back(player);
 
-	for (int i = objects.size() - 1; i >= 0; i--) {
-		if (objects[i]->isDelete)
+	objects = listAreaOnMap[1]->GetAreaOnMap_ListObj();
+
+	for (int i = objects->size() - 1; i >= 0; i--) {
+		if (objects->at(i)->isDelete)
 		{
-			delete objects[i];
-			objects.erase(objects.begin() + i);
+			delete objects->at(i);
+			objects->erase(objects->begin() + i);
 		}
 		else {
-			objects[i]->GetBoundingBox(l2, t2, r2, b2);
-			if (game->IsScope(l1, t1, r1, b1, l2, t2, r2, b2) || game->IsScope(l2, t2, r2, b2, l1, t1, r1, b1))
-				curObjects->push_back(objects[i]);
+			/*objects->at(i)->GetBoundingBox(l2, t2, r2, b2);
+			if (game->IsScope(l1, t1, r1, b1, l2, t2, r2, b2) || game->IsScope(l2, t2, r2, b2, l1, t1, r1, b1))*/
+				curObjects->push_back(objects->at(i));
 		}
 	}
 
 	for (size_t i = 0; i < curObjects->size(); i++) {
-		curObjects->at(i)->Update(dt, curObjects, &objects);
+		curObjects->at(i)->Update(dt, curObjects, objects);
 	}
 	for (size_t i = 0; i < curObjects->size(); i++) {
 		curObjects->at(i)->LastUpdate();
@@ -288,13 +277,17 @@ void CPlayScene::Update(DWORD dt)
 
 
 	
-	player->GetPosition(cx, cy);
+	/*player->GetPosition(cx, cy);
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
 	cx = cx < 0 ? 0 : cx;
 	cy = cy < 0 ? 0 : cy;
 	cx = (cx + game->GetScreenWidth()) > map->GetMapWidth() ? cx = map->GetMapWidth() - game->GetScreenWidth() : cx;
-	cy = (cy + game->GetScreenHeight()) > map->GetMapHeiht() ? cy = map->GetMapHeiht() - game->GetScreenHeight() : cy;
+	cy = (cy + game->GetScreenHeight()) > map->GetMapHeiht() ? cy = map->GetMapHeiht() - game->GetScreenHeight() : cy;*/
+
+	player->GetPosition(cx, cy);
+	cx -= 50;
+	cy -= 50;
 	CGame::GetInstance()->SetCamPos(round(cx), round(cy));
 }
 
@@ -304,19 +297,19 @@ void CPlayScene::Render()
 		map->Render(cx, cy);
 	for (int i = 0; i < curObjects->size(); i++)
 		curObjects->at(i)->Render();
-	curObjects->clear();
+	
 	
 }
 
 void CPlayScene::Unload()
 {
-	for (int i = 0; i < objects.size(); i++)
+	/*for (int i = 0; i < objects.size(); i++)
 		delete objects[i];
 
 	objects.clear();
 	player = NULL;
 
-	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
+	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);*/
 }
 
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)

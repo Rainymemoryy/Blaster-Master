@@ -24,9 +24,6 @@
     <ClCompile Include="Bullet2.cpp">
       <Filter>Bullet</Filter>
     </ClCompile>
-    <ClCompile Include="CBullet3.cpp">
-      <Filter>Bullet</Filter>
-    </ClCompile>
     <ClCompile Include="Animations.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
@@ -63,6 +60,14 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
+    <ClCompile Include="Bullet3.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy4.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy5.cpp" />
+    <ClCompile Include="AreaOnMap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Hero.h" />
@@ -130,6 +135,11 @@
     <ClInclude Include="GameObject.h">
       <Filter>Framework</Filter>
     </ClInclude>
+    <ClInclude Include="Enemy4.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy5.h" />
+    <ClInclude Include="AreaOnMap.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Enemy">

@@ -6,26 +6,32 @@
 #include "Bullet.h"
 #include "Enemy.h"
 
-#define Enemy1_Box_Height	10
-#define Enemy1_Box_Width	18
-#define Enemy1_HP			100
-#define Enemy1_AY			0.0005f
-#define Enemy1_VX			0.05f
-#define Enemy1_VY			0.05f
+#define Enemy5_Box_Height	18
+#define Enemy5_Box_Width	18
+#define Enemy5_HP			100
+#define Enemy5_AY			0.0005f
+#define Enemy5_VX			0.05f
+#define Enemy5_VY			0.05f
 
-#define Enemy1_AniSet		801
-#define Enemy1_Ani_Left		0
-#define Enemy1_Ani_Right	1
-
-#define Enemy1_Damge       25.f
-#define Enemy1_Jump			0.2f
+#define Enemy5_MaxD			100.f
 
 
-class CEnemy1 : public CEnemy
+#define Enemy5_AniSet		805
+#define Enemy5_Ani_Left		0
+#define Enemy5_Ani_Right	1
+
+#define Enemy5_Damge		25.f
+#define Enemy5_Jump			0.2f
+
+#define Enemy5_TimeDoiHuong	3000
+
+class CEnemy5 : public CEnemy
 {
+	int timeDoiHuong = -1;
+	bool followHero = false;
 public:
 
-	CEnemy1();
+	CEnemy5();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL, vector<LPGAMEOBJECT> *listObj = NULL);
 	virtual void Render();
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);

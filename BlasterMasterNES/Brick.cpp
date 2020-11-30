@@ -1,8 +1,18 @@
 #include "Brick.h"
 
+
+
+CBrick::CBrick(float l, float t, float r, float b)
+{
+	this->x = l;
+	this->y = t; 
+	this->r = r;
+	this->b = b;
+}
+
 void CBrick::Render()
 {
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 void CBrick::GetBoundingBox(float &l, float &t, float &r, float &b)

@@ -2,6 +2,8 @@
 #include "Enemy1.h"
 #include "Enemy2.h"
 #include "Enemy3.h"
+#include "Enemy4.h"
+#include "Enemy5.h"
 
 
 #include "Bullet.h"
@@ -344,12 +346,26 @@ void CHero::SetState(int state)
 
 
 	if (state == AddEnemy) {
-		CGameObject *obj = new CEnemy2();
+		CGameObject *obj = new CEnemy5();
 		listObj->push_back(obj);
 	}
 	if (state == Bullet3) {
-		for (int k = 0; k < 10; k++) {
-			CBullet3 *obj = new CBullet3();
+		
+		vector<LPGAMEOBJECT> *listTarget;
+		for (int i = 0; i < listObj->size(); i++)
+		{
+			LPGAMEOBJECT e = listObj->at(i);
+			if (dynamic_cast<CEnemy*>(e))
+			{
+				
+
+				
+				break;
+			}
+		}
+		
+
+			/*CBullet3 *obj = new CBullet3();
 			obj->SetPosition(x, y);
 			obj->SetState(Bullet_Hero);
 
@@ -363,8 +379,8 @@ void CHero::SetState(int state)
 					listObj->push_back(obj);
 					break;
 				}
-			}
-		}
+			}*/
+		
 	}
 	if (state == STATE_VAOXE) {
 		if (sldf_coTheVaoXe) {
@@ -554,7 +570,6 @@ void CHero::SetState(int state)
 			vx = 0;
 			break;
 		case STATE_SLOC_NHAY:
-
 			if (sloc_coTheNhay&&vy < 0.1) {
 				vy = -SLOC_VY;
 				sloc_coTheNhay = false;

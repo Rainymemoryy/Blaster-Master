@@ -5,16 +5,23 @@
 #include "GameObject.h"
 #include "Brick.h"
 #include "Hero.h"
-
 #include "Map.h"
+
+#include "AreaOnMap.h"
+
+
 
 class CPlayScene : public CScene
 {
 protected:
-	CHero *player;					// A play scene has to have player, right?
+	CHero *player;					
 	Map *map;
 
-	vector<LPGAMEOBJECT> objects;
+	unordered_map<int, CAreaOnMap*> listAreaOnMap;
+	int indexAreaOnMap = 1;
+
+
+	vector<LPGAMEOBJECT> *objects= new vector<LPGAMEOBJECT>();
 	vector<LPGAMEOBJECT> *curObjects=new vector<LPGAMEOBJECT>();
 
 	float cx = 0, cy = 0;
@@ -26,9 +33,9 @@ protected:
 	void _ParseSection_ANIMATIONS(string line);
 	void _ParseSection_ANIMATION_SETS(string line);
 	void _ParseSection_OBJECTS(string line);
-	void CPlayScene::_ParseSeciton_MAP(string line);
-
-	int a = 0, b = 0;
+	void _ParseSeciton_MAP(string line);
+	void _ParseSeciton_AreaOnMap(string line);
+	
 
 public:
 	CPlayScene(int id, LPCWSTR filePath);
@@ -38,8 +45,6 @@ public:
 	virtual void Unload();
 
 	CHero * GetPlayer() { return player; }
-
-	//friend class CPlayScenceKeyHandler;
 };
 
 class CPlayScenceKeyHandler : public CScenceKeyHandler
