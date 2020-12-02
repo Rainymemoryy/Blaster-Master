@@ -6,6 +6,7 @@
 #include "Game.h"
 #include "GameObject.h"
 #include "Sprites.h"
+#include "PlayScence.h"
 
 CGameObject::CGameObject()
 {
@@ -22,9 +23,7 @@ void CGameObject::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAM
 	dy = vy * dt;
 }
 
-/*
-	Extension of original SweptAABB to deal with two moving objects
-*/
+
 LPCOLLISIONEVENT CGameObject::SweptAABBEx(LPGAMEOBJECT coO)
 {
 	float sl, st, sr, sb;		// static object bbox
@@ -128,7 +127,7 @@ void CGameObject::RenderBoundingBox()
 	rect.right = (int)r - (int)l;
 	rect.bottom = (int)b - (int)t;
 
-	CGame::GetInstance()->Draw(x, y, bbox, rect.left, rect.top, rect.right, rect.bottom, 255);
+	CGame::GetInstance()->Draw(x, y, bbox, rect.left, rect.top, rect.right, rect.bottom, 200);
 }
 
 bool CGameObject::IsScopeWith(CGameObject * obj)
@@ -163,5 +162,7 @@ float CGameObject::TinhKhoangCach(CGameObject * obj)
 
 CGameObject::~CGameObject()
 {
-	//DebugOut(L"Huy doiu tuog\n");
+	
+		
+	
 }

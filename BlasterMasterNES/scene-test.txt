@@ -91,7 +91,7 @@
 11141	148	320 	193	360	302
 
 #---------------item-------------------
-#hp
+#hp nhan vat
 40100	15	3	23	51	401
 40101	25	3	33	51	401
 40102	36	3	44	51	401
@@ -101,6 +101,12 @@
 40106	78	3	86	51	401
 40107	88	3	96	51	401
 40108	99	3	107	51	401
+
+#item HP
+40201	87	240	103	256	401
+
+#brick2
+40301	3	201	19	217	401
 #---------------Bullet-------------------
 
 #bullet
@@ -202,9 +208,12 @@
 #xe no
 456	11141	100
 #----------items------------
-#hp
+#hp nhan vat
 4001	40100	100	40101	100	40102	100	40103	100	40104	100	40105	100	40106	100	40107	100	40108	100
-
+#Item hp
+4002	40201	100
+#brick2
+4003	40301	100
 #----------Bullet------------
 #bullet
 2000	30001	50	30002	50	30003	50
@@ -242,8 +251,12 @@
 2	455
 
 #----------Items------------
-#hp
+#hp nhan vat
 901	4001
+#item hp
+902	4002
+#Brick2
+903	4003
 #----------Bullet------------
 #bullet1
 701	2001	2000
@@ -262,14 +275,26 @@
 #enemy5
 805	1051	1052
 
-
 [MAP]
 #title	cl	row	
-201	13	11	128	128	143	map\Map2Sl.txt
-
+201	13	11	256	256	143	map\Map2Sl_1.txt
 
 [OBJECTS]
 # MARIO
 0	1120	1120	1
 [AREAONMAP]
-1	AreaOnMap\Area2.1.txt
+101	AreaOnMap\Area2sl.1.txt
+102	AreaOnMap\Area2sl.2.txt
+103	AreaOnMap\Area2sl.3.txt
+104	AreaOnMap\Area2sl.4.txt
+105	AreaOnMap\Area2sl.5.txt
+106	AreaOnMap\Area2sl.6.txt
+107	AreaOnMap\Area2sl.7.txt
+108	AreaOnMap\Area2sl.8.txt
+109	AreaOnMap\Area2sl.9.txt
+110	AreaOnMap\Area2sl.10.txt
+111	AreaOnMap\Area2sl.11.txt
+112	AreaOnMap\Area2sl.12.txt
+113	AreaOnMap\Area2sl.13.txt
+114	AreaOnMap\Area2sl.14.txt
+115	AreaOnMap\Area2sl.15.txt

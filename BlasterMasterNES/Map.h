@@ -23,6 +23,6 @@ public:
 	void Render(int x, int y);
 	int GetTotalColsOfMap() { return this->TotalColsOfMap; }
 	int GetTotalRowsOfMap() { return this->TotalRowsOfMap; }
-	int GetMapHeiht();
+	int GetMapHeight();
 	int GetMapWidth();
 };

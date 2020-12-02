@@ -5,12 +5,12 @@
 #include "Bullet1.h"
 
 
-CEnemy2::CEnemy2()
+CEnemy2::CEnemy2(float x, float y)
 {
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(Enemy2_AniSet));
 
-	x = 100;
-	y = 100;
+	this->x = x;
+	this->y = y;
 	vx = Enemy2_VX;
 	vy = Enemy2_VY;
 	hp = Enemy2_HP;

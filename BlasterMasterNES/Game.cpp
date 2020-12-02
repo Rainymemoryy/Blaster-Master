@@ -32,11 +32,11 @@ void CGame::Init(HWND hWnd)
 	RECT r;
 	GetClientRect(hWnd, &r);	// retrieve Window width & height
 
-	d3dpp.BackBufferHeight = r.bottom + 1;
-	d3dpp.BackBufferWidth = r.right + 1;
+	d3dpp.BackBufferHeight = r.bottom;
+	d3dpp.BackBufferWidth = r.right;
 
-	screen_height = r.bottom + 1;
-	screen_width = r.right + 1;
+	screen_height = r.bottom;
+	screen_width = r.right;
 
 	d3d->CreateDevice(
 		D3DADAPTER_DEFAULT,
@@ -319,6 +319,7 @@ bool CGame::IsScope(float l1, float t1, float r1, float b1, float l2, float t2, 
 		}
 		else
 			return false;
+	
 }
 
 #define MAX_GAME_LINE 1024

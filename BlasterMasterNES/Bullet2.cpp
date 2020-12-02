@@ -1,5 +1,7 @@
 #include "Bullet2.h"
 
+#include "Brick2.h"
+
 CBullet2::CBullet2()
 {
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(Bullet2_AniSet));
@@ -65,7 +67,16 @@ void CBullet2::LastUpdate()
 			float rdx = 0;
 			float rdy = 0;
 			vector<LPCOLLISIONEVENT> coEventsResult;
+			
 			FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+			for (int i = 0; i < coEventsResult.size(); i++) {
+
+				LPGAMEOBJECT e = coEventsResult[i]->obj;
+				if (dynamic_cast<CBrick2 *>(e)) {
+					e->SetDelete(true);
+				}
+
+			}
 			x += min_tx * dx + nx * 0.001f;
 			y += min_ty * dy + ny * 0.001f;
 			isPhatNo = true;

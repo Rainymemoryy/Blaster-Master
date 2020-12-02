@@ -18,8 +18,7 @@ protected:
 	Map *map;
 
 	unordered_map<int, CAreaOnMap*> listAreaOnMap;
-	int indexAreaOnMap = 1;
-
+	int indexAreaOnMap = 101;
 
 	vector<LPGAMEOBJECT> *objects= new vector<LPGAMEOBJECT>();
 	vector<LPGAMEOBJECT> *curObjects=new vector<LPGAMEOBJECT>();
@@ -45,6 +44,14 @@ public:
 	virtual void Unload();
 
 	CHero * GetPlayer() { return player; }
+	void SetIdArea(int idArea) {
+		this->indexAreaOnMap = idArea;
+	}
+	float GetMapHeight() { return map->GetMapHeight(); }
+	float GetMapWidth() { return map->GetMapWidth(); }
+	void SetCam(float cx, float cy) { this->cx=cx; this->cy = cy; }
+	void GetCam(float &cx, float& cy);
+
 };
 
 class CPlayScenceKeyHandler : public CScenceKeyHandler

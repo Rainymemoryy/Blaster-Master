@@ -26,7 +26,7 @@ class CEnemy2 : public CEnemy
 	int timeAniBanDan=-1;
 	vector<LPGAMEOBJECT> *listObj;
 public:
-	CEnemy2();
+	CEnemy2(float x, float y);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL, vector<LPGAMEOBJECT> *listObj = NULL);
 	virtual void Render();
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);

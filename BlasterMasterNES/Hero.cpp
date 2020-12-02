@@ -12,6 +12,11 @@
 #include "Bullet3.h"
 
 
+#include "Item.h"
+#include "ItemHp.h"
+
+#include "PlayScence.h"
+
 CHero::CHero(float x, float y) : CGameObject()
 {
 	level = LEVEL_SLOC;
@@ -23,7 +28,7 @@ CHero::CHero(float x, float y) : CGameObject()
 	this->x = x;
 	this->y = y;
 
-	{
+	if(false){
 		LSLOC a = new SLOC();
 		a->width = 26;
 		a->height = 18;
@@ -54,11 +59,42 @@ CHero::CHero(float x, float y) : CGameObject()
 		f->indexAni = 14;
 		sloc_ani_box.push_back(f);
 	}
+	if (true) {
+		LSLOC a = new SLOC();
+		a->width = 26;
+		a->height = 18;
+		a->indexAni = 10;
+		sloc_ani_box.push_back(a);
+
+		LSLOC b = new SLOC();
+		b->width = 26;
+		b->height = 18;
+		b->indexAni = 11;
+		sloc_ani_box.push_back(b);
+
+		LSLOC c = new SLOC();
+		c->width = 26;
+		c->height = 18;
+		c->indexAni = 12;
+		sloc_ani_box.push_back(c);
+
+		LSLOC d = new SLOC();
+		d->width = 26;
+		d->height = 18;
+		d->indexAni = 13;
+		sloc_ani_box.push_back(d);
+
+		LSLOC f = new SLOC();
+		f->width = 26;
+		f->height = 18;
+		f->indexAni = 14;
+		sloc_ani_box.push_back(f);
+	}
 }
 
 void CHero::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJECT> *listObj)
 {
-	if(true){
+	if (true){
 		if (isDeath)return;
 
 		CGameObject::Update(dt);
@@ -98,24 +134,32 @@ void CHero::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJEC
 		y = y + lastHeight - currentHeight;
 	}
 
-	coEvents.clear();
+	if (true) {
+		coEvents.clear();
 
-	vector<LPGAMEOBJECT> *TmpCoo=new vector<LPGAMEOBJECT>();
-	for (int i = 0; i < coObjects->size(); i++) {
-		LPGAMEOBJECT e = coObjects->at(i);
-		if (dynamic_cast<CBrick *>(e)) {
-			TmpCoo->push_back(e);
-		}
-		if (dynamic_cast<CBullet *>(e) && e->isTouthtable) {
-			if(e->GetState()!=Bullet_Hero)
+		vector<LPGAMEOBJECT> *TmpCoo = new vector<LPGAMEOBJECT>();
+		for (int i = 0; i < coObjects->size(); i++) {
+			LPGAMEOBJECT e = coObjects->at(i);
+			if (dynamic_cast<CBrick *>(e)) {
 				TmpCoo->push_back(e);
+			}
+			if (dynamic_cast<CBullet *>(e) && e->isTouthtable) {
+				if (e->GetState() != Bullet_Hero)
+					TmpCoo->push_back(e);
+			}
+			if (dynamic_cast<CEnemy *>(e)) {
+				TmpCoo->push_back(e);
+			}
+			if (dynamic_cast<CPortal *>(e)) {
+				TmpCoo->push_back(e);
+			}
+			if(dynamic_cast<CItem *>(e)){
+				TmpCoo->push_back(e);
+			}
 		}
-		if (dynamic_cast<CEnemy *>(e)) {
-			TmpCoo->push_back(e);
-		}
-	}
 
-	CalcPotentialCollisions(TmpCoo, coEvents);
+		CalcPotentialCollisions(TmpCoo, coEvents);
+	}
 	
 	
 }
@@ -134,7 +178,7 @@ void CHero::LastUpdate()
 	}
 	else
 	{
-
+		//Va cham vs gach
 		if (true) {
 			float min_tx, min_ty, nx = 0, ny;
 			float rdx = 0;
@@ -159,28 +203,32 @@ void CHero::LastUpdate()
 			for (UINT i = 0; i < coEventsResultBrick->size(); i++)
 			{
 				LPCOLLISIONEVENT e = coEventsResultBrick->at(i);
+				int a = 1;
+				if (ny > 0) a = 10;
 
 				if (level == LEVEL_SLDF) {
 					if (ny < 0) sldf_coTheNhay = true;
-					else sldf_coTheNhay = false;
-
+					else {
+						sldf_coTheNhay = false;
+						dangNhay = false;
+					}
 					if (ny < 0)	sldf_coTheNamXuong = true;
 					else sldf_coTheNamXuong = false;
-
-					if (((CBrick*)(e->obj))->state == 1) {
-						sldf_hp -= BRICK_DAMAGE * dt;
-					}
+					sldf_hp -= ((CBrick*)(e->obj))->GetDamage() * dt*a;
 				}
 				else {
 					if (ny < 0) sloc_coTheNhay = true;
-					else sloc_coTheNhay = false;
-					if (((CBrick*)(e->obj))->state == 1) {
-						sloc_hp -= BRICK_DAMAGE * dt;
+					else {
+						sloc_coTheNhay = false;
+						dangNhay = false;
 					}
+					sloc_hp -= ((CBrick*)(e->obj))->GetDamage() * dt*a;
+					
 				}
 			}
 		}
 
+		//Va cham vs quai, dan
 		if (true) {
 
 			float min_tx, min_ty, nx = 0, ny;
@@ -208,8 +256,10 @@ void CHero::LastUpdate()
 				*/
 				LPCOLLISIONEVENT e = coEventsResultEnemy_Bullet->at(i);
 				if (untouchable <= 0) {
+					
 					if (dynamic_cast<CEnemy*>(e->obj)) {
 
+						
 						untouchable = HERO_UNTOUCHABLE_TIME;
 						if (level == LEVEL_SLOC)
 							sloc_hp -= dynamic_cast<CEnemy*>(e->obj)->GetDamage();
@@ -231,17 +281,46 @@ void CHero::LastUpdate()
 			}
 		}
 
+		//va cham voi item, cong dich chuyen
+		if(true){
+			for (int i = 0; i < coEvents.size(); i++) {
+				if (dynamic_cast<CPortal *>(coEvents.at(i)->obj))
+				{
+					CPortal *portal = (CPortal *)(coEvents.at(i)->obj);
+					((CPlayScene*)(CGame::GetInstance()->GetCurrentScene()))->SetIdArea(portal->GetSceneId());
+					x += portal->GetSumX();
+					y += portal->GetSumY();
+					vy = 0;
+					vx = 0;
+
+				}
+				if (dynamic_cast<CItemHp *>(coEvents.at(i)->obj))
+				{
+					CItemHp *itemhp = (CItemHp *)(coEvents.at(i)->obj);
+					if (level == LEVEL_SLDF) {
+						sldf_hp += itemhp->GetHP();
+					}
+					if (level == LEVEL_SLOC) {
+						sloc_hp += itemhp->GetHP();
+					}
+					itemhp->SetDelete(true);
+				}
+			}
+			
+		}
 
 		for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 	}
-
+	
 	UpdateHP();
 
+
+	//DebugOut(L"%f   %f\n", x, y);
 }
 
 void CHero::Render()
 {
-	//RenderBoundingBox();
+	RenderBoundingBox();
 	untouchable_nhapnhay -= dt;
 	int untouchable_alpha = 255;
 	if (untouchable > 0 && untouchable_nhapnhay > 0) {
@@ -255,7 +334,7 @@ void CHero::Render()
 	{
 		int ani = -1;
 		if (isDeath) {
-			if (nx >= 0)ani = ANI_SLDF_CHETBENPHAI;
+			if (nx >= 0)ani = Ani_Sldf_ChetBenPhai;
 			else ani = ANI_SLDF_CHETBENTRAI;
 		}
 		else
@@ -291,7 +370,31 @@ void CHero::Render()
 			int j = sloc_iy / 100;
 			int i = sloc_ix / 100;
 			if (nx > 0) i = i + 4;
-			animation_set->at(sloc_ani_box.at(j)->indexAni)->Render(round(x), round(y), untouchable_alpha, i);
+
+			int t;
+			switch (j)
+			{
+			case 0:
+				t = 0;
+				break;
+			case 1:
+				t = 8;
+				break;
+			case 2:
+				t = 10;
+				break;
+			case 3:
+				t = 12;
+				break;
+			case 4:
+				t = 16;
+				break;
+			default:
+				break;
+			}
+
+			animation_set->at(sloc_ani_box.at(j)->indexAni)->Render(round(x), round(y)-t, untouchable_alpha, i);
+
 		}
 	}
 	RenderHP();
@@ -299,7 +402,6 @@ void CHero::Render()
 
 void CHero::Reset()
 {
-
 	SetLevel(LEVEL_SLOC);
 	SetState(STATE_SLOC_DUNGYEN);
 
@@ -308,8 +410,6 @@ void CHero::Reset()
 
 	sloc_hp = 160;
 	sldf_hp = 80;
-
-
 }
 
 void CHero::RenderHP()
@@ -324,8 +424,6 @@ void CHero::RenderHP()
 		i = sloc_hp / 20;
 	}
 	CAnimationSets::GetInstance()->Get(901)->at(0)->Render(round(camx+10), round(camy+CGame::GetInstance()->GetScreenHeight()-70), 255, i);
-	
-	
 }
 
 void CHero::UpdateHP()
@@ -335,6 +433,7 @@ void CHero::UpdateHP()
 
 	sldf_hp = sldf_hp >= SLDF_MAXHP ? SLDF_MAXHP : sldf_hp;
 	sldf_hp = sldf_hp <= 0 ? 0 : sldf_hp;
+
 	if (sldf_hp <= 0 || sloc_hp <= 0) isDeath = true;
 }
 
@@ -343,29 +442,9 @@ void CHero::SetState(int state)
 	if (isDeath) return;
 	CGameObject::SetState(state);
 
-
-
-	if (state == AddEnemy) {
-		CGameObject *obj = new CEnemy5();
-		listObj->push_back(obj);
-	}
 	if (state == Bullet3) {
 		
-		vector<LPGAMEOBJECT> *listTarget;
-		for (int i = 0; i < listObj->size(); i++)
-		{
-			LPGAMEOBJECT e = listObj->at(i);
-			if (dynamic_cast<CEnemy*>(e))
-			{
-				
-
-				
-				break;
-			}
-		}
-		
-
-			/*CBullet3 *obj = new CBullet3();
+			CBullet3 *obj = new CBullet3();
 			obj->SetPosition(x, y);
 			obj->SetState(Bullet_Hero);
 
@@ -375,11 +454,11 @@ void CHero::SetState(int state)
 				if (dynamic_cast<CEnemy*>(e))
 				{
 					obj->SetTarget(e);
-					
 					listObj->push_back(obj);
+					DebugOut(L"%f   %f\n", e->x, e->y);
 					break;
 				}
-			}*/
+			}
 		
 	}
 	if (state == STATE_VAOXE) {
@@ -415,7 +494,7 @@ void CHero::SetState(int state)
 				CGameObject *obj = new CCar();
 				car = obj;
 				obj->SetPosition(x + lastWidth - (26 + lastWidth) / 2, y + lastHeight - 26);
-				obj->SetAnimationSet(CAnimationSets::GetInstance()->Get(2));;
+				obj->SetAnimationSet(CAnimationSets::GetInstance()->Get(2));
 				obj->nx = nx;
 				listObj->push_back(obj);
 				
@@ -573,6 +652,7 @@ void CHero::SetState(int state)
 			if (sloc_coTheNhay&&vy < 0.1) {
 				vy = -SLOC_VY;
 				sloc_coTheNhay = false;
+				dangNhay = true;
 			}
 			break;
 		case STATE_SLOC_CHET:
@@ -586,6 +666,13 @@ void CHero::SetState(int state)
 			break;
 		case STATE_SLOC_KEYUP:
 			sloc_iy += 2 * dt;
+			break;
+		case STATE_SLOC_HIGHTJUMP:
+			
+			if (dangNhay&&vy<0) {
+				DebugOut(L"%f\n", vy);
+				vy -= 0.00015*dt;
+			}
 			break;
 		default:
 			break;

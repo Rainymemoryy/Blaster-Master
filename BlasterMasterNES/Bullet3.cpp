@@ -12,9 +12,6 @@ void CBullet3::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOB
 {
 	if (isPhatNo)return;
 
-
-
-
 	float target_x=-1, target_y=-1;
 	target->GetPosition(target_x, target_y);
 
@@ -59,9 +56,15 @@ void CBullet3::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOB
 		LPGAMEOBJECT e = coObjects->at(i);
 		if (e->isTouthtable)
 		{
-			if (dynamic_cast<CEnemy*>(e)) {
+			/*if (dynamic_cast<CEnemy*>(e)) {
 				if (GetState() == Bullet_Hero) TmpCoo->push_back(e);
+			}*/
+
+			if (target == e) {
+				DebugOut(L"adas target\n");
+				TmpCoo->push_back(e);
 			}
+				
 		}
 	}
 

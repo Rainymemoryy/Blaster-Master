@@ -155,18 +155,11 @@ void CPlayScene::_ParseSeciton_AreaOnMap(string line)
 {
 	vector<string> tokens = split(line);
 	if (tokens.size() < 2) return;
-
 	int index = atoi(tokens[0].c_str());
 	LPCWSTR path = ToLPCWSTR(tokens[1]);
-
 	CAreaOnMap * areaOnMap = new CAreaOnMap(index, path);
 	areaOnMap->GetAreaOnMap_Load();
-
-
 	listAreaOnMap[index] = areaOnMap;
-
-	//DebugOut(L"id: %d     size: %d\n", index, listAreaOnMap[index]->GetAreaOnMap_ListObj()->size());
-	//DebugOut(L"Playscence___   add areaonmap___id: %d___link: %s\n", atoi(tokens[0].c_str()), ToLPCWSTR(tokens[1]));
 }
 
 void CPlayScene::Load()
@@ -230,30 +223,22 @@ void CPlayScene::Update(DWORD dt)
 {
 	if (player == NULL) return;
 
-	//Tính toán cx/cy
-	/*player->GetPosition(cx, cy);
-	CGame *game = CGame::GetInstance();
-	cx -= game->GetScreenWidth() / 2;
-	cy -= game->GetScreenHeight() / 2;
-	cx = cx < 0 ? 0 : cx;
-	cy = cy < 0 ? 0 : cy;
-	cx = (cx + game->GetScreenWidth()) > map->GetMapWidth() ? cx = map->GetMapWidth() - game->GetScreenWidth() : cx;
-	cy = (cy + game->GetScreenHeight()) > map->GetMapHeiht() ? cy = map->GetMapHeiht() - game->GetScreenHeight() : cy;
+	CAreaOnMap *curAreaOnMap = listAreaOnMap[indexAreaOnMap];
 
-	float l1, t1, r1, b1;
-	l1 = cx - 50;
-	t1 = cy - 50;
-	r1 = cx + game->GetScreenWidth() + 100;
-	b1 = cy + game->GetScreenHeight() + 100;
-	float l2, t2, r2, b2;*/
-
-
-
-	
 	curObjects->clear();
 	curObjects->push_back(player);
+	objects = curAreaOnMap->GetAreaOnMap_ListObj();
 
-	objects = listAreaOnMap[1]->GetAreaOnMap_ListObj();
+
+	GetCam(cx, cy);
+	float l1, t1, r1, b1, l2, t2, r2, b2;
+	l1 = cx;
+	t1 = cy;
+	r1 = cx+CGame::GetInstance()->GetScreenWidth();
+	b1 = cy+CGame::GetInstance()->GetScreenHeight();
+	
+
+	DebugOut(L"%d %d\n", CGame::GetInstance()->GetScreenWidth(), CGame::GetInstance()->GetScreenHeight());
 
 	for (int i = objects->size() - 1; i >= 0; i--) {
 		if (objects->at(i)->isDelete)
@@ -262,9 +247,17 @@ void CPlayScene::Update(DWORD dt)
 			objects->erase(objects->begin() + i);
 		}
 		else {
-			/*objects->at(i)->GetBoundingBox(l2, t2, r2, b2);
-			if (game->IsScope(l1, t1, r1, b1, l2, t2, r2, b2) || game->IsScope(l2, t2, r2, b2, l1, t1, r1, b1))*/
-				curObjects->push_back(objects->at(i));
+			/*if(dynamic_cast<CBrick*>(objects->at(i))) curObjects->push_back(objects->at(i));
+			else {*/
+				objects->at(i)->GetBoundingBox(l2, t2, r2, b2);
+
+
+				
+				//if (CGame::GetInstance()->IsScope(l1, t1, r1, b1, l2, t2, r2, b2) || CGame::GetInstance()->IsScope(l2, t2, r2, b2, l1, t1, r1, b1))
+				if(!(l1 > r2 || r1 < l2 || t1 > b2 || b1 < t2))
+					curObjects->push_back(objects->at(i));
+			//}
+		
 		}
 	}
 
@@ -276,29 +269,23 @@ void CPlayScene::Update(DWORD dt)
 	}
 
 
-	
-	/*player->GetPosition(cx, cy);
-	cx -= game->GetScreenWidth() / 2;
-	cy -= game->GetScreenHeight() / 2;
-	cx = cx < 0 ? 0 : cx;
-	cy = cy < 0 ? 0 : cy;
-	cx = (cx + game->GetScreenWidth()) > map->GetMapWidth() ? cx = map->GetMapWidth() - game->GetScreenWidth() : cx;
-	cy = (cy + game->GetScreenHeight()) > map->GetMapHeiht() ? cy = map->GetMapHeiht() - game->GetScreenHeight() : cy;*/
 
-	player->GetPosition(cx, cy);
-	cx -= 50;
-	cy -= 50;
+	DebugOut(L"%d\n", curObjects->size());
+
+	GetCam(cx, cy);
 	CGame::GetInstance()->SetCamPos(round(cx), round(cy));
 }
 
 void CPlayScene::Render()
 {
+	GetCam(cx, cy);
 	if (map != NULL)
 		map->Render(cx, cy);
+
 	for (int i = 0; i < curObjects->size(); i++)
 		curObjects->at(i)->Render();
-	
-	
+	player->Render();
+
 }
 
 void CPlayScene::Unload()
@@ -311,6 +298,26 @@ void CPlayScene::Unload()
 
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);*/
 }
+
+void CPlayScene::GetCam(float & cx, float & cy)
+{
+	CGame *game = CGame::GetInstance();
+	CAreaOnMap *curAreaOnMap = listAreaOnMap[indexAreaOnMap];
+
+	float l = curAreaOnMap->GetAreaOnMap_X(), t = curAreaOnMap->GetAreaOnMap_Y(), r = curAreaOnMap->GetAreaOnMap_Right(), b = curAreaOnMap->GetAreaOnMap_Bottom();
+
+	player->TinhTam(cx, cy);
+	cx -= game->GetScreenWidth() / 2;
+	cy -= game->GetScreenHeight() / 2;
+	cx = cx < l ? l : cx;
+	cy = cy < t ? t : cy;
+	cx = (cx + game->GetScreenWidth()) > r ? r - game->GetScreenWidth() : cx;
+	cy = (cy + game->GetScreenHeight()) > b ? b - game->GetScreenHeight() : cy;
+}
+
+
+
+
 
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
@@ -399,6 +406,10 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		}
 	}
 	else {
+
+		if (game->IsKeyDown(DIK_SPACE))
+			hero->SetState(STATE_SLOC_HIGHTJUMP);
+
 		if (game->IsKeyDown(DIK_LEFT)) {
 			hero->SetState(STATE_SLOC_CHAYBENTRAI);
 
@@ -436,3 +447,4 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 				}
 	}
 }
+		

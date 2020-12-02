@@ -4,12 +4,14 @@
 #include "Bullet.h"
 
 
-CEnemy1::CEnemy1()
+
+
+CEnemy1::CEnemy1(float x, float y)
 {
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(Enemy1_AniSet));
+	this->x = x;
+	this->y = y;
 
-	x = 100;
-	y = 100;
 	vx = -Enemy1_VX;
 	vy = 0;
 	hp = Enemy1_HP;
@@ -43,10 +45,8 @@ void CEnemy1::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOBJ
 				TmpCoo->push_back(e);
 		}
 	}
-	
-	
 	CalcPotentialCollisions(TmpCoo, coEvents);
-	//if (coEvents.size() >= 2)DebugOut(L"coEvents.size: %d\n", coEvents.size());
+	
 }
 
 void CEnemy1::LastUpdate()

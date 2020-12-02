@@ -67,9 +67,8 @@ public:
 	vector<LPCOLLISIONEVENT> coEvents;
 	
 
-	float emin_tx, emin_ty, enx = 0, eny = 0;
-	float erdx = 0;
-	float erdy = 0;
+	int dropItem = -1;
+	
 
 public:
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
@@ -109,6 +108,8 @@ public:
 	bool IsScopeWith(CGameObject *obj);
 	void TinhTam(float &x, float &y);
 	float TinhKhoangCach(CGameObject *obj);
+
+	void SetDelete(bool a) { this->isDelete = a; }
 
 	~CGameObject();
 };

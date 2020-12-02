@@ -27,9 +27,6 @@
     <ClCompile Include="Animations.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
-    <ClCompile Include="Brick.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
     <ClCompile Include="Car.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
@@ -66,8 +63,25 @@
     <ClCompile Include="Enemy4.cpp">
       <Filter>Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy5.cpp" />
     <ClCompile Include="AreaOnMap.cpp" />
+    <ClCompile Include="Enemy5.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Brick.cpp">
+      <Filter>Brick</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Items</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemHp.cpp">
+      <Filter>Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Brick1.cpp">
+      <Filter>Brick</Filter>
+    </ClCompile>
+    <ClCompile Include="Brick2.cpp">
+      <Filter>Brick</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Hero.h" />
@@ -97,9 +111,6 @@
       <Filter>Bullet</Filter>
     </ClInclude>
     <ClInclude Include="Animations.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Brick.h">
       <Filter>Framework</Filter>
     </ClInclude>
     <ClInclude Include="Car.h">
@@ -138,8 +149,25 @@
     <ClInclude Include="Enemy4.h">
       <Filter>Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy5.h" />
     <ClInclude Include="AreaOnMap.h" />
+    <ClInclude Include="Enemy5.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Brick.h">
+      <Filter>Brick</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Items</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemHp.h">
+      <Filter>Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Brick1.h">
+      <Filter>Brick</Filter>
+    </ClInclude>
+    <ClInclude Include="Brick2.h">
+      <Filter>Brick</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Enemy">
@@ -150,6 +178,12 @@
     </Filter>
     <Filter Include="Framework">
       <UniqueIdentifier>{961deb47-cd03-44a5-9ab0-14c5d613464e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Brick">
+      <UniqueIdentifier>{7c1ceaca-e571-412b-8ba7-a1e7c08c6911}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Items">
+      <UniqueIdentifier>{f45a8ef7-88b5-4f9a-8fde-fbe2dee32b14}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

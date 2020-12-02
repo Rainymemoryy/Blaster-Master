@@ -51,7 +51,8 @@
 #define ANI_SLDF_NAMBENTRAI				6
 #define ANI_SLDF_NAMBENPHAI				7
 #define ANI_SLDF_CHETBENTRAI			8
-#define ANI_SLDF_CHETBENPHAI			9
+#define Ani_Sldf_ChetBenPhai			9
+#define Ani_Sldf_LeoCauThang			10
 //10 11 12 13 14 da duoc xai
 
 #define BOX_SLDF_WIDTH_DI				10
@@ -84,6 +85,7 @@
 #define STATE_SLOC_BANDANDON	1126
 #define STATE_SLOC_CHET			1127
 #define STATE_SLOC_KEYUP		1130
+#define	STATE_SLOC_HIGHTJUMP	1131
 
 #define ANI_SLOC_NOXE			15
 #define BOX_SLOC_WIDTH_NOXE		45
@@ -115,7 +117,6 @@ public:
 	int enviroment;
 
 
-
 	int currentWidth = BOX_SLDF_WIDTH_DUNG;
 	int currentHeight = BOX_SLDF_HEIGHT_DUNG;
 	int lastWidth = BOX_SLDF_WIDTH_DUNG;
@@ -142,6 +143,8 @@ public:
 	float sloc_hp = SLOC_MAXHP;
 	int sloc_ix = 0;
 	int sloc_iy = 0;
+
+	bool dangNhay = false;
 
 	float lastX, lastY;
 

@@ -106,13 +106,8 @@ void CEnemy5::LastUpdate()
 				}
 			}
 		}
-
-		
 		for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 	}
-
-
-
 }
 
 void CEnemy5::Render()

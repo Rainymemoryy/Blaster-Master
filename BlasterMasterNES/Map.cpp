@@ -46,15 +46,6 @@ void Map::LoadMatrix(LPCWSTR path)
 }
 void Map::Render(int cx, int cy)
 {
-	//for (int iRow = 0; iRow < TotalRowsOfMap; iRow++)
-	//{
-	//	for (int iColumn = 0; iColumn < TotalColsOfMap; iColumn++)
-	//	{
-	//		this->Tiles[this->Matrix[iRow][iColumn] - 1]->Draw( iColumn * TILE_WIDTH, iRow*TILE_HEIGHT, 255);
-	//	}
-	//}
-
-	//DebugOut(L"x___%d               y___%d\n", cx*16+320, cy*16+240);
 
 	int col = (cx + CGame::GetInstance()->GetScreenWidth()) / 16 + 1;
 	col = col >= TotalColsOfMap ? TotalColsOfMap : col;
@@ -70,7 +61,7 @@ void Map::Render(int cx, int cy)
 		}
 	}
 }
-int Map::GetMapHeiht()
+int Map::GetMapHeight()
 {
 	if (Height == 0)
 		Height = TotalRowsOfMap * TILE_HEIGHT;
