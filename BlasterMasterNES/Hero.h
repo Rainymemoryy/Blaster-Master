@@ -19,11 +19,15 @@
 #define	LEVEL_SLDF		211
 #define	LEVEL_SLOC		212
 
-#define HERO_UNTOUCHABLE_TIME 2000
+#define HERO_UNTOUCHABLE_TIME	2000
+
 #define STATE_NHAYKHOIXE		1201
 #define STATE_VAOXE				1202
 
 #define ANI_HP					16
+#define Hero_Sldf_AniSet			101
+#define Hero_Sloc_AniSet			102
+
 
 #pragma region SLDF
 #define SLDF_VX		0.08f
@@ -41,6 +45,9 @@
 #define STATE_SLDF_NAMXUONG			1108
 #define STATE_SLDF_BANDANDON		1109
 #define STATE_SLDF_BANDANCHUM		1110
+#define STATE_SLDF_LEOLENCAUTHANG	1111
+#define STATE_SLDF_LEOXUONGCAUTHANG	1112
+#define STATE_SLDF_DUNGTRENCAUTHANG	1113
 
 #define ANI_SLDF_NHINTRAI				0
 #define ANI_SLDF_NHINPHAI				1
@@ -52,8 +59,8 @@
 #define ANI_SLDF_NAMBENPHAI				7
 #define ANI_SLDF_CHETBENTRAI			8
 #define Ani_Sldf_ChetBenPhai			9
-#define Ani_Sldf_LeoCauThang			10
-//10 11 12 13 14 da duoc xai
+#define Ani_Sldf_LeoCauThang			16
+//10 11 12 13 14 15 da duoc xai
 
 #define BOX_SLDF_WIDTH_DI				10
 #define BOX_SLDF_HEIGHT_DI				17
@@ -124,7 +131,7 @@ public:
 
 	vector<LPGAMEOBJECT> *listObj;
 	vector<LPGAMEOBJECT> *coObjects;
-
+	
 
 	CGameObject *car = NULL;
 
@@ -137,6 +144,12 @@ public:
 	bool sldf_namXuong = false;
 	bool sldf_coTheNamXuong = false;
 	bool sldf_coTheVaoXe = false;
+	bool sldf_oGanCauThang = false;
+	bool sldf_oTrenCauThang = false;
+	bool sldf_leoCauThang = false;
+
+	CGameObject *cauThang = NULL;
+
 
 	vector<LSLOC> sloc_ani_box;
 	bool sloc_coTheNhay = false;

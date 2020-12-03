@@ -135,6 +135,7 @@
     <ClCompile Include="Bullet2.cpp" />
     <ClCompile Include="Car.cpp" />
     <ClCompile Include="Bullet3.cpp" />
+    <ClCompile Include="Stair.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Enemy1.cpp" />
     <ClCompile Include="Enemy2.cpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="ItemHp.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Portal.h" />
+    <ClInclude Include="Stair.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />

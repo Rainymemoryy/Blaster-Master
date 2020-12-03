@@ -9,7 +9,7 @@
 
 #include "AreaOnMap.h"
 
-
+#define InDexArea_Start 101
 
 class CPlayScene : public CScene
 {
@@ -18,7 +18,7 @@ protected:
 	Map *map;
 
 	unordered_map<int, CAreaOnMap*> listAreaOnMap;
-	int indexAreaOnMap = 101;
+	int indexAreaOnMap = InDexArea_Start;
 
 	vector<LPGAMEOBJECT> *objects= new vector<LPGAMEOBJECT>();
 	vector<LPGAMEOBJECT> *curObjects=new vector<LPGAMEOBJECT>();
@@ -51,7 +51,7 @@ public:
 	float GetMapWidth() { return map->GetMapWidth(); }
 	void SetCam(float cx, float cy) { this->cx=cx; this->cy = cy; }
 	void GetCam(float &cx, float& cy);
-
+	
 };
 
 class CPlayScenceKeyHandler : public CScenceKeyHandler

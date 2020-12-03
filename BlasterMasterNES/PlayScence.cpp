@@ -238,7 +238,7 @@ void CPlayScene::Update(DWORD dt)
 	b1 = cy+CGame::GetInstance()->GetScreenHeight();
 	
 
-	DebugOut(L"%d %d\n", CGame::GetInstance()->GetScreenWidth(), CGame::GetInstance()->GetScreenHeight());
+	//DebugOut(L"%d %d\n", CGame::GetInstance()->GetScreenWidth(), CGame::GetInstance()->GetScreenHeight());
 
 	for (int i = objects->size() - 1; i >= 0; i--) {
 		if (objects->at(i)->isDelete)
@@ -270,7 +270,7 @@ void CPlayScene::Update(DWORD dt)
 
 
 
-	DebugOut(L"%d\n", curObjects->size());
+	//DebugOut(L"%d\n", curObjects->size());
 
 	GetCam(cx, cy);
 	CGame::GetInstance()->SetCamPos(round(cx), round(cy));
@@ -337,7 +337,13 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			hero->Reset();
 			break;
 		case DIK_DOWN:
-			hero->SetState(STATE_SLDF_NAMXUONG);
+			if (hero->sldf_oTrenCauThang) {
+				hero->sldf_leoCauThang = true;
+				hero->y += 1;
+			}
+			else {
+				hero->SetState(STATE_SLDF_NAMXUONG);
+			}
 			break;
 		case DIK_F:
 			hero->SetState(STATE_VAOXE);
@@ -345,8 +351,16 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		case DIK_D:
 			hero->SetState(STATE_SLDF_BANDANDON);
 			break;
+		case DIK_UP:
+			if (hero->sldf_oGanCauThang) hero->sldf_leoCauThang = true;
+			else
+			if (hero->sldf_namXuong) {
+				hero->SetState(STATE_SLDF_DUNGYEN);
+			}
+			break;
 		default:
 			break;
+			
 		}
 	}
 	else
@@ -375,35 +389,38 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 {
 	CGame *game = CGame::GetInstance();
 	CHero *hero = ((CPlayScene*)scence)->GetPlayer();
+	if (hero->GetState() == STATE_SLDF_CHET) return;
+
 
 	if (hero->level == LEVEL_SLDF) {
-		if (hero->GetState() == STATE_SLDF_CHET) return;
-		if (game->IsKeyDown(DIK_RIGHT))
-		{
-			if (!hero->sldf_namXuong)
-				hero->SetState(STATE_SLDF_DIBENPHAI);
-			else
-				hero->SetState(STATE_SLDF_BOBENPHAI);
-		}
-		else
-			if (game->IsKeyDown(DIK_LEFT))
+		if (!hero->sldf_leoCauThang)
+			if (game->IsKeyDown(DIK_RIGHT))
 			{
 				if (!hero->sldf_namXuong)
-					hero->SetState(STATE_SLDF_DIBENTRAI);
+					hero->SetState(STATE_SLDF_DIBENPHAI);
 				else
-					hero->SetState(STATE_SLDF_BOBENTRAI);
+					hero->SetState(STATE_SLDF_BOBENPHAI);
 			}
 			else
-				if (hero->sldf_namXuong)
-					hero->SetState(STATE_SLDF_NAMXUONG);
-				else hero->SetState(STATE_SLDF_DUNGYEN);
-
-		if (game->IsKeyDown(DIK_UP))
-		{
-			if (hero->sldf_namXuong) {
-				hero->SetState(STATE_SLDF_DUNGYEN);
-			}
-		}
+				if (game->IsKeyDown(DIK_LEFT))
+				{
+					if (!hero->sldf_namXuong)
+						hero->SetState(STATE_SLDF_DIBENTRAI);
+					else
+						hero->SetState(STATE_SLDF_BOBENTRAI);
+				}
+				else
+					if (hero->sldf_namXuong)
+						hero->SetState(STATE_SLDF_NAMXUONG);
+					else hero->SetState(STATE_SLDF_DUNGYEN);
+		else
+			if (game->IsKeyDown(DIK_UP))
+				hero->SetState(STATE_SLDF_LEOLENCAUTHANG);
+			else
+				if (game->IsKeyDown(DIK_DOWN))
+					hero->SetState(STATE_SLDF_LEOXUONGCAUTHANG);
+				else
+					hero->SetState(STATE_SLDF_DUNGTRENCAUTHANG);
 	}
 	else {
 

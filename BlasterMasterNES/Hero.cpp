@@ -15,6 +15,9 @@
 #include "Item.h"
 #include "ItemHp.h"
 
+
+#include "Stair.h"
+
 #include "PlayScence.h"
 
 CHero::CHero(float x, float y) : CGameObject()
@@ -137,7 +140,7 @@ void CHero::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJEC
 	if (true) {
 		coEvents.clear();
 
-		vector<LPGAMEOBJECT> *TmpCoo = new vector<LPGAMEOBJECT>();
+		/*vector<LPGAMEOBJECT> *TmpCoo = new vector<LPGAMEOBJECT>();
 		for (int i = 0; i < coObjects->size(); i++) {
 			LPGAMEOBJECT e = coObjects->at(i);
 			if (dynamic_cast<CBrick *>(e)) {
@@ -156,9 +159,9 @@ void CHero::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJEC
 			if(dynamic_cast<CItem *>(e)){
 				TmpCoo->push_back(e);
 			}
-		}
+		}*/
 
-		CalcPotentialCollisions(TmpCoo, coEvents);
+		CalcPotentialCollisions(coObjects, coEvents);
 	}
 	
 	
@@ -170,6 +173,10 @@ void CHero::LastUpdate()
 	if (isDeath)return;
 	untouchable -= dt;
 
+	sldf_oGanCauThang = false;
+	sldf_oTrenCauThang = false;
+	
+	//Tinh toan va cham
 	if (coEvents.size() == 0)
 	{
 		x += dx;
@@ -188,14 +195,24 @@ void CHero::LastUpdate()
 
 
 			for (int i = 0; i < coEvents.size(); i++)
+			{
 				if (dynamic_cast<CBrick *>(coEvents.at(i)->obj))
 					coEventsBrick->push_back(coEvents.at(i));
+				if (dynamic_cast<CStair *>(coEvents.at(i)->obj))
+				{
+					cauThang = coEvents.at(i)->obj;
+					if (coEvents.at(i)->ny < 0) {
+						sldf_oGanCauThang = true;
+						coEventsBrick->push_back(coEvents.at(i));
+					}
+						
+				}
+			}
 
 			FilterCollision(*coEventsBrick, *coEventsResultBrick, min_tx, min_ty, nx, ny, rdx, rdy);
 
 			x += min_tx * dx + nx * 0.001f;
 			y += min_ty * dy + ny * 0.001f;
-
 
 			if (nx != 0)vx = 0;
 			if (ny != 0)vy = 0;
@@ -203,27 +220,35 @@ void CHero::LastUpdate()
 			for (UINT i = 0; i < coEventsResultBrick->size(); i++)
 			{
 				LPCOLLISIONEVENT e = coEventsResultBrick->at(i);
-				int a = 1;
-				if (ny > 0) a = 10;
+				if (dynamic_cast<CBrick *>(e->obj)) {
+					int a = 1;
+					if (ny > 0) a = 10;
 
-				if (level == LEVEL_SLDF) {
-					if (ny < 0) sldf_coTheNhay = true;
-					else {
-						sldf_coTheNhay = false;
-						dangNhay = false;
+					if (level == LEVEL_SLDF) {
+						if (ny < 0) sldf_coTheNhay = true;
+						else {
+							sldf_coTheNhay = false;
+							dangNhay = false;
+						}
+						if (ny < 0)	sldf_coTheNamXuong = true;
+						else sldf_coTheNamXuong = false;
+						sldf_hp -= ((CBrick*)(e->obj))->GetDamage() * dt*a;
+
 					}
-					if (ny < 0)	sldf_coTheNamXuong = true;
-					else sldf_coTheNamXuong = false;
-					sldf_hp -= ((CBrick*)(e->obj))->GetDamage() * dt*a;
+					else {
+						if (ny < 0) sloc_coTheNhay = true;
+						else {
+							sloc_coTheNhay = false;
+							dangNhay = false;
+						}
+						sloc_hp -= ((CBrick*)(e->obj))->GetDamage() * dt*a;
+
+					}
+					sldf_oTrenCauThang = false;
 				}
-				else {
-					if (ny < 0) sloc_coTheNhay = true;
-					else {
-						sloc_coTheNhay = false;
-						dangNhay = false;
-					}
-					sloc_hp -= ((CBrick*)(e->obj))->GetDamage() * dt*a;
-					
+				if (dynamic_cast<CStair *>(e->obj)) {
+					sldf_oTrenCauThang = true;
+					sldf_coTheNamXuong = false;
 				}
 			}
 		}
@@ -238,22 +263,18 @@ void CHero::LastUpdate()
 			vector<LPCOLLISIONEVENT> *coEventsResultEnemy_Bullet = new vector<LPCOLLISIONEVENT>();
 
 			for (int i = 0; i < coEvents.size(); i++)
-				if (!dynamic_cast<CBrick *>(coEvents.at(i)->obj))
+			{
+				LPCOLLISIONEVENT e = coEvents.at(i);
+				if (dynamic_cast<CEnemy *>(e->obj))
 					coEventsEnemy_Bullet->push_back(coEvents.at(i));
-
-
+				if (dynamic_cast<CBullet *>(e->obj) && e->obj->isTouthtable)
+					if (e->obj->GetState() != Bullet_Hero)
+						coEventsEnemy_Bullet->push_back(coEvents.at(i));
+			}
 			FilterCollision(*coEventsEnemy_Bullet, *coEventsResultEnemy_Bullet, min_tx, min_ty, nx, ny, rdx, rdy);
-
 
 			for (UINT i = 0; i < coEventsResultEnemy_Bullet->size(); i++)
 			{
-
-				/*if (dynamic_cast<CPortal *>(e->obj))
-				{
-					CPortal *p = dynamic_cast<CPortal *>(e->obj);
-					CGame::GetInstance()->SwitchScene(p->GetSceneId());
-				}
-				*/
 				LPCOLLISIONEVENT e = coEventsResultEnemy_Bullet->at(i);
 				if (untouchable <= 0) {
 					
@@ -312,15 +333,37 @@ void CHero::LastUpdate()
 		for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 	}
 	
+	//Dieu kien leo cau thang
+	if (true) {
+		
+		if (level == LEVEL_SLDF) {
+			for (int i = 0; i < listObj->size(); i++) {
+				if (dynamic_cast<CStair *>(listObj->at(i)))
+				{
+					cauThang = listObj->at(i);
+					float l1, t1, r1, b1, l2, t2, r2, b2;
+					this->GetBoundingBox(l1, t1, r1, b1);
+					listObj->at(i)->GetBoundingBox(l2, t2, r2, b2);
+					if (CGame::GetInstance()->ChongLenNhau(l1, t1, r1, b1, l2, t2, r2, b2))
+					{
+						sldf_oGanCauThang = true;
+						break;
+					}
+				}
+			}
+		}
+		sldf_oGanCauThang = sldf_oTrenCauThang ? true : sldf_oGanCauThang;
+		sldf_leoCauThang = sldf_oGanCauThang ? sldf_leoCauThang : false;
+		
+	}
+
 	UpdateHP();
 
-
-	//DebugOut(L"%f   %f\n", x, y);
 }
 
 void CHero::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 	untouchable_nhapnhay -= dt;
 	int untouchable_alpha = 255;
 	if (untouchable > 0 && untouchable_nhapnhay > 0) {
@@ -339,7 +382,12 @@ void CHero::Render()
 		}
 		else
 
-			if (nx < 0) {
+			if (sldf_leoCauThang) {
+				ani = Ani_Sldf_LeoCauThang;
+				if (ny == 0) animation_set->at(ani)->IsStop(true);
+				else animation_set->at(ani)->IsStop(false);
+			}
+			else if (nx < 0) {
 				if (vx == 0) {
 					if (sldf_namXuong == true) ani = ANI_SLDF_NAMBENTRAI;
 					else ani = ANI_SLDF_NHINTRAI;
@@ -359,7 +407,7 @@ void CHero::Render()
 					else ani = ANI_SLDF_DIBENPHAI;
 				}
 			}
-
+		if(ani!=-1)
 		animation_set->at(ani)->Render(round(x), round(y), untouchable_alpha, -1);
 	}
 	else {
@@ -441,7 +489,6 @@ void CHero::SetState(int state)
 {
 	if (isDeath) return;
 	CGameObject::SetState(state);
-
 	if (state == Bullet3) {
 		
 			CBullet3 *obj = new CBullet3();
@@ -455,7 +502,7 @@ void CHero::SetState(int state)
 				{
 					obj->SetTarget(e);
 					listObj->push_back(obj);
-					DebugOut(L"%f   %f\n", e->x, e->y);
+					//DebugOut(L"%f   %f\n", e->x, e->y);
 					break;
 				}
 			}
@@ -504,7 +551,7 @@ void CHero::SetState(int state)
 	}
 
 	if (level == LEVEL_SLDF) {
-		if (state == STATE_SLDF_BANDANDON) {
+		if (state == STATE_SLDF_BANDANDON&&!sldf_leoCauThang) {
 			CGameObject *tmpObj = new CBullet1();
 			if (nx > 0) {
 				tmpObj->SetPosition(x + currentWidth / 2 - 2, y + currentHeight / 2 - 2);
@@ -550,6 +597,8 @@ void CHero::SetState(int state)
 					SetState(STATE_SLDF_DUNGYEN);
 					sldf_coTheNhay = false;
 					sldf_coTheNamXuong = false;
+					sldf_oGanCauThang = false;
+					sldf_leoCauThang = false;
 				}
 			}
 			break;
@@ -602,7 +651,39 @@ void CHero::SetState(int state)
 			currentWidth = BOX_SLDF_WIDTH_NAMXUONG;
 			currentHeight = BOX_SLDF_HEIGHT_NAMXUONG;
 			break;
-
+		case STATE_SLDF_LEOLENCAUTHANG:
+			vy = -0.08;
+			vx = 0;
+			ny = -1;
+			if(cauThang!=NULL)
+			x = cauThang->x + cauThang->GetWidth() / 2 - currentWidth / 2;
+			lastWidth = currentWidth;
+			lastHeight = currentHeight;
+			currentWidth = BOX_DFMAP_WIDTH_LEOTHANG;
+			currentHeight = BOX_DFMAP_HEIGHT_LEOTHANG;
+			break;
+		case STATE_SLDF_LEOXUONGCAUTHANG:
+			vy = 0.08;
+			vx = 0;
+			ny = 1;
+			if (cauThang != NULL)
+				x = cauThang->x + cauThang->GetWidth() / 2 - currentWidth / 2;
+			lastWidth = currentWidth;
+			lastHeight = currentHeight;
+			currentWidth = BOX_DFMAP_WIDTH_LEOTHANG;
+			currentHeight = BOX_DFMAP_HEIGHT_LEOTHANG;
+			break;
+		case STATE_SLDF_DUNGTRENCAUTHANG:
+			vy = 0;
+			vx = 0;
+			ny = 0;
+			if (cauThang != NULL)
+				x = cauThang->x + cauThang->GetWidth() / 2 - currentWidth / 2;
+			lastWidth = currentWidth;
+			lastHeight = currentHeight;
+			currentWidth = BOX_DFMAP_WIDTH_LEOTHANG;
+			currentHeight = BOX_DFMAP_HEIGHT_LEOTHANG;
+			break;
 		default:
 			break;
 		}
@@ -670,7 +751,7 @@ void CHero::SetState(int state)
 		case STATE_SLOC_HIGHTJUMP:
 			
 			if (dangNhay&&vy<0) {
-				DebugOut(L"%f\n", vy);
+				//DebugOut(L"%f\n", vy);
 				vy -= 0.00015*dt;
 			}
 			break;

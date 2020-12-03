@@ -87,6 +87,10 @@ public:
 	static CGame * GetInstance();
 
 	bool IsScope(float l1, float t1, float r1, float b1, float l2, float t2, float r2, float b2);
+	bool ChongLenNhau(float l1, float t1, float r1, float b1, float l2, float t2, float r2, float b2) {
+		if (!(l1 > r2 || r1 < l2 || t1 > b2 || b1 < t2)) return true;
+		return false;
+	}
 
 	~CGame();
 };

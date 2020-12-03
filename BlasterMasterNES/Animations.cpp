@@ -30,12 +30,14 @@ void CAnimation::Render(float x, float y, int alpha, int frame)
 	}
 	else
 	{
-		DWORD t = frames[currentFrame]->GetTime();
-		if (now - lastFrameTime > t)
-		{
-			currentFrame++;
-			lastFrameTime = now;
-			if (currentFrame == frames.size()) currentFrame = 0;
+		if (!isStop) {
+			DWORD t = frames[currentFrame]->GetTime();
+			if (now - lastFrameTime > t)
+			{
+				currentFrame++;
+				lastFrameTime = now;
+				if (currentFrame == frames.size()) currentFrame = 0;
+			}
 		}
 	}
 

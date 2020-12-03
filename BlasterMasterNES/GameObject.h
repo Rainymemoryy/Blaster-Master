@@ -52,8 +52,8 @@ public:
 	float vx;
 	float vy;
 
-	int nx;
-
+	int nx, ny;
+	
 	int state;
 
 	DWORD dt;
@@ -108,8 +108,12 @@ public:
 	bool IsScopeWith(CGameObject *obj);
 	void TinhTam(float &x, float &y);
 	float TinhKhoangCach(CGameObject *obj);
-
 	void SetDelete(bool a) { this->isDelete = a; }
+
+	float GetWidth() { float l, t, r, b;
+	this->GetBoundingBox(l, t, r, b);
+	return r - l;
+	}
 
 	~CGameObject();
 };

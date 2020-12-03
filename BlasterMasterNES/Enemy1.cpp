@@ -2,9 +2,7 @@
 #include "Hero.h"
 #include "PlayScence.h"
 #include "Bullet.h"
-
-
-
+#include "AreaOnMap.h"
 
 CEnemy1::CEnemy1(float x, float y)
 {
@@ -13,8 +11,10 @@ CEnemy1::CEnemy1(float x, float y)
 	this->y = y;
 
 	vx = -Enemy1_VX;
-	vy = 0;
+	vy = Enemy1_VY;;
 	hp = Enemy1_HP;
+
+	dropItem = AreaOnMap_Type_ItemHP;
 }
 
 void CEnemy1::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOBJECT>* listObj)
@@ -29,7 +29,6 @@ void CEnemy1::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOBJ
 		x = (l + r) / 2;
 	if (x > herox + 25) vx = -Enemy1_VX;
 	if (x < herox - 25)  vx = Enemy1_VX;
-
 
 	CGameObject::Update(dt);
 	coEvents.clear();
@@ -46,7 +45,6 @@ void CEnemy1::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOBJ
 		}
 	}
 	CalcPotentialCollisions(TmpCoo, coEvents);
-	
 }
 
 void CEnemy1::LastUpdate()
@@ -58,9 +56,8 @@ void CEnemy1::LastUpdate()
 	}
 	else
 	{
-		
-		if(true){
-			float min_tx, min_ty, nx = 0, ny=0;
+		if (true) {
+			float min_tx, min_ty, nx = 0, ny = 0;
 			float rdx = 0;
 			float rdy = 0;
 			vector<LPCOLLISIONEVENT> coEvents_Brick;
@@ -80,21 +77,25 @@ void CEnemy1::LastUpdate()
 			if (ny != 0) vy = 0;
 		}
 
-		if(true){
+		if (true) {
 			for (int i = 0; i < coEvents.size(); i++) {
 				LPCOLLISIONEVENT e = coEvents[i];
 				if ((dynamic_cast<CBullet *>(e->obj))) {
 					hp -= (dynamic_cast<CBullet *>(e->obj))->GetDamage();
-					if (hp <= 0) isDelete = true;
+					if (hp <= 0) {
+						isDelete = true;
+						DropItem();
+					}
+
+
 				}
 			}
 		}
 		for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 	}
-
-
-	
 }
+
+
 
 void CEnemy1::Render()
 {
@@ -110,4 +111,3 @@ void CEnemy1::GetBoundingBox(float & left, float & top, float & right, float & b
 	top = y;
 	bottom = y + Enemy1_Box_Height;
 }
-

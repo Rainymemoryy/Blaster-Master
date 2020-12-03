@@ -15,7 +15,7 @@ void CBullet3::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOB
 	float target_x=-1, target_y=-1;
 	target->GetPosition(target_x, target_y);
 
-	DebugOut(L"%f  %f   \n", target_x, target_y);
+	//DebugOut(L"%f  %f   \n", target_x, target_y);
 	if (abs(target_x - x) > abs(target_y - y))
 	{
 		if (target_x - x > 0) {
@@ -61,7 +61,7 @@ void CBullet3::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOB
 			}*/
 
 			if (target == e) {
-				DebugOut(L"adas target\n");
+				//DebugOut(L"adas target\n");
 				TmpCoo->push_back(e);
 			}
 				

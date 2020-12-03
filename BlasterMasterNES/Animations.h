@@ -23,6 +23,7 @@ typedef CAnimationFrame *LPANIMATION_FRAME;
 
 class CAnimation
 {
+	bool isStop = false;
 	DWORD lastFrameTime;
 	int currentFrame;
 	int defaultTime;
@@ -33,6 +34,7 @@ public:
 	void Render(float x, float y, int alpha = 255, int frame = -1);
 	int GetCurrentFrame() { return currentFrame; }
 	void SetCurrentFrame(int n) {}
+	void IsStop(bool isStop) { this->isStop = isStop; }
 };
 
 typedef CAnimation *LPANIMATION;

@@ -10,6 +10,7 @@
 #include "Brick.h"
 #include "Brick1.h"
 #include "Brick2.h"
+#include "Stair.h"
 
 #include "Enemy1.h"
 #include "Enemy2.h"
@@ -28,7 +29,7 @@
 #define AreaOnMap_Type_BrickDf	0
 #define AreaOnMap_Type_Brick1	1
 #define AreaOnMap_Type_Brick2	2
-
+#define AreaOnMap_Type_Stair	3
 
 #define AreaOnMap_Type_Portal	20
 
@@ -115,6 +116,9 @@ public:
 			break;
 		case AreaOnMap_Type_Brick2:
 			obj = new CBrick2(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16, atof(tokens[3].c_str()) * 16, atof(tokens[4].c_str()) * 16);
+			break;
+		case AreaOnMap_Type_Stair:
+			obj = new CStair(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16, atof(tokens[3].c_str()) * 16, atof(tokens[4].c_str()) * 16);
 			break;
 
 
