@@ -24,7 +24,8 @@ class CEnemy2 : public CEnemy
 	int timeBanDan = 0;
 	bool isBanDan = false;
 	int timeAniBanDan=-1;
-	vector<LPGAMEOBJECT> *listObj;
+	
+	//vector<LPGAMEOBJECT> *listObj;
 public:
 	CEnemy2(float x, float y);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL, vector<LPGAMEOBJECT> *listObj = NULL);

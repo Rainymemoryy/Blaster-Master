@@ -1,30 +1,43 @@
-#include "Enemy1.h"
-#include "Hero.h"
-#include "PlayScence.h"
-
-
-#include "Bullet.h"
+#include "Enemy6.h"
+#include <cstdlib>
 #include "Bullet3.h"
-
 #include "Item.h"
 
-
-
-CEnemy1::CEnemy1(float x, float y)
+CEnemy6::CEnemy6(float x, float y, float min_x, float max_x)
 {
-	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(Enemy1_AniSet));
 	this->x = x;
 	this->y = y;
-
-	vx = -Enemy1_VX;
-	vy = Enemy1_VY;;
-	hp = Enemy1_HP;
+	this->min_x = min_x;
+	this->max_x = max_x;
+	vy = 0;
+	vx = -Enemy6_VX;
 
 	dropItem = Item_HP;
+
+	hp = Enemy6_HP;
+
+	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(Enemy6_AniSet));
 }
 
-void CEnemy1::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOBJECT>* listObj)
+void CEnemy6::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOBJECT>* listObj)
 {
+
+
+	this->listObj = listObj;
+	if (soLanNhay == 0) {
+		timeDiTrenMatDat -= dt;
+		if (timeDiTrenMatDat < 0) {
+			srand(time(NULL));
+			soLanNhay = rand() % 4 + 1;
+			DebugOut(L"[Enenmy6] so lan nhay %d\n", soLanNhay);
+		}
+	}
+	else timeDiTrenMatDat = Enemy6_TimeDiTrenMatDat;
+
+
+	//CGameObject::Update(dt);
+
+	this->dt = dt;
 	this->listObj = listObj;
 	CGameObject::Update(dt);
 	coEvents->clear();
@@ -34,17 +47,20 @@ void CEnemy1::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOBJ
 		if (coObjects->at(i)->isTouthtable) tmp->push_back(coObjects->at(i));
 	CalcPotentialCollisions(tmp, *coEvents);
 	delete tmp;
+
+
+
 }
 
-void CEnemy1::LastUpdate()
+void CEnemy6::LastUpdate()
 {
-
 	if (coEvents->size() == 0) {
 		x += dx;
 		y += dy;
 	}
 	else
 	{
+
 		if (true) {
 			float min_tx, min_ty, nx = 0, ny = 0;
 			float rdx = 0;
@@ -62,8 +78,18 @@ void CEnemy1::LastUpdate()
 			x += min_tx * dx + nx * 0.001f;
 			y += min_ty * dy + ny * 0.001f;
 
+
+
 			if (nx != 0) vx = -vx;
-			if (ny != 0) vy = 0;
+
+			if (soLanNhay > 0) {
+				if (ny < 0) {
+					vy = -Enemy6_VY; soLanNhay--;
+				}
+			}
+			else {
+				if (ny != 0) vy = 0;
+			}
 		}
 
 		if (true) {
@@ -91,33 +117,24 @@ void CEnemy1::LastUpdate()
 		for (UINT i = 0; i < coEvents->size(); i++) delete coEvents->at(i);
 	}
 
-	if (true) {
-		vy += Enemy1_AY;
-		float hero_t, hero_l, hero_r, hero_b;
-		((CPlayScene*)(CGame::GetInstance()->GetCurrentScene()))->GetPlayer()->GetBoundingBox(hero_l, hero_t, hero_r, hero_b);
-		float t, l, r, b;
-		GetBoundingBox(l, t, r, b);
-		float herox = (hero_l + hero_r) / 2,
-			x = (l + r) / 2;
-		if (x > herox + 25) vx = -Enemy1_VX;
-		if (x < herox - 25)  vx = Enemy1_VX;
-	}
-
+	vy += Enemy6_AY;
+	if (x < min_x)vx = Enemy6_VX;
+	if (x > max_x)vx = -Enemy6_VX;
 }
 
-
-
-void CEnemy1::Render()
+void CEnemy6::Render()
 {
-	RenderBoundingBox();
-	if (vx < 0) animation_set->at(Enemy1_Ani_Left)->Render(round(x), round(y), 255, -1);
-	else animation_set->at(Enemy1_Ani_Right)->Render(round(x), round(y), 255, -1);
+
+	if (vx <= 0) animation_set->at(Enemy6_Ani_Left)->Render(round(x), round(y), 255, -1);
+	else animation_set->at(Enemy6_Ani_Right)->Render(round(x), round(y), 255, -1);
 }
 
-void CEnemy1::GetBoundingBox(float & left, float & top, float & right, float & bottom)
+void CEnemy6::GetBoundingBox(float & left, float & top, float & right, float & bottom)
 {
 	left = x;
-	right = x + Enemy1_Box_Width;
 	top = y;
-	bottom = y + Enemy1_Box_Height;
+	right = x + Enemy6_Box_Width;
+	bottom = y + Enemy6_Box_Height;
 }
+
+

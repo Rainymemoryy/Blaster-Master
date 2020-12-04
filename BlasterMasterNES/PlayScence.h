@@ -52,6 +52,7 @@ public:
 	void SetCam(float cx, float cy) { this->cx=cx; this->cy = cy; }
 	void GetCam(float &cx, float& cy);
 	
+	
 };
 
 class CPlayScenceKeyHandler : public CScenceKeyHandler

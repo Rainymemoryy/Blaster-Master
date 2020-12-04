@@ -2,6 +2,9 @@
 #include "GameObject.h"
 
 
+#define Item_HP	201
+
+
 class CItem :public CGameObject
 {
 public:

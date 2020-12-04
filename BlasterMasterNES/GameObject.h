@@ -64,7 +64,7 @@ public:
 	bool isTouthtable = true;
 
 
-	vector<LPCOLLISIONEVENT> coEvents;
+	vector<LPCOLLISIONEVENT> *coEvents=new vector<LPCOLLISIONEVENT>();
 	
 
 	int dropItem = -1;

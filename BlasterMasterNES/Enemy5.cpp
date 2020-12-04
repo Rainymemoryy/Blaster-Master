@@ -2,68 +2,39 @@
 #include "Hero.h"
 #include "PlayScence.h"
 #include "Bullet.h"
-
+#include "Item.h"
 
 CEnemy5::CEnemy5()
 {
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(Enemy5_AniSet));
-
 	x = 100;
 	y = 100;
 	vx = -Enemy5_VX;
 	vy = 0;
 	hp = Enemy5_HP;
+	dropItem = Item_HP;
 }
 
 void CEnemy5::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOBJECT>* listObj)
 {
 	
-	CHero *hero = ((CPlayScene*)(CGame::GetInstance()->GetCurrentScene()))->GetPlayer();
-	if (this->TinhKhoangCach(hero) <= Enemy5_MaxD) {
-		float a1, b1, a2, b2;
-
-		hero->TinhTam(a1, b1);
-		this->TinhTam(a2, b2);
-		vx = 3*Enemy5_VX*(a1 - a2) / hero->TinhKhoangCach(this);
-		vy = 3*Enemy5_VY *(b1 - b2) / hero->TinhKhoangCach(this);
-		followHero = true;
-
-	}
-	else {
-		
-		timeDoiHuong -= dt;
-		if (timeDoiHuong <= 0) {
-			vx = -vx;
-			timeDoiHuong += Enemy5_TimeDoiHuong;
-		}
-		followHero = false;
-	}
 	
+	this->listObj = listObj;
 	CGameObject::Update(dt);
-	coEvents.clear();
+	coEvents->clear();
 
-	vector<LPGAMEOBJECT> *TmpCoo = new vector<LPGAMEOBJECT>();
-	for (int i = 0; i < coObjects->size(); i++) {
-		LPGAMEOBJECT e = coObjects->at(i);
-		if (dynamic_cast<CBrick *>(e)) {
-			TmpCoo->push_back(e);
-		}
-		if (dynamic_cast<CHero *>(e)) {
-			TmpCoo->push_back(e);
-		}
-		if (dynamic_cast<CBullet *>(e) && e->isTouthtable) {
-			if (e->GetState() != Bullet_Enemy)
-				TmpCoo->push_back(e);
-		}
-	}
-	CalcPotentialCollisions(TmpCoo, coEvents);
+	vector<LPGAMEOBJECT>* tmp = new vector<LPGAMEOBJECT>();
+	for (int i = 0; i < coObjects->size(); i++)
+		if (coObjects->at(i)->isTouthtable) tmp->push_back(coObjects->at(i));
+	CalcPotentialCollisions(tmp, *coEvents);
+	delete tmp;
 	
 }
 
 void CEnemy5::LastUpdate()
 {
 	
-	if (coEvents.size() == 0) {
+	if (coEvents->size() == 0) {
 		x += dx;
 		y += dy;
 	}
@@ -77,8 +48,8 @@ void CEnemy5::LastUpdate()
 			vector<LPCOLLISIONEVENT> coEvents_Brick;
 			vector<LPCOLLISIONEVENT> coEventsResult_Brick;
 
-			for (int i = 0; i < coEvents.size(); i++) {
-				LPCOLLISIONEVENT e = coEvents[i];
+			for (int i = 0; i < coEvents->size(); i++) {
+				LPCOLLISIONEVENT e = coEvents->at(i);
 				if (dynamic_cast<CBrick *>(e->obj))
 					coEvents_Brick.push_back(e);
 			}
@@ -95,8 +66,8 @@ void CEnemy5::LastUpdate()
 		}
 
 		if (true) {
-			for (int i = 0; i < coEvents.size(); i++) {
-				LPCOLLISIONEVENT e = coEvents[i];
+			for (int i = 0; i < coEvents->size(); i++) {
+				LPCOLLISIONEVENT e = coEvents->at(i);
 				if ((dynamic_cast<CBullet *>(e->obj))) {
 					hp -= (dynamic_cast<CBullet *>(e->obj))->GetDamage();
 					if (hp <= 0) isDelete = true;
@@ -106,7 +77,30 @@ void CEnemy5::LastUpdate()
 				}
 			}
 		}
-		for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+		for (UINT i = 0; i < coEvents->size(); i++) delete coEvents->at(i);
+	}
+
+	if (true) {
+		CHero *hero = ((CPlayScene*)(CGame::GetInstance()->GetCurrentScene()))->GetPlayer();
+		if (this->TinhKhoangCach(hero) <= Enemy5_MaxD) {
+			float a1, b1, a2, b2;
+
+			hero->TinhTam(a1, b1);
+			this->TinhTam(a2, b2);
+			vx = 3 * Enemy5_VX*(a1 - a2) / hero->TinhKhoangCach(this);
+			vy = 3 * Enemy5_VY *(b1 - b2) / hero->TinhKhoangCach(this);
+			followHero = true;
+
+		}
+		else {
+
+			timeDoiHuong -= dt;
+			if (timeDoiHuong <= 0) {
+				vx = -vx;
+				timeDoiHuong += Enemy5_TimeDoiHuong;
+			}
+			followHero = false;
+		}
 	}
 }
 

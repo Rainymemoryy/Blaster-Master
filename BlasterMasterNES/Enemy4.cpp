@@ -2,58 +2,44 @@
 #include "Hero.h"
 #include "PlayScence.h"
 #include "Bullet.h"
+#include "Bullet3.h"
+
+#include "Item.h"
 
 
-CEnemy4::CEnemy4()
+CEnemy4::CEnemy4(float x, float y)
 {
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(Enemy4_AniSet));
-	x = 100;
-	y = 100;
+	this->x = x;
+	this->y = y;
 	vy = 0;
 	vx = -Enemy4_VX;
-	hp = Enemy4_HP;
-	
+	hp = Enemy4_HP*10;
+	dropItem = Item_HP;
 }
 
 void CEnemy4::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOBJECT>* listObj)
 {
-	vy += Enemy4_AY*dt;
-
-
-	timeJump -= dt;
-	if (timeJump <= 0) {
-		vy = -Enemy4_VY;
-		timeJump += Enemy4_TimeJump;
-	}
-
+	this->listObj = listObj;
 	CGameObject::Update(dt);
-	coEvents.clear();
+	coEvents->clear();
 
-	vector<LPGAMEOBJECT> *TmpCoo = new vector<LPGAMEOBJECT>();
-	for (int i = 0; i < coObjects->size(); i++) {
-		LPGAMEOBJECT e = coObjects->at(i);
-		if (dynamic_cast<CBrick *>(e)) {
-			TmpCoo->push_back(e);
-		}
-		if (dynamic_cast<CBullet *>(e) && e->isTouthtable) {
-			if (e->GetState() != Bullet_Enemy)
-				TmpCoo->push_back(e);
-		}
-	}
-	CalcPotentialCollisions(TmpCoo, coEvents);
+	vector<LPGAMEOBJECT>* tmp = new vector<LPGAMEOBJECT>();
+	for (int i = 0; i < coObjects->size(); i++)
+		if (coObjects->at(i)->isTouthtable) tmp->push_back(coObjects->at(i));
+	CalcPotentialCollisions(tmp, *coEvents);
+	delete tmp;
 	
 }
 
 void CEnemy4::LastUpdate()
 {
-	
-	if (coEvents.size() == 0) {
+	if (coEvents->size() == 0) {
 		x += dx;
 		y += dy;
 	}
 	else
 	{
-
 		if (true) {
 			float min_tx, min_ty, nx = 0, ny = 0;
 			float rdx = 0;
@@ -61,8 +47,8 @@ void CEnemy4::LastUpdate()
 			vector<LPCOLLISIONEVENT> coEvents_Brick;
 			vector<LPCOLLISIONEVENT> coEventsResult_Brick;
 
-			for (int i = 0; i < coEvents.size(); i++) {
-				LPCOLLISIONEVENT e = coEvents[i];
+			for (int i = 0; i < coEvents->size(); i++) {
+				LPCOLLISIONEVENT e = coEvents->at(i);
 				if (dynamic_cast<CBrick *>(e->obj))
 					coEvents_Brick.push_back(e);
 			}
@@ -78,21 +64,40 @@ void CEnemy4::LastUpdate()
 				timeJump = Enemy4_TimeJump;
 			}
 		}
-
 		if (true) {
-			for (int i = 0; i < coEvents.size(); i++) {
-				LPCOLLISIONEVENT e = coEvents[i];
-				if ((dynamic_cast<CBullet *>(e->obj))) {
-					hp -= (dynamic_cast<CBullet *>(e->obj))->GetDamage();
-					if (hp <= 0) isDelete = true;
+			for (int i = 0; i < coEvents->size(); i++) {
+				CGameObject* e = coEvents->at(i)->obj;
+
+				if (dynamic_cast<CBullet3 *>(e))
+				{
+					CBullet3 *tmpBullet3 = (CBullet3*)(e);
+					if (tmpBullet3->target == this) hp -= tmpBullet3->GetDamage();
 				}
+				else if (dynamic_cast<CBullet *>(e) && e->GetState() != Bullet_Enemy)
+				{
+					CBullet *tmpBullet = (CBullet*)(e);
+					hp -= tmpBullet->GetDamage();
+				}
+
 			}
+			if (hp <= 0) {
+				isDelete = true;
+				DropItem();
+			}
+
 		}
-		for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+		for (UINT i = 0; i < coEvents->size(); i++) delete coEvents->at(i);
 	}
-
-
-
+	
+	if (true) {
+		vy += Enemy4_AY * dt;
+		timeJump -= dt;
+		if (timeJump <= 0) {
+			vy = -Enemy4_VY;
+			timeJump += Enemy4_TimeJump;
+		}
+	}
+	
 }
 
 void CEnemy4::Render()

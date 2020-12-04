@@ -14,8 +14,9 @@
 
 class CBullet3 : public CBullet
 {
-	CGameObject *target;
+	
 public:
+	CGameObject *target;
 	CBullet3();
 
 	virtual void LastUpdate();

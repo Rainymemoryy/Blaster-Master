@@ -236,30 +236,28 @@ void CPlayScene::Update(DWORD dt)
 	t1 = cy;
 	r1 = cx+CGame::GetInstance()->GetScreenWidth();
 	b1 = cy+CGame::GetInstance()->GetScreenHeight();
-	
 
-	//DebugOut(L"%d %d\n", CGame::GetInstance()->GetScreenWidth(), CGame::GetInstance()->GetScreenHeight());
+	//DebugOut(L"++++++++++++++size %d\n", objects->size());
 
 	for (int i = objects->size() - 1; i >= 0; i--) {
 		if (objects->at(i)->isDelete)
 		{
-			delete objects->at(i);
+			CGameObject *tmp = objects->at(i);
 			objects->erase(objects->begin() + i);
+			delete tmp;
 		}
 		else {
-			/*if(dynamic_cast<CBrick*>(objects->at(i))) curObjects->push_back(objects->at(i));
-			else {*/
+			if(dynamic_cast<CBrick*>(objects->at(i))) curObjects->push_back(objects->at(i));
+			else {
 				objects->at(i)->GetBoundingBox(l2, t2, r2, b2);
-
-
-				
-				//if (CGame::GetInstance()->IsScope(l1, t1, r1, b1, l2, t2, r2, b2) || CGame::GetInstance()->IsScope(l2, t2, r2, b2, l1, t1, r1, b1))
 				if(!(l1 > r2 || r1 < l2 || t1 > b2 || b1 < t2))
 					curObjects->push_back(objects->at(i));
-			//}
+			}
 		
 		}
 	}
+
+	//DebugOut(L"-------------size %d\n", objects->size());
 
 	for (size_t i = 0; i < curObjects->size(); i++) {
 		curObjects->at(i)->Update(dt, curObjects, objects);

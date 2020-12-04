@@ -6,6 +6,7 @@
 #include "Bullet.h"
 #include "Enemy.h"
 
+
 #define Enemy1_Box_Height	10
 #define Enemy1_Box_Width	18
 #define Enemy1_HP			100

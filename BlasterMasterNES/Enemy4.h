@@ -28,7 +28,7 @@ protected:
 
 	float s1, s2;
 public:
-	CEnemy4();
+	CEnemy4(float x, float y);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL, vector<LPGAMEOBJECT> *listObj = NULL);
 	virtual void Render();
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);

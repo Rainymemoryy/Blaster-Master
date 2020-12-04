@@ -3,7 +3,8 @@
 #include "PlayScence.h"
 #include "Bullet.h"
 #include "Bullet1.h"
-
+#include "Item.h"
+#include "Bullet3.h"
 
 CEnemy2::CEnemy2(float x, float y)
 {
@@ -15,36 +16,25 @@ CEnemy2::CEnemy2(float x, float y)
 	vy = Enemy2_VY;
 	hp = Enemy2_HP;
 
-
+	dropItem = Item_HP;
 }
 
 void CEnemy2::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOBJECT>* listObj)
 {
-	
-	CGameObject::Update(dt);
 	this->listObj = listObj;
-	coEvents.clear();
+	CGameObject::Update(dt);
+	coEvents->clear();
 
-	vector<LPGAMEOBJECT> *TmpCoo = new vector<LPGAMEOBJECT>();
-	for (int i = 0; i < coObjects->size(); i++) {
-		LPGAMEOBJECT e = coObjects->at(i);
-		if (dynamic_cast<CBrick *>(e)  && e->isTouthtable) {
-			TmpCoo->push_back(e);
-		}
-		if (dynamic_cast<CBullet *>(e) && e->isTouthtable) {
-			if(e->state!=Bullet_Enemy) 
-				TmpCoo->push_back(e);
-		}
-	}
-	CalcPotentialCollisions(TmpCoo, coEvents);
+	vector<LPGAMEOBJECT>* tmp = new vector<LPGAMEOBJECT>();
+	for (int i = 0; i < coObjects->size(); i++)
+		if (coObjects->at(i)->isTouthtable) tmp->push_back(coObjects->at(i));
+	CalcPotentialCollisions(tmp, *coEvents);
+	delete tmp;
 }
 
 void CEnemy2::LastUpdate()
 {
-
-	
-
-	if (coEvents.size() == 0) {
+	if (coEvents->size() == 0) {
 		x += dx;
 		y += dy;
 	}
@@ -58,8 +48,8 @@ void CEnemy2::LastUpdate()
 			vector<LPCOLLISIONEVENT> coEvents_Brick;
 			vector<LPCOLLISIONEVENT> coEventsResult_Brick;
 
-			for (int i = 0; i < coEvents.size(); i++) {
-				LPCOLLISIONEVENT e = coEvents[i];
+			for (int i = 0; i < coEvents->size(); i++) {
+				LPCOLLISIONEVENT e = coEvents->at(i);
 				if (dynamic_cast<CBrick *>(e->obj))
 					coEvents_Brick.push_back(e);
 			}
@@ -73,30 +63,44 @@ void CEnemy2::LastUpdate()
 		}
 
 		if (true) {
-			for (int i = 0; i < coEvents.size(); i++) {
-				LPCOLLISIONEVENT e = coEvents[i];
-				if ((dynamic_cast<CBullet *>(e->obj))) {
-					hp -= (dynamic_cast<CBullet *>(e->obj))->GetDamage();
-					if (hp <= 0) isDelete = true;
-				}	
+			for (int i = 0; i < coEvents->size(); i++) {
+				CGameObject* e = coEvents->at(i)->obj;
+
+				if (dynamic_cast<CBullet3 *>(e))
+				{
+					CBullet3 *tmpBullet3 = (CBullet3*)(e);
+					if (tmpBullet3->target == this) hp -= tmpBullet3->GetDamage();
+				}
+				else if (dynamic_cast<CBullet *>(e))
+				{
+					CBullet *tmpBullet = (CBullet*)(e);
+					hp -= tmpBullet->GetDamage();
+				}
 			}
+			if (hp <= 0) {
+				isDelete = true;
+				DropItem();
+			}
+
 		}
-		for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+
+		for (UINT i = 0; i < coEvents->size(); i++) delete coEvents->at(i);
 		
 	}
 
+	if (true) {
+		CHero * hero = ((CPlayScene*)(CGame::GetInstance()->GetCurrentScene()))->GetPlayer();
+		float kc = this->TinhKhoangCach(hero);
+		timeBanDan += dt;
+		timeAniBanDan = timeAniBanDan < 0 ? -1 : timeAniBanDan + dt;
+		if (timeBanDan >= Enemy2_TimeBanDan && kc <= 100 && kc >= 30) {
+			timeBanDan = 0;
+			timeAniBanDan = 0;
+			isBanDan = true;
 
-	CHero * hero = ((CPlayScene*)(CGame::GetInstance()->GetCurrentScene()))->GetPlayer();
-	float kc = this->TinhKhoangCach(hero);
-	timeBanDan += dt;
-	timeAniBanDan = timeAniBanDan < 0 ? -1 : timeAniBanDan + dt;
-	if (timeBanDan >= Enemy2_TimeBanDan && kc <= 100 && kc >= 30) {
-		timeBanDan = 0;
-		timeAniBanDan = 0;
-		isBanDan = true;
+			BanDan();
 
-		BanDan();
-
+		}
 	}
 }
 

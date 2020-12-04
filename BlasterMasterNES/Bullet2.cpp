@@ -13,34 +13,15 @@ void CBullet2::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOB
 {
 	if (isPhatNo)return;
 	CGameObject::Update(dt);
-	coEvents.clear();
-
-	vector<LPGAMEOBJECT> *TmpCoo = new vector<LPGAMEOBJECT>();
-	for (int i = 0; i < coObjects->size(); i++) {
-		LPGAMEOBJECT e = coObjects->at(i);
-
-
-		if (e->isTouthtable)
-		{
-			if (dynamic_cast<CBrick *>(e)) {
-				TmpCoo->push_back(e);
-			}
-			if (dynamic_cast<CHero*>(e)) {
-				if (GetState() != Bullet_Hero) TmpCoo->push_back(e);
-			}
-			if (dynamic_cast<CEnemy*>(e)) {
-				if (GetState() != Bullet_Enemy) TmpCoo->push_back(e);
-			}
-		}
-	}
-	CalcPotentialCollisions(TmpCoo, coEvents);
+	coEvents->clear();
+	CalcPotentialCollisions(coObjects, *coEvents);
 }
 
 void CBullet2::LastUpdate()
 {
 	if (isPhatNo)  timeDelete -= dt;
 	else {
-		if (coEvents.size() == 0)
+		if (coEvents->size() == 0)
 		{
 			if (maxD - sqrt(dx*dx + dy * dy) > 0)
 			{
@@ -56,7 +37,6 @@ void CBullet2::LastUpdate()
 			}
 			else
 			{
-
 				isPhatNo = true;
 				isTouthtable = false;
 			}
@@ -66,23 +46,44 @@ void CBullet2::LastUpdate()
 			float min_tx, min_ty, nx = 0, ny;
 			float rdx = 0;
 			float rdy = 0;
-			vector<LPCOLLISIONEVENT> coEventsResult;
-			
-			FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
-			for (int i = 0; i < coEventsResult.size(); i++) {
+			vector<LPCOLLISIONEVENT> *coEventsResult = new vector<LPCOLLISIONEVENT>();
+			vector<LPCOLLISIONEVENT> *tmpCoo = new vector<LPCOLLISIONEVENT>();
 
-				LPGAMEOBJECT e = coEventsResult[i]->obj;
-				if (dynamic_cast<CBrick2 *>(e)) {
-					e->SetDelete(true);
+			for (int i = 0; i < coEvents->size(); i++)
+			{
+				CGameObject *obj = coEvents->at(i)->obj;
+				if (dynamic_cast<CBrick *>(obj)) {
+					tmpCoo->push_back(coEvents->at(i));
+				}
+				if (dynamic_cast<CHero*>(obj)) {
+					if (GetState() != Bullet_Hero) tmpCoo->push_back(coEvents->at(i));
+				}
+				if (dynamic_cast<CEnemy*>(obj)) {
+					if (GetState() != Bullet_Enemy) tmpCoo->push_back(coEvents->at(i));
 				}
 
+
 			}
+
+			FilterCollision(*tmpCoo, *coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+
 			x += min_tx * dx + nx * 0.001f;
 			y += min_ty * dy + ny * 0.001f;
-			isPhatNo = true;
-			isTouthtable = false;
 
-			for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+
+			for (int i = 0; i < coEventsResult->size(); i++) {
+
+				LPGAMEOBJECT e = coEventsResult->at(i)->obj;
+				if (dynamic_cast<CBrick2 *>(e)) {
+					e->SetDelete(true);
+					
+				}
+				isPhatNo = true;
+				isTouthtable = false;
+			}
+			delete coEventsResult;
+			delete tmpCoo;
+			for (UINT i = 0; i < coEvents->size(); i++) delete coEvents->at(i);
 		}
 	}
 	if (timeDelete <= 0) isDelete = true;

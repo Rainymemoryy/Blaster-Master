@@ -37,5 +37,5 @@ public:
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 
 	virtual void LastUpdate();
-	virtual float GetDamge() { return Enemy1_Damge; };
+	virtual float GetDamge() { return Enemy5_Damge; };
 };

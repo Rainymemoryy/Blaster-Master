@@ -20,7 +20,7 @@ CEnemy3::CEnemy3()
 
 void CEnemy3::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOBJECT>* listObj)
 {
-	CGameObject::Update(dt);
+	/*CGameObject::Update(dt);
 	coEvents.clear();
 	vector<LPGAMEOBJECT> *TmpCoo = new vector<LPGAMEOBJECT>();
 	for (int i = 0; i < coObjects->size(); i++) {
@@ -29,7 +29,7 @@ void CEnemy3::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOBJ
 			TmpCoo->push_back(e);
 		}
 	}
-	CalcPotentialCollisions(TmpCoo, coEvents);
+	CalcPotentialCollisions(TmpCoo, coEvents);*/
 }
 void CEnemy3::Render()
 {
@@ -48,7 +48,7 @@ void CEnemy3::GetBoundingBox(float & left, float & top, float & right, float & b
 void CEnemy3::LastUpdate()
 {
 	
-	if (coEvents.size() == 0) {
+	/*if (coEvents.size() == 0) {
 		x += dx;
 		y += dy;
 	}
@@ -77,7 +77,7 @@ void CEnemy3::LastUpdate()
 		}
 
 		for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
-	}
+	}*/
 
 }
 

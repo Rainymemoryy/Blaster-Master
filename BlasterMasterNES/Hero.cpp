@@ -138,7 +138,7 @@ void CHero::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJEC
 	}
 
 	if (true) {
-		coEvents.clear();
+		coEvents->clear();
 
 		/*vector<LPGAMEOBJECT> *TmpCoo = new vector<LPGAMEOBJECT>();
 		for (int i = 0; i < coObjects->size(); i++) {
@@ -161,7 +161,7 @@ void CHero::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJEC
 			}
 		}*/
 
-		CalcPotentialCollisions(coObjects, coEvents);
+		CalcPotentialCollisions(coObjects, *coEvents);
 	}
 	
 	
@@ -177,7 +177,7 @@ void CHero::LastUpdate()
 	sldf_oTrenCauThang = false;
 	
 	//Tinh toan va cham
-	if (coEvents.size() == 0)
+	if (coEvents->size() == 0)
 	{
 		x += dx;
 		y += dy;
@@ -194,16 +194,16 @@ void CHero::LastUpdate()
 			vector<LPCOLLISIONEVENT> *coEventsResultBrick = new vector<LPCOLLISIONEVENT>();
 
 
-			for (int i = 0; i < coEvents.size(); i++)
+			for (int i = 0; i < coEvents->size(); i++)
 			{
-				if (dynamic_cast<CBrick *>(coEvents.at(i)->obj))
-					coEventsBrick->push_back(coEvents.at(i));
-				if (dynamic_cast<CStair *>(coEvents.at(i)->obj))
+				if (dynamic_cast<CBrick *>(coEvents->at(i)->obj))
+					coEventsBrick->push_back(coEvents->at(i));
+				if (dynamic_cast<CStair *>(coEvents->at(i)->obj))
 				{
-					cauThang = coEvents.at(i)->obj;
-					if (coEvents.at(i)->ny < 0) {
+					cauThang = coEvents->at(i)->obj;
+					if (coEvents->at(i)->ny < 0) {
 						sldf_oGanCauThang = true;
-						coEventsBrick->push_back(coEvents.at(i));
+						coEventsBrick->push_back(coEvents->at(i));
 					}
 						
 				}
@@ -262,14 +262,14 @@ void CHero::LastUpdate()
 			vector<LPCOLLISIONEVENT> *coEventsEnemy_Bullet = new vector<LPCOLLISIONEVENT>();
 			vector<LPCOLLISIONEVENT> *coEventsResultEnemy_Bullet = new vector<LPCOLLISIONEVENT>();
 
-			for (int i = 0; i < coEvents.size(); i++)
+			for (int i = 0; i < coEvents->size(); i++)
 			{
-				LPCOLLISIONEVENT e = coEvents.at(i);
+				LPCOLLISIONEVENT e = coEvents->at(i);
 				if (dynamic_cast<CEnemy *>(e->obj))
-					coEventsEnemy_Bullet->push_back(coEvents.at(i));
+					coEventsEnemy_Bullet->push_back(coEvents->at(i));
 				if (dynamic_cast<CBullet *>(e->obj) && e->obj->isTouthtable)
 					if (e->obj->GetState() != Bullet_Hero)
-						coEventsEnemy_Bullet->push_back(coEvents.at(i));
+						coEventsEnemy_Bullet->push_back(coEvents->at(i));
 			}
 			FilterCollision(*coEventsEnemy_Bullet, *coEventsResultEnemy_Bullet, min_tx, min_ty, nx, ny, rdx, rdy);
 
@@ -304,10 +304,10 @@ void CHero::LastUpdate()
 
 		//va cham voi item, cong dich chuyen
 		if(true){
-			for (int i = 0; i < coEvents.size(); i++) {
-				if (dynamic_cast<CPortal *>(coEvents.at(i)->obj))
+			for (int i = 0; i < coEvents->size(); i++) {
+				if (dynamic_cast<CPortal *>(coEvents->at(i)->obj))
 				{
-					CPortal *portal = (CPortal *)(coEvents.at(i)->obj);
+					CPortal *portal = (CPortal *)(coEvents->at(i)->obj);
 					((CPlayScene*)(CGame::GetInstance()->GetCurrentScene()))->SetIdArea(portal->GetSceneId());
 					x += portal->GetSumX();
 					y += portal->GetSumY();
@@ -315,9 +315,9 @@ void CHero::LastUpdate()
 					vx = 0;
 
 				}
-				if (dynamic_cast<CItemHp *>(coEvents.at(i)->obj))
+				if (dynamic_cast<CItemHp *>(coEvents->at(i)->obj))
 				{
-					CItemHp *itemhp = (CItemHp *)(coEvents.at(i)->obj);
+					CItemHp *itemhp = (CItemHp *)(coEvents->at(i)->obj);
 					if (level == LEVEL_SLDF) {
 						sldf_hp += itemhp->GetHP();
 					}
@@ -330,7 +330,7 @@ void CHero::LastUpdate()
 			
 		}
 
-		for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+		for (UINT i = 0; i < coEvents->size(); i++) delete coEvents->at(i);
 	}
 	
 	//Dieu kien leo cau thang
@@ -490,23 +490,26 @@ void CHero::SetState(int state)
 	if (isDeath) return;
 	CGameObject::SetState(state);
 	if (state == Bullet3) {
-		
-			CBullet3 *obj = new CBullet3();
-			obj->SetPosition(x, y);
-			obj->SetState(Bullet_Hero);
 
-			for (int i = 0; i < listObj->size(); i++)
-			{
-				LPGAMEOBJECT e = listObj->at(i);
-				if (dynamic_cast<CEnemy*>(e))
-				{
-					obj->SetTarget(e);
-					listObj->push_back(obj);
-					//DebugOut(L"%f   %f\n", e->x, e->y);
-					break;
-				}
+		for (int i = 0; i < coObjects->size(); i++) {
+			CGameObject *e = coObjects->at(i);
+
+			if (dynamic_cast<CEnemy*>(e)) {
+
+
+				CBullet3 *obj = new CBullet3();
+
+				float ix, iy;
+				this->TinhTam(ix, iy);
+				obj->SetPosition(ix - 3, iy - 3);
+				obj->SetState(Bullet_Hero);
+				obj->SetTarget(e);
+
+				listObj->push_back(obj);
+
 			}
-		
+		}
+
 	}
 	if (state == STATE_VAOXE) {
 		if (sldf_coTheVaoXe) {

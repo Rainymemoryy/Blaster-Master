@@ -85,6 +85,12 @@
     <ClCompile Include="Stair.cpp">
       <Filter>Brick</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy6.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy7.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Hero.h" />
@@ -173,6 +179,12 @@
     </ClInclude>
     <ClInclude Include="Stair.h">
       <Filter>Brick</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy6.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy7.h">
+      <Filter>Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

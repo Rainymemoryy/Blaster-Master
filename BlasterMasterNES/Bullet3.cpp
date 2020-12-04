@@ -2,82 +2,76 @@
 
 CBullet3::CBullet3()
 {
-	//this->SetAnimationSet(CAnimationSets::GetInstance()->Get(Bullet3_AniSet));
 	damage = Bullet3_Damage_DF;
-	
-
+	vx = 0; vy = 0;
 }
 
 void CBullet3::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOBJECT>* listObj)
 {
 	if (isPhatNo)return;
 
-	float target_x=-1, target_y=-1;
-	target->GetPosition(target_x, target_y);
-
-	//DebugOut(L"%f  %f   \n", target_x, target_y);
-	if (abs(target_x - x) > abs(target_y - y))
-	{
-		if (target_x - x > 0) {
-			vx = Bullet3_V_DF;
-			vy = 0;
-		}
-		else {
-			vx =- Bullet3_V_DF;
-			vy = 0;
-		}
-	}
-	else {
-		if (target_y - y > 0) {
-			vx = 0;
-			vy = Bullet3_V_DF;
-		}
-		else {
-			vx =-0;
-			vy = -Bullet3_V_DF;
-		}
-	}
-
-	if (target_x < 0 || target_y < 0) {
-		vx = 0; vy = 0;
-		CGameObject::Update(dt);
-		isPhatNo = true;
-		return;
-	}
-	
-
-	
-	CGameObject::Update(dt);
-	coEvents.clear();
-
-	vector<LPGAMEOBJECT> *TmpCoo = new vector<LPGAMEOBJECT>();
-
-	for (int i = 0; i < coObjects->size(); i++) {
-		LPGAMEOBJECT e = coObjects->at(i);
-		if (e->isTouthtable)
+	/*for (int i = 0; i < listObj->size(); i++) {
+		if (target == listObj->at(i))
 		{
-			/*if (dynamic_cast<CEnemy*>(e)) {
-				if (GetState() == Bullet_Hero) TmpCoo->push_back(e);
-			}*/
+			float target_x = -1, target_y = -1;
+			target->TinhTam(target_x, target_y);
+			float x, y;
+			TinhTam(x, y);
 
-			if (target == e) {
-				//DebugOut(L"adas target\n");
-				TmpCoo->push_back(e);
+			if (abs(target_x - x) > abs(target_y - y))
+			{
+				if (target_x - x > 0) {
+					vx = Bullet3_V_DF;
+					vy = 0;
+				}
+				else {
+					vx = -Bullet3_V_DF;
+					vy = 0;
+				}
 			}
-				
+			else {
+				if (target_y - y > 0) {
+					vx = 0;
+					vy = Bullet3_V_DF;
+				}
+				else {
+					vx = -0;
+					vy = -Bullet3_V_DF;
+				}
+			}
+
+			CGameObject::Update(dt);
+			coEvents->clear();
+			vector<LPGAMEOBJECT> * tmpObj= new vector<LPGAMEOBJECT>();
+			tmpObj->push_back(target);
+			CalcPotentialCollisions(tmpObj, *coEvents);
+			return;
 		}
 	}
+	isPhatNo = true;*/
 
-	CalcPotentialCollisions(TmpCoo, coEvents);
-
+	for (int i = 0; i < listObj->size(); i++) {
+		if (target == listObj->at(i))
+		{
+			CGameObject::Update(dt);
+			coEvents->clear();
+			vector<LPGAMEOBJECT> * tmpObj = new vector<LPGAMEOBJECT>();
+			tmpObj->push_back(target);
+			CalcPotentialCollisions(tmpObj, *coEvents);
+			return;
+		}
+	}
+	isPhatNo = true;
 }
 
 void CBullet3::LastUpdate()
 {
-	
-	if (isPhatNo)  timeDelete -= dt;
+	if (isPhatNo) {
+		timeDelete -= dt;
+		isTouthtable = false;
+	}
 	else {
-		if (coEvents.size() == 0)
+		if (coEvents->size() == 0)
 		{
 			x += dx;
 			y += dy;
@@ -87,16 +81,50 @@ void CBullet3::LastUpdate()
 			float min_tx, min_ty, nx = 0, ny;
 			float rdx = 0;
 			float rdy = 0;
-			vector<LPCOLLISIONEVENT> coEventsResult;
-			FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+			vector<LPCOLLISIONEVENT> *coEventsResult=new vector<LPCOLLISIONEVENT>();
+			
+
+			FilterCollision(*coEvents, *coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 			x += min_tx * dx + nx * 0.001f;
 			y += min_ty * dy + ny * 0.001f;
 			isPhatNo = true;
 			isTouthtable = false;
+			
+			delete coEventsResult;
+			for (UINT i = 0; i < coEvents->size(); i++) delete coEvents->at(i);
+		}
 
-			for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+		if (true) {
+			float target_x = -1, target_y = -1;
+			target->TinhTam(target_x, target_y);
+			float x, y;
+			TinhTam(x, y);
+
+			if (abs(target_x - x) > abs(target_y - y))
+			{
+				if (target_x - x > 0) {
+					vx = Bullet3_V_DF;
+					vy = 0;
+				}
+				else {
+					vx = -Bullet3_V_DF;
+					vy = 0;
+				}
+			}
+			else {
+				if (target_y - y > 0) {
+					vx = 0;
+					vy = Bullet3_V_DF;
+				}
+				else {
+					vx = -0;
+					vy = -Bullet3_V_DF;
+				}
+			}
 		}
 	}
+
+	
 
 	if (timeDelete <= 0) isDelete = true;
 
@@ -105,11 +133,6 @@ void CBullet3::LastUpdate()
 void CBullet3::Render()
 {
 	RenderBoundingBox();
-	/*if (isPhatNo) {
-		animation_set->at(1)->Render(round(x - 6), round(y - 6), 255, -1);
-	}
-	else animation_set->at(0)->Render(round(x), round(y), 255, -1);*/
-
 }
 
 void CBullet3::GetBoundingBox(float & left, float & top, float & right, float & bottom)

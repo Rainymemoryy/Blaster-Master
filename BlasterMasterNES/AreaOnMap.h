@@ -14,7 +14,10 @@
 
 #include "Enemy1.h"
 #include "Enemy2.h"
-
+#include "Enemy3.h"
+#include "Enemy4.h"
+#include "Enemy5.h"
+#include "Enemy6.h"
 
 
 #include "Item.h"
@@ -40,7 +43,9 @@
 #define AreaOnMap_Type_Enemy5	105
 #define AreaOnMap_Type_Enemy6	106
 
+
 #define AreaOnMap_Type_ItemHP	201
+
 
 
 
@@ -134,6 +139,13 @@ public:
 		case AreaOnMap_Type_Enemy2:
 			obj = new CEnemy2(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16);
 			break;
+		case AreaOnMap_Type_Enemy4:
+			obj = new CEnemy4(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16);
+			
+			break;
+		case AreaOnMap_Type_Enemy6:
+			obj = new CEnemy6(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16, atof(tokens[3].c_str()) * 16, atof(tokens[4].c_str()) * 16);
+			break;
 
 
 
@@ -153,7 +165,9 @@ public:
 	vector<LPGAMEOBJECT> * GetAreaOnMap_ListObj() {
 		return listObj;
 	}
-
+	void SetListObj(vector<LPGAMEOBJECT> * list) {
+		listObj = list;
+	}
 
 	~CAreaOnMap() {
 		for (int i = 0; i < listObj->size(); i++)

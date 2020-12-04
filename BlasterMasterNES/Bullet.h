@@ -15,12 +15,10 @@ protected:
 	bool isPhatNo = false;
 	float maxD;
 	int timeDelete = 145;
-	
-
 public:
 	
 	virtual void LastUpdate() {};
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL, vector<LPGAMEOBJECT> *listObj = NULL);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL, vector<LPGAMEOBJECT> *listObj = NULL) {};
 	virtual void Render() {};
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) {};
 
