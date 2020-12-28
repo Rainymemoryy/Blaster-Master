@@ -62,8 +62,12 @@ void CEnemy1::LastUpdate()
 			x += min_tx * dx + nx * 0.001f;
 			y += min_ty * dy + ny * 0.001f;
 
+
 			if (nx != 0) vx = -vx;
 			if (ny != 0) vy = 0;
+
+
+			if (nx != 0 && ny <0)vy = -0.045;
 		}
 
 		if (true) {
@@ -109,7 +113,7 @@ void CEnemy1::LastUpdate()
 
 void CEnemy1::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 	if (vx < 0) animation_set->at(Enemy1_Ani_Left)->Render(round(x), round(y), 255, -1);
 	else animation_set->at(Enemy1_Ani_Right)->Render(round(x), round(y), 255, -1);
 }

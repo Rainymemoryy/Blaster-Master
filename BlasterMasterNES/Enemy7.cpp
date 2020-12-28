@@ -17,7 +17,7 @@ CEnemy7::CEnemy7(float x, float y, float min_x, float max_x)
 	dropItem = Item_HP;
 	hp = Enemy7_HP;
 
-	//this->SetAnimationSet(CAnimationSets::GetInstance()->Get(Enemy7_AniSet));
+	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(Enemy7_AniSet));
 }
 
 void CEnemy7::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOBJECT>* listObj)
@@ -90,20 +90,26 @@ void CEnemy7::LastUpdate()
 			}
 
 		}
+
 		for (UINT i = 0; i < coEvents->size(); i++) delete coEvents->at(i);
 	}
 
-	vy += Enemy7_AY;
-	if (x < min_x)vx = Enemy7_VX;
-	if (x > max_x)vx = -Enemy7_VX;
 
-	timeNgungBanDan -= dt;
-	if (timeNgungBanDan <= 0) {
-		soLanBanDan = Enemy7_SoLanBanDan;
+	if (true) {
+		if (x < min_x)vx = Enemy7_VX;
+		if (x > max_x)vx = -Enemy7_VX;
 	}
-	
-	
-	
+
+	if (true) {
+		timeBanDan -= dt;
+		timeBanDan = timeBanDan <= -Enemy7_NgungTimeBanDan ? (Enemy7_SoLanBanDan+1) * Enemy7_Time1LanBanDan -5 : timeBanDan;
+		if (timeBanDan / Enemy7_Time1LanBanDan > 0 && timeBanDan / Enemy7_Time1LanBanDan != lastBanDan) {
+
+			BanDan();
+		}
+		lastBanDan = timeBanDan / Enemy7_Time1LanBanDan;
+	}
+
 }
 
 void CEnemy7::BanDan()
@@ -113,7 +119,7 @@ void CEnemy7::BanDan()
 		float a1, b1, a2, b2;
 		CBullet1*obj = new CBullet1();
 		obj->SetPosition(x + 7, y + 18);
-		obj->SetmaxD(100);
+		obj->SetmaxD(1000);
 		tmpTarget->TinhTam(a1, b1);
 		obj->TinhTam(a2, b2);
 		obj->SetState(Bullet_Enemy);
@@ -123,7 +129,7 @@ void CEnemy7::BanDan()
 
 void CEnemy7::Render()
 {
-
+	//RenderBoundingBox();
 	if (vx <= 0) animation_set->at(Enemy7_Ani_Left)->Render(round(x), round(y), 255, -1);
 	else animation_set->at(Enemy7_Ani_Right)->Render(round(x), round(y), 255, -1);
 }

@@ -5,6 +5,10 @@
 #include "Utils.h"
 
 #include "PlayScence.h"
+#include "OpeningScene.h"
+#include "EndingScene.h"
+#include "RollOutScene.h"
+
 
 CGame * CGame::__instance = NULL;
 
@@ -339,6 +343,7 @@ void CGame::_ParseSection_SETTINGS(string line)
 		DebugOut(L"[ERROR] Unknown game setting %s\n", ToWSTR(tokens[0]).c_str());
 }
 
+
 void CGame::_ParseSection_SCENES(string line)
 {
 	vector<string> tokens = split(line);
@@ -347,8 +352,30 @@ void CGame::_ParseSection_SCENES(string line)
 	int id = atoi(tokens[0].c_str());
 	LPCWSTR path = ToLPCWSTR(tokens[1]);
 
-	LPSCENE scene = new CPlayScene(id, path);
-	scenes[id] = scene;
+	int typeScene = atoi(tokens[2].c_str());
+	int nextScene = atoi(tokens[3].c_str());
+
+	if (typeScene == TypeScene_Play) {
+		LPSCENE scene = new CPlayScene(id, path);
+		scene->SetNextScene(nextScene);
+		scenes[id] = scene;
+	}
+	else if (typeScene == TypeScene_Opening) {
+		LPSCENE scene = new COpeningScene(id, path);
+		scene->SetNextScene(nextScene);
+		scenes[id] = scene;
+
+	}
+	else if (typeScene == TypeScene_Ending) {
+		LPSCENE scene = new CEndingScene(id, path);
+		scene->SetNextScene(nextScene);
+		scenes[id] = scene;
+	}
+	else if (typeScene == TypeScene_RollOut) {
+		LPSCENE scene = new CRollOutScene(id, path);
+		scene->SetNextScene(nextScene);
+		scenes[id] = scene;
+	}
 }
 
 /*
@@ -374,9 +401,7 @@ void CGame::Load(LPCWSTR gameFile)
 		if (line == "[SETTINGS]") { section = GAME_FILE_SECTION_SETTINGS; continue; }
 		if (line == "[SCENES]") { section = GAME_FILE_SECTION_SCENES; continue; }
 
-		//
-		// data section
-		//
+	
 		switch (section)
 		{
 		case GAME_FILE_SECTION_SETTINGS: _ParseSection_SETTINGS(line); break;

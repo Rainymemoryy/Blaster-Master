@@ -5,11 +5,11 @@
 #define Bullet3_Box_Width	7
 #define Bullet3_Box_Height	7
 
-#define Bullet3_AniSet		701
+#define Bullet3_AniSet		703
 
 #define Bullet3_Damage_DF	120
 
-#define Bullet3_V_DF		0.08
+#define Bullet3_V_DF		0.3
 
 
 class CBullet3 : public CBullet

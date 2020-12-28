@@ -15,6 +15,7 @@
 #define Bullet3		1010015
 
 
+#define Hero_MatKiemSoatTocDo 200
 
 #define	LEVEL_SLDF		211
 #define	LEVEL_SLOC		212
@@ -110,7 +111,11 @@ typedef SLOC*LSLOC;
 
 class CHero : public CGameObject
 {
-public:
+public: 
+	float typeMap_isSL = true;
+
+
+
 	int untouchable=0;
 	int untouchable_nhapnhay =  100;
 
@@ -120,8 +125,7 @@ public:
 
 	float delta_x, delta_y;
 
-	int typeMap;
-	int enviroment;
+	
 
 
 	int currentWidth = BOX_SLDF_WIDTH_DUNG;
@@ -134,6 +138,8 @@ public:
 	
 
 	CGameObject *car = NULL;
+
+	int matKiemSoatTocDo = -1;
 
 	int level = LEVEL_SLOC;
 	bool oTrongXe = true;
@@ -161,6 +167,9 @@ public:
 
 	float lastX, lastY;
 
+	bool sl_isStopGame = false;
+
+
 public:
 	CHero(float x = 0.0f, float y = 0.0f);
 
@@ -181,4 +190,7 @@ public:
 
 	void RenderHP();
 	void UpdateHP();
+
+	void NhayVaoXe();
+	void RaKhoiXe();
 };

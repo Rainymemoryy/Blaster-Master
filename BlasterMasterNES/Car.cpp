@@ -2,7 +2,7 @@
 
 void CCar::Render()
 {
-	//RenderBoundingBox();
+	
 	if (nx >= 0)animation_set->at(0)->Render(round(x), round(y), 255, 0);
 	else
 		animation_set->at(0)->Render(round(x), round(y), 255, 1);

@@ -135,12 +135,8 @@ bool CGameObject::IsScopeWith(CGameObject * obj)
 	float l1, t1, r1, b1, l2, t2, r2, b2;
 	this->GetBoundingBox(l1, t1, r1, b1);
 	obj->GetBoundingBox(l2, t2, r2, b2);
+	return !(l1 > r2 || r1 < l2 || t1 > b2 || b1 < t2);
 
-
-
-	if (CGame::GetInstance()->IsScope(l1, t1, r1, b1, l2, t2, r2, b2) || CGame::GetInstance()->IsScope(l2, t2, r2, b2, l1, t1, r1, b1))
-		return true;
-	return false;
 }
 
 void CGameObject::TinhTam(float &x,float &y)

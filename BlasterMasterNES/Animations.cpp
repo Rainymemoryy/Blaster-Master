@@ -1,4 +1,4 @@
-#include "Animations.h"
+﻿#include "Animations.h"
 #include "Utils.h"
 
 CAnimationSets * CAnimationSets::__instance = NULL;
@@ -57,7 +57,10 @@ CAnimations * CAnimations::GetInstance()
 
 void CAnimations::Add(int id, LPANIMATION ani)
 {
+	
 	animations[id] = ani;
+	DebugOut(L"[INFO] animation added: %d\n", id);
+	
 }
 
 LPANIMATION CAnimations::Get(int id)
@@ -94,11 +97,11 @@ LPANIMATION_SET CAnimationSets::Get(unsigned int id)
 	LPANIMATION_SET ani_set = animation_sets[id];
 	if (ani_set == NULL)
 		DebugOut(L"[ERROR] Failed to find animation set id: %d\n", id);
-
 	return ani_set;
 }
 
 void CAnimationSets::Add(int id, LPANIMATION_SET ani_set)
 {
 	animation_sets[id] = ani_set;
+	DebugOut(L"[INFO] animation_set added: %d\n", id);
 }

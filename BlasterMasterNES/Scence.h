@@ -8,6 +8,8 @@ class CScene
 protected:
 	CKeyEventHandler * key_handler;
 	int id;
+	int typeScene = -1;
+	int nextScene;
 	LPCWSTR sceneFilePath;
 
 public:
@@ -18,6 +20,19 @@ public:
 	virtual void Unload() = 0;
 	virtual void Update(DWORD dt) = 0;
 	virtual void Render() = 0;
+
+	void SetTypeScene(int type) {
+		typeScene = type;
+	}
+	int GetTypeScene( ) {
+		return typeScene;
+	}
+	void SetNextScene(int nextScene) {
+		this->nextScene = nextScene;
+	}
+	int GetNextScene() {
+		return nextScene;
+	}
 };
 typedef CScene * LPSCENE;
 

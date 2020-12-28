@@ -13,6 +13,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
 {
 	key_handler = new CPlayScenceKeyHandler(this);
+	
 }
 
 #define SCENE_SECTION_UNKNOWN -1
@@ -22,7 +23,6 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define SCENE_SECTION_ANIMATION_SETS	5
 #define Scene_Section_Objects	6
 #define Scene_Section_Map	7
-
 #define Scene_Section_AreaOnMap	8
 
 
@@ -111,6 +111,7 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 	}
 
 	CAnimationSets::GetInstance()->Add(ani_set_id, s);
+	
 }
 
 void CPlayScene::_ParseSection_OBJECTS(string line)
@@ -221,6 +222,8 @@ void CPlayScene::Load()
 
 void CPlayScene::Update(DWORD dt)
 {
+	if (isStopGame) return;
+
 	if (player == NULL) return;
 
 	CAreaOnMap *curAreaOnMap = listAreaOnMap[indexAreaOnMap];
@@ -276,14 +279,15 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
-	GetCam(cx, cy);
-	if (map != NULL)
-		map->Render(cx, cy);
+	if (!isStopGame) {
+		GetCam(cx, cy);
+		if (map != NULL)
+			map->Render(cx, cy);
 
-	for (int i = 0; i < curObjects->size(); i++)
-		curObjects->at(i)->Render();
-	player->Render();
-
+		for (int i = 0; i < curObjects->size(); i++)
+			curObjects->at(i)->Render();
+		player->Render();
+	}
 }
 
 void CPlayScene::Unload()
@@ -312,9 +316,6 @@ void CPlayScene::GetCam(float & cx, float & cy)
 	cx = (cx + game->GetScreenWidth()) > r ? r - game->GetScreenWidth() : cx;
 	cy = (cy + game->GetScreenHeight()) > b ? b - game->GetScreenHeight() : cy;
 }
-
-
-
 
 
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
@@ -352,13 +353,16 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		case DIK_UP:
 			if (hero->sldf_oGanCauThang) hero->sldf_leoCauThang = true;
 			else
-			if (hero->sldf_namXuong) {
-				hero->SetState(STATE_SLDF_DUNGYEN);
-			}
+				if (hero->sldf_namXuong) {
+					hero->SetState(STATE_SLDF_DUNGYEN);
+				}
+			break;
+		case DIK_ESCAPE:
+			((CPlayScene*)scence)->StopOrResumeGame();
 			break;
 		default:
 			break;
-			
+
 		}
 	}
 	else
@@ -377,6 +381,9 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		case DIK_D:
 			hero->SetState(STATE_SLOC_BANDANDON);
 			break;
+		case DIK_ESCAPE:
+			((CPlayScene*)scence)->StopOrResumeGame();
+			break;
 		default:
 			break;
 		}
@@ -385,6 +392,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 
 void CPlayScenceKeyHandler::KeyState(BYTE *states)
 {
+
 	CGame *game = CGame::GetInstance();
 	CHero *hero = ((CPlayScene*)scence)->GetPlayer();
 	if (hero->GetState() == STATE_SLDF_CHET) return;

@@ -27,7 +27,6 @@ void CEnemy6::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOBJ
 	if (soLanNhay == 0) {
 		timeDiTrenMatDat -= dt;
 		if (timeDiTrenMatDat < 0) {
-			srand(time(NULL));
 			soLanNhay = rand() % 4 + 1;
 			DebugOut(L"[Enenmy6] so lan nhay %d\n", soLanNhay);
 		}

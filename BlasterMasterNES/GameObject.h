@@ -52,7 +52,7 @@ public:
 	float vx;
 	float vy;
 
-	int nx, ny;
+	float nx, ny;
 	
 	int state;
 

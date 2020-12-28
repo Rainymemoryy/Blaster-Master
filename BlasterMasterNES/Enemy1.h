@@ -10,9 +10,9 @@
 #define Enemy1_Box_Height	10
 #define Enemy1_Box_Width	18
 #define Enemy1_HP			100
-#define Enemy1_AY			0.0005f
+#define Enemy1_AY			0.0015f
 #define Enemy1_VX			0.05f
-#define Enemy1_VY			0.05f
+#define Enemy1_VY			0.1f
 
 #define Enemy1_AniSet		801
 #define Enemy1_Ani_Left		0

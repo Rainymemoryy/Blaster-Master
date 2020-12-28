@@ -11,6 +11,7 @@
 #include "Brick1.h"
 #include "Brick2.h"
 #include "Stair.h"
+#include "Block1.h"
 
 #include "Enemy1.h"
 #include "Enemy2.h"
@@ -18,6 +19,9 @@
 #include "Enemy4.h"
 #include "Enemy5.h"
 #include "Enemy6.h"
+#include "Enemy7.h"
+#include "Enemy8.h"
+#include "Enemy9.h"
 
 
 #include "Item.h"
@@ -33,6 +37,7 @@
 #define AreaOnMap_Type_Brick1	1
 #define AreaOnMap_Type_Brick2	2
 #define AreaOnMap_Type_Stair	3
+#define AreaOnMap_Type_Block1	4
 
 #define AreaOnMap_Type_Portal	20
 
@@ -42,6 +47,9 @@
 #define AreaOnMap_Type_Enemy4	104
 #define AreaOnMap_Type_Enemy5	105
 #define AreaOnMap_Type_Enemy6	106
+#define AreaOnMap_Type_Enemy7	107
+#define AreaOnMap_Type_Enemy8	108
+#define AreaOnMap_Type_Enemy9	109
 
 
 #define AreaOnMap_Type_ItemHP	201
@@ -115,45 +123,77 @@ public:
 		{
 		case AreaOnMap_Type_BrickDf:
 			obj = new CBrick(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16, atof(tokens[3].c_str()) * 16, atof(tokens[4].c_str()) * 16);
+			listObj->push_back(obj);
 			break;
 		case AreaOnMap_Type_Brick1:
 			obj = new CBrick1(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16, atof(tokens[3].c_str()) * 16, atof(tokens[4].c_str()) * 16);
+			listObj->push_back(obj);
 			break;
 		case AreaOnMap_Type_Brick2:
 			obj = new CBrick2(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16, atof(tokens[3].c_str()) * 16, atof(tokens[4].c_str()) * 16);
+			listObj->push_back(obj);
 			break;
 		case AreaOnMap_Type_Stair:
 			obj = new CStair(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16, atof(tokens[3].c_str()) * 16, atof(tokens[4].c_str()) * 16);
+			listObj->push_back(obj);
 			break;
-
+		case AreaOnMap_Type_Block1:
+			obj = new CBlock1(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16);
+			listObj->push_back(obj);
+			break;
 
 		case AreaOnMap_Type_ItemHP:
 			obj = new CItemHp(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16);
+			listObj->push_back(obj);
 			break;
 
 
 
 		case AreaOnMap_Type_Enemy1:
 			obj = new CEnemy1(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16);
+			listObj->push_back(obj);
 			break;
 		case AreaOnMap_Type_Enemy2:
 			obj = new CEnemy2(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16);
+			listObj->push_back(obj);
+			break;
+		case AreaOnMap_Type_Enemy3:
+			obj = new CEnemy3(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16);
+			listObj->push_back(obj);
 			break;
 		case AreaOnMap_Type_Enemy4:
 			obj = new CEnemy4(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16);
-			
+			listObj->push_back(obj);
+			break;
+		case AreaOnMap_Type_Enemy5:
+			obj = new CEnemy5(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16);
+			listObj->push_back(obj);
 			break;
 		case AreaOnMap_Type_Enemy6:
 			obj = new CEnemy6(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16, atof(tokens[3].c_str()) * 16, atof(tokens[4].c_str()) * 16);
+			listObj->push_back(obj);
 			break;
-
-
+		case AreaOnMap_Type_Enemy7:
+			obj = new CEnemy7(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16, atof(tokens[3].c_str()) * 16, atof(tokens[4].c_str()) * 16);
+			listObj->push_back(obj);
+			break;
+		case AreaOnMap_Type_Enemy8:
+			obj = new CEnemy8(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16+6);
+			listObj->push_back(obj);
+			break;
+		case AreaOnMap_Type_Enemy9:
+			obj = new CEnemy9(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16 + 6);
+			listObj->push_back(obj);
+			break;
+	
 
 		case AreaOnMap_Type_Portal:
 			obj = new CPortal(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16, atof(tokens[3].c_str()) * 16, atof(tokens[4].c_str()) * 16, atoi(tokens[5].c_str()), atof(tokens[6].c_str()) * 16, atof(tokens[7].c_str()) * 16);
+			listObj->push_back(obj);
 			break;
+			
 		}
-		listObj->push_back(obj);
+		
 	}
 
 	float GetAreaOnMap_Right() { return map_r*16; }

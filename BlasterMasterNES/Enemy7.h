@@ -14,20 +14,20 @@
 #define Enemy7_VX			0.05f
 #define Enemy7_VY			0.25f
 
-#define Enemy7_AniSet		806
+#define Enemy7_AniSet		807
 #define Enemy7_Ani_Left		0
 #define Enemy7_Ani_Right	1
 
 #define Enemy7_Damge		25.f
-#define Enemy7_TimeBanDan	1500
-#define Enemy7_Time1LanBanDan	1500
+#define Enemy7_NgungTimeBanDan	1500
+#define Enemy7_Time1LanBanDan	200
 #define Enemy7_SoLanBanDan	4
 
 class CEnemy7:public CEnemy
 {
 	float max_x, min_x;
-	int timeNgungBanDan = 0;
-	int time1LanBanDan = 200;
+	int timeBanDan = 0;
+	int lastBanDan = 0;
 	int soLanBanDan = Enemy7_SoLanBanDan;
 
 

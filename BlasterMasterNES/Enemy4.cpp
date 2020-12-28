@@ -14,7 +14,7 @@ CEnemy4::CEnemy4(float x, float y)
 	this->y = y;
 	vy = 0;
 	vx = -Enemy4_VX;
-	hp = Enemy4_HP*10;
+	hp = Enemy4_HP;
 	dropItem = Item_HP;
 }
 

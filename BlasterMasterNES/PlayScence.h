@@ -14,6 +14,8 @@
 class CPlayScene : public CScene
 {
 protected:
+	bool isStopGame = false;
+
 	CHero *player;					
 	Map *map;
 
@@ -51,8 +53,13 @@ public:
 	float GetMapWidth() { return map->GetMapWidth(); }
 	void SetCam(float cx, float cy) { this->cx=cx; this->cy = cy; }
 	void GetCam(float &cx, float& cy);
+	void StopOrResumeGame() {
+		isStopGame = !isStopGame;
+	}
 	
-	
+	void SelectedItem() {
+
+	}
 };
 
 class CPlayScenceKeyHandler : public CScenceKeyHandler

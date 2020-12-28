@@ -4,11 +4,11 @@
 #include "Bullet.h"
 #include "Item.h"
 
-CEnemy5::CEnemy5()
+CEnemy5::CEnemy5(float x, float y)
 {
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(Enemy5_AniSet));
-	x = 100;
-	y = 100;
+	this->x = x;
+	this->y = y;
 	vx = -Enemy5_VX;
 	vy = 0;
 	hp = Enemy5_HP;
@@ -33,7 +33,9 @@ void CEnemy5::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOBJ
 
 void CEnemy5::LastUpdate()
 {
+
 	
+	DebugOut(L"Enemy5	vx %f vy %f\n", vx, vy);
 	if (coEvents->size() == 0) {
 		x += dx;
 		y += dy;

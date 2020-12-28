@@ -2,7 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Hero.cpp" />
-    <ClCompile Include="PlayScence.cpp" />
     <ClCompile Include="Enemy.cpp">
       <Filter>Enemy</Filter>
     </ClCompile>
@@ -21,16 +20,10 @@
     <ClCompile Include="Bullet1.cpp">
       <Filter>Bullet</Filter>
     </ClCompile>
-    <ClCompile Include="Bullet2.cpp">
-      <Filter>Bullet</Filter>
-    </ClCompile>
     <ClCompile Include="Animations.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
     <ClCompile Include="Car.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
@@ -63,7 +56,6 @@
     <ClCompile Include="Enemy4.cpp">
       <Filter>Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="AreaOnMap.cpp" />
     <ClCompile Include="Enemy5.cpp">
       <Filter>Enemy</Filter>
     </ClCompile>
@@ -91,10 +83,51 @@
     <ClCompile Include="Enemy7.cpp">
       <Filter>Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy8.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet2.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet4.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy9.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet5.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="AreaOnMap.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayScence.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="OpeningScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CEndingScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Credit.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy10.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Block1.cpp">
+      <Filter>Brick</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="RollOutScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Hero.h" />
-    <ClInclude Include="PlayScence.h" />
     <ClInclude Include="Enemy.h">
       <Filter>Enemy</Filter>
     </ClInclude>
@@ -158,7 +191,6 @@
     <ClInclude Include="Enemy4.h">
       <Filter>Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="AreaOnMap.h" />
     <ClInclude Include="Enemy5.h">
       <Filter>Enemy</Filter>
     </ClInclude>
@@ -186,11 +218,44 @@
     <ClInclude Include="Enemy7.h">
       <Filter>Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="Enemy8.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet4.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy9.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet5.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="AreaOnMap.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScence.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="OpeningScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="EndingScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Credit.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy10.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Block1.h">
+      <Filter>Brick</Filter>
+    </ClInclude>
+    <ClInclude Include="RollOutScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Enemy">
-      <UniqueIdentifier>{da89b649-a50d-49bb-b602-43158f0d0d98}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Bullet">
       <UniqueIdentifier>{cbbd4ed2-40db-47c4-a165-345b6c2b7c5a}</UniqueIdentifier>
     </Filter>
@@ -202,6 +267,12 @@
     </Filter>
     <Filter Include="Items">
       <UniqueIdentifier>{f45a8ef7-88b5-4f9a-8fde-fbe2dee32b14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{856ae3d6-6cc8-4620-b3bc-2e83a382f58a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enemy">
+      <UniqueIdentifier>{da89b649-a50d-49bb-b602-43158f0d0d98}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
