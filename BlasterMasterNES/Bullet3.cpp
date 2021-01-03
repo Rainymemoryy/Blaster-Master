@@ -10,7 +10,7 @@ CBullet3::CBullet3()
 void CBullet3::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOBJECT>* listObj)
 {
 	if (isPhatNo)return;
-
+	CGameObject::Update(dt);
 	for (int i = 0; i < listObj->size(); i++) {
 		if (target == listObj->at(i))
 		{
@@ -19,8 +19,6 @@ void CBullet3::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOB
 				vx = 0; vy = 0;
 				return;
 			}
-
-			CGameObject::Update(dt);
 			coEvents->clear();
 			vector<LPGAMEOBJECT> * tmpObj = new vector<LPGAMEOBJECT>();
 			tmpObj->push_back(target);
@@ -29,6 +27,8 @@ void CBullet3::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOB
 		}
 	}
 	isPhatNo = true;
+
+	
 }
 
 void CBullet3::LastUpdate()
@@ -37,6 +37,7 @@ void CBullet3::LastUpdate()
 	if (isPhatNo) {
 		timeDelete -= dt;
 		isTouthtable = false;
+		DebugOut(L"[Bullet3] timeDelete: %d\n", timeDelete);
 	}
 	else {
 		if (coEvents->size() == 0)

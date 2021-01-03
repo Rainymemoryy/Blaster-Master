@@ -193,4 +193,6 @@ public:
 
 	void NhayVaoXe();
 	void RaKhoiXe();
+
+	void SpecialSkill(int tag);
 };

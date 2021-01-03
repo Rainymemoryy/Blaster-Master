@@ -25,6 +25,8 @@ using namespace std;
 
 class CGame
 {
+
+
 	static CGame * __instance;
 	HWND hWnd;									// Window handle
 
@@ -51,12 +53,18 @@ class CGame
 	unordered_map<int, LPSCENE> scenes;
 	int current_scene;
 
-
-
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_SCENES(string line);
 
+	bool isTopRender = false;
+
 public:
+	bool GetIsStopRender() {
+		return isTopRender;
+	}
+	void SetIsStopRender(bool b) {
+		isTopRender = b;
+	}
 
 	void InitKeyboard();
 	void SetKeyHandler(LPKEYEVENTHANDLER handler) { keyHandler = handler; }

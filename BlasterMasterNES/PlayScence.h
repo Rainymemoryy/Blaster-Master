@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Game.h"
 #include "Textures.h"
 #include "Scence.h"
@@ -11,24 +11,51 @@
 
 #define InDexArea_Start 101
 
+#define TimeHienThiSoMangTrongGame 2000
+#define SoMangMacDinh	2
+#define TimeRenderLeft	2000
 class CPlayScene : public CScene
 {
 protected:
-	bool isStopGame = false;
+	
+	//dt
+	int dt;
 
-	CHero *player;					
+	//Nhân vật
+	CHero *player;	
+
+	//Map dùng để hiển thị lên hệ thống
 	Map *map;
 
+	//Khu vực chơi
 	unordered_map<int, CAreaOnMap*> listAreaOnMap;
 	int indexAreaOnMap = InDexArea_Start;
 
+	//Danh sách đối tượng
 	vector<LPGAMEOBJECT> *objects= new vector<LPGAMEOBJECT>();
 	vector<LPGAMEOBJECT> *curObjects=new vector<LPGAMEOBJECT>();
 
+	//Camera
 	float cx = 0, cy = 0;
 	float last_cx = 0, last_cy = 0;
 
+	//Trạng thái dừng game
+	bool isStopGame = false;
 
+	//Số mạng của nhân vật
+	int soMangTrongGame = SoMangMacDinh;
+	int timeHienThiSoMangTrongGame = TimeHienThiSoMangTrongGame;
+	int timeRenderLeft = TimeRenderLeft;
+
+
+	//Select item
+	int selectItem = 1;
+	bool isChoseItem = false;
+	int iItem_1 = 9;
+	int iItem_2 = 99;
+	int iItem_3 = 99;
+
+	//Hàm đọc dữ liệu
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
@@ -53,13 +80,23 @@ public:
 	float GetMapWidth() { return map->GetMapWidth(); }
 	void SetCam(float cx, float cy) { this->cx=cx; this->cy = cy; }
 	void GetCam(float &cx, float& cy);
-	void StopOrResumeGame() {
-		isStopGame = !isStopGame;
-	}
-	
-	void SelectedItem() {
+	void StopOrResumeGame() { isStopGame = !isStopGame; }
+	bool GetIsStopGame() { return isStopGame; }
+	void RederStopGame();
+	void RenderLeft(); // mang trong game
 
-	}
+	void RenderSelectMenu();
+	void SelectItemLeft();
+	void SelectItemRight();
+	bool GetIsChoseItem() { return isChoseItem; }
+	void SetIsChoseItem(bool b) { this->isChoseItem = b; }
+
+	void Set_iItem1(int n) { iItem_1 = n; }
+	void Set_iItem2(int n) { iItem_2 = n; }
+	void Set_iItem3(int n) { iItem_3 = n; }
+	int Get_iItem1() { return iItem_1; }
+	int Get_iItem2() { return iItem_2; }
+	int Get_iItem3() { return iItem_3; }
 };
 
 class CPlayScenceKeyHandler : public CScenceKeyHandler

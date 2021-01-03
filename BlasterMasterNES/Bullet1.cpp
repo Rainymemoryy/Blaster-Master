@@ -16,6 +16,7 @@ void CBullet1::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOB
 	coEvents->clear();
 	CalcPotentialCollisions(coObjects, *coEvents);
 
+	
 }
 
 void CBullet1::LastUpdate()
@@ -54,17 +55,33 @@ void CBullet1::LastUpdate()
 			{
 				CGameObject *obj = coEvents->at(i)->obj;
 				if (dynamic_cast<CBrick *>(obj)) {
+					if (this->IsScopeWith(obj)) {
+						isPhatNo = true;
+						isTouthtable = false;
+						
+					}
 					tmpCoo->push_back(coEvents->at(i));
 				}
 				if (dynamic_cast<CHero*>(obj)) {
+					if (this->IsScopeWith(obj)) {
+						isPhatNo = true;
+						isTouthtable = false;
+					}
 					if (GetState() != Bullet_Hero) tmpCoo->push_back(coEvents->at(i));
 				}
 				if (dynamic_cast<CEnemy*>(obj)) {
+					if (this->IsScopeWith(obj)) {
+						isPhatNo = true;
+						isTouthtable = false;
+					}
 					if (GetState() != Bullet_Enemy) tmpCoo->push_back(coEvents->at(i));
 				}
 
 
 			}
+			
+
+
 
 			FilterCollision(*tmpCoo, *coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 

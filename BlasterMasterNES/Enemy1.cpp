@@ -74,6 +74,7 @@ void CEnemy1::LastUpdate()
 			for (int i = 0; i < coEvents->size(); i++) {
 				CGameObject* e = coEvents->at(i)->obj;
 
+
 				if (dynamic_cast<CBullet3 *>(e))
 				{
 					CBullet3 *tmpBullet3 = (CBullet3*)(e);

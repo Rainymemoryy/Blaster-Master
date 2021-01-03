@@ -1,11 +1,12 @@
-#include <iostream>
-#include <fstream>
-
+﻿#include <iostream>
+#include <fstream> 
+#include <string>  
 #include "PlayScence.h"
 #include "Utils.h"
 #include "Textures.h"
 #include "Sprites.h"
 #include "Portal.h"
+
 
 using namespace std;
 
@@ -16,6 +17,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	
 }
 
+#pragma region Load
 #define SCENE_SECTION_UNKNOWN -1
 #define SCENE_SECTION_TEXTURES 2
 #define SCENE_SECTION_SPRITES 3
@@ -39,7 +41,7 @@ void CPlayScene::_ParseSection_TEXTURES(string line)
 {
 	vector<string> tokens = split(line);
 
-	if (tokens.size() < 5) return; 
+	if (tokens.size() < 5) return;
 	int texID = atoi(tokens[0].c_str());
 	wstring path = ToWSTR(tokens[1]);
 	int R = atoi(tokens[2].c_str());
@@ -53,7 +55,7 @@ void CPlayScene::_ParseSection_SPRITES(string line)
 {
 	vector<string> tokens = split(line);
 
-	if (tokens.size() < 6) return; 
+	if (tokens.size() < 6) return;
 
 	int ID = atoi(tokens[0].c_str());
 	int l = atoi(tokens[1].c_str());
@@ -76,7 +78,7 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 {
 	vector<string> tokens = split(line);
 
-	if (tokens.size() < 3) return; 
+	if (tokens.size() < 3) return;
 	LPANIMATION ani = new CAnimation();
 
 	int ani_id = atoi(tokens[0].c_str());
@@ -111,13 +113,13 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 	}
 
 	CAnimationSets::GetInstance()->Add(ani_set_id, s);
-	
+
 }
 
 void CPlayScene::_ParseSection_OBJECTS(string line)
 {
 	vector<string> tokens = split(line);
-	if (tokens.size() < 3) return; 
+	if (tokens.size() < 3) return;
 
 	int object_type = atoi(tokens[0].c_str());
 	float x = atof(tokens[1].c_str());
@@ -132,7 +134,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	CAnimationSets * animation_sets = CAnimationSets::GetInstance();
 	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 	player->SetAnimationSet(ani_set);
-	
+
 }
 
 void CPlayScene::_ParseSeciton_MAP(string line)
@@ -194,7 +196,7 @@ void CPlayScene::Load()
 		if (line == "[MAP]") {
 			section = Scene_Section_Map; continue;
 		}
-		if (line == "[AREAONMAP]"){
+		if (line == "[AREAONMAP]") {
 			section = Scene_Section_AreaOnMap; continue;
 		}
 
@@ -219,15 +221,20 @@ void CPlayScene::Load()
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 }
+#pragma endregion
+
 
 void CPlayScene::Update(DWORD dt)
 {
+	this->dt = dt;
+
 	if (isStopGame) return;
+	if (isChoseItem) return;
 
 	if (player == NULL) return;
+	CGame::GetInstance()->SetIsStopRender(false);
 
 	CAreaOnMap *curAreaOnMap = listAreaOnMap[indexAreaOnMap];
-
 	curObjects->clear();
 	curObjects->push_back(player);
 	objects = curAreaOnMap->GetAreaOnMap_ListObj();
@@ -279,27 +286,28 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
-	if (!isStopGame) {
-		GetCam(cx, cy);
-		if (map != NULL)
-			map->Render(cx, cy);
 
-		for (int i = 0; i < curObjects->size(); i++)
-			curObjects->at(i)->Render();
-		player->Render();
+	GetCam(cx, cy);
+	if (map != NULL)
+		map->Render(cx, cy);
+
+	for (int i = 0; i < curObjects->size(); i++)
+		curObjects->at(i)->Render();
+	player->Render();
+
+	RenderLeft(); //render so mang nhan vat
+
+	if(isChoseItem){
+		RenderSelectMenu();
 	}
+	else
+		if (isStopGame) {
+			CGame::GetInstance()->SetIsStopRender(true);
+			RederStopGame();
+		}
 }
 
-void CPlayScene::Unload()
-{
-	/*for (int i = 0; i < objects.size(); i++)
-		delete objects[i];
 
-	objects.clear();
-	player = NULL;
-
-	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);*/
-}
 
 void CPlayScene::GetCam(float & cx, float & cy)
 {
@@ -317,157 +325,386 @@ void CPlayScene::GetCam(float & cx, float & cy)
 	cy = (cy + game->GetScreenHeight()) > b ? b - game->GetScreenHeight() : cy;
 }
 
+#define SpritePause	101
+void CPlayScene::RederStopGame()
+{
+	GetCam(cx, cy);
+	CSprites::GetInstance()->Get(SpritePause)->Draw(round(cx),round(cy), 200);
+	
+}
 
+
+#define SpriteLeft	201
+#define SpriteLeft_X	102
+#define SpriteLeft_Y	106
+void CPlayScene::RenderLeft()
+{
+	if (timeRenderLeft <= 0) return;
+	GetCam(cx, cy);
+	float _x = cx + SpriteLeft_X, _y = cy + SpriteLeft_Y;
+	CSprites::GetInstance()->Get(SpriteLeft)->Draw(round(_x), round(_y), 255);
+	string str = to_string(soMangTrongGame);
+	_x += 35; _y += 1;
+
+	std::list<char> chars;
+	for (char c : str)
+		chars.push_back(c);
+	for (char c : chars)
+	{
+		int i = (int)c;
+		CSprites::GetInstance()->Get(i)->Draw(round(_x), round(_y), 255);
+		_x += 7;
+		
+	}
+	timeRenderLeft -= dt;
+}
+
+#define SpriteSelectMenu	301
+#define AniSelectMenu		302
+#define Item_1	1
+#define Item_2	2
+#define Item_3	3
+#define Item_1_X	80
+#define Item_1_Y	167
+#define Item_2_X	112
+#define Item_2_Y	167
+#define Item_3_X	144
+#define Item_3_Y	137
+
+#define Item_1_IX	96
+#define Item_2_IX	128	
+#define Item_3_IX	160
+#define Item_IY		183
+void CPlayScene::RenderSelectMenu()
+{
+	GetCam(cx, cy);
+	CSprites::GetInstance()->Get(SpriteSelectMenu)->Draw(round(cx), round(cy), 255);
+	
+	switch (selectItem)
+	{
+	case Item_1:
+		CAnimations::GetInstance()->Get(AniSelectMenu)->Render(round(cx + Item_1_X), round(cy + Item_1_Y), 255);
+		break;
+	case Item_2:
+		CAnimations::GetInstance()->Get(AniSelectMenu)->Render(round(cx + Item_2_X), round(cy + Item_1_Y), 255);
+		break;
+	case Item_3:
+		CAnimations::GetInstance()->Get(AniSelectMenu)->Render(round(cx + Item_3_X), round(cy + Item_1_Y), 255);
+		break;
+	default:
+		break;
+	}
+
+
+	if (true)
+	{
+		string str = to_string(iItem_1);
+		std::list<char> chars;
+		for (char c : str)
+			chars.push_back(c);
+		float _x = cx+ Item_1_IX, _y = cy+ Item_IY;
+		_x -= 7 * chars.size()/2+1;
+		for (char c : chars)
+		{
+			int i = (int)c;
+			CSprites::GetInstance()->Get(i)->Draw(round(_x), round(_y), 255);
+			_x += 7;
+		}
+	}
+	
+	if (true)
+	{
+		string str = to_string(iItem_2);
+		std::list<char> chars;
+		for (char c : str)
+			chars.push_back(c);
+		float _x = cx + Item_2_IX, _y = cy + Item_IY;
+		_x -= 7 * chars.size() / 2 + 1;
+		for (char c : chars)
+		{
+			int i = (int)c;
+			CSprites::GetInstance()->Get(i)->Draw(round(_x), round(_y), 255);
+			_x += 7;
+		}
+	}
+
+	if (true)
+	{
+		string str = to_string(iItem_3);
+		std::list<char> chars;
+		for (char c : str)
+			chars.push_back(c);
+		float _x = cx + Item_3_IX, _y = cy + Item_IY;
+		_x -= 7 * chars.size() / 2 + 1;
+		for (char c : chars)
+		{
+			int i = (int)c;
+			CSprites::GetInstance()->Get(i)->Draw(round(_x), round(_y), 255);
+			_x += 7;
+		}
+	}
+
+}
+
+void CPlayScene::SelectItemLeft()
+{
+	selectItem--;
+	selectItem = selectItem < Item_1 ? Item_1 : selectItem;
+}
+
+void CPlayScene::SelectItemRight()
+{
+	selectItem++;
+	selectItem = selectItem > Item_3 ? Item_3 : selectItem;
+}
+
+void CPlayScene::Unload()
+{
+	/*for (int i = 0; i < objects.size(); i++)
+		delete objects[i];
+
+	objects.clear();
+	player = NULL;
+
+	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);*/
+}
+
+#pragma region KeyBorad
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
-	CHero *hero = ((CPlayScene*)scence)->GetPlayer();
-	if (KeyCode == DIK_R)
-		hero->SetState(AddEnemy);
+	CPlayScene* playScene = (CPlayScene*)scence;
+	CHero *hero = playScene->GetPlayer();
 
-	if (KeyCode == DIK_E) hero->SetState(Bullet3);
-
-	if (hero->level == LEVEL_SLDF) {
+	if (playScene->GetIsChoseItem()) {
 		switch (KeyCode)
 		{
-		case DIK_SPACE:
-			hero->SetState(STATE_SLDF_NHAY);
+		case DIK_RIGHT:
+			playScene->SelectItemRight();
 			break;
-		case DIK_A:
-			hero->Reset();
-			break;
-		case DIK_DOWN:
-			if (hero->sldf_oTrenCauThang) {
-				hero->sldf_leoCauThang = true;
-				hero->y += 1;
-			}
-			else {
-				hero->SetState(STATE_SLDF_NAMXUONG);
-			}
-			break;
-		case DIK_F:
-			hero->SetState(STATE_VAOXE);
-			break;
-		case DIK_D:
-			hero->SetState(STATE_SLDF_BANDANDON);
-			break;
-		case DIK_UP:
-			if (hero->sldf_oGanCauThang) hero->sldf_leoCauThang = true;
-			else
-				if (hero->sldf_namXuong) {
-					hero->SetState(STATE_SLDF_DUNGYEN);
-				}
+		case DIK_LEFT:
+			playScene->SelectItemLeft();
 			break;
 		case DIK_ESCAPE:
-			((CPlayScene*)scence)->StopOrResumeGame();
+			playScene->SetIsChoseItem(false);
+			break;
+		case 28: //enter
+			playScene->SetIsChoseItem(false);
 			break;
 		default:
+			
 			break;
-
 		}
 	}
 	else
-	{
-		switch (KeyCode)
-		{
-		case DIK_A:
-			hero->Reset();
-			break;
-		case DIK_SPACE:
-			hero->SetState(STATE_SLOC_NHAY);
-			break;
-		case DIK_F:
-			hero->SetState(STATE_NHAYKHOIXE);
-			break;
-		case DIK_D:
-			hero->SetState(STATE_SLOC_BANDANDON);
-			break;
-		case DIK_ESCAPE:
-			((CPlayScene*)scence)->StopOrResumeGame();
-			break;
-		default:
-			break;
+		if (playScene->GetIsStopGame()) {
+			if(KeyCode==DIK_ESCAPE)
+				((CPlayScene*)scence)->StopOrResumeGame();
 		}
-	}
+		else {
+
+			switch (KeyCode)
+			{
+
+			case DIK_TAB:
+				playScene->SetIsChoseItem(true);
+				break;
+			case DIK_ESCAPE:
+				playScene->StopOrResumeGame();
+				break;
+			case DIK_A:
+				hero->Reset();
+				break;
+			case DIK_E:
+				if (hero->level == LEVEL_SLOC)
+					hero->SetState(Bullet3);
+				break;
+			case DIK_SPACE:
+				if (hero->level == LEVEL_SLDF)
+					hero->SetState(STATE_SLDF_NHAY);
+				else
+					hero->SetState(STATE_SLOC_NHAY);
+				break;
+			case DIK_DOWN:
+				if (hero->level == LEVEL_SLDF) {
+					if (hero->sldf_oTrenCauThang) {
+						hero->sldf_leoCauThang = true;
+						hero->y += 1;
+					}
+					else {
+						hero->SetState(STATE_SLDF_NAMXUONG);
+					}
+				}
+				break;
+			case DIK_F:
+				if (hero->level == LEVEL_SLDF)
+					hero->SetState(STATE_VAOXE);
+				else
+					hero->SetState(STATE_NHAYKHOIXE);
+				break;
+			case DIK_D:
+				if (hero->level == LEVEL_SLDF)
+					hero->SetState(STATE_SLDF_BANDANDON);
+				else
+					hero->SetState(STATE_SLOC_BANDANDON);
+				break;
+			case DIK_UP:
+				if (hero->level == LEVEL_SLDF) {
+					if (hero->sldf_oGanCauThang) hero->sldf_leoCauThang = true;
+					else
+						if (hero->sldf_namXuong) {
+							hero->SetState(STATE_SLDF_DUNGYEN);
+						}
+				}
+				break;
+			default:
+				break;
+			}
+		}
 }
 
 void CPlayScenceKeyHandler::KeyState(BYTE *states)
 {
 
 	CGame *game = CGame::GetInstance();
-	CHero *hero = ((CPlayScene*)scence)->GetPlayer();
-	if (hero->GetState() == STATE_SLDF_CHET) return;
+	CPlayScene* playScene = (CPlayScene*)scence;
+	CHero *hero = playScene->GetPlayer();
 
 
-	if (hero->level == LEVEL_SLDF) {
-		if (!hero->sldf_leoCauThang)
-			if (game->IsKeyDown(DIK_RIGHT))
-			{
-				if (!hero->sldf_namXuong)
-					hero->SetState(STATE_SLDF_DIBENPHAI);
-				else
-					hero->SetState(STATE_SLDF_BOBENPHAI);
-			}
-			else
-				if (game->IsKeyDown(DIK_LEFT))
-				{
-					if (!hero->sldf_namXuong)
-						hero->SetState(STATE_SLDF_DIBENTRAI);
-					else
-						hero->SetState(STATE_SLDF_BOBENTRAI);
-				}
-				else
-					if (hero->sldf_namXuong)
-						hero->SetState(STATE_SLDF_NAMXUONG);
-					else hero->SetState(STATE_SLDF_DUNGYEN);
-		else
-			if (game->IsKeyDown(DIK_UP))
-				hero->SetState(STATE_SLDF_LEOLENCAUTHANG);
-			else
-				if (game->IsKeyDown(DIK_DOWN))
-					hero->SetState(STATE_SLDF_LEOXUONGCAUTHANG);
-				else
-					hero->SetState(STATE_SLDF_DUNGTRENCAUTHANG);
+
+	if (playScene->GetIsChoseItem()) {
+
 	}
-	else {
+	else
+		if (playScene->GetIsStopGame()) {
 
-		if (game->IsKeyDown(DIK_SPACE))
-			hero->SetState(STATE_SLOC_HIGHTJUMP);
-
-		if (game->IsKeyDown(DIK_LEFT)) {
-			hero->SetState(STATE_SLOC_CHAYBENTRAI);
-
-			if (game->IsKeyDown(DIK_UP)) {
-				hero->SetState(STATE_SLOC_KEYUP);
-			}
 		}
-		else
-			if (game->IsKeyDown(DIK_RIGHT)) {
-				hero->SetState(STATE_SLOC_CHAYBENPHAI);
+		else {
+			if (hero->GetState() == STATE_SLDF_CHET) return;
 
-				if (game->IsKeyDown(DIK_UP)) {
-					hero->SetState(STATE_SLOC_KEYUP);
-				}
-			}
-			else
-				if (game->IsKeyDown(DIK_UP)) {
-					hero->SetState(STATE_SLOC_KEYUP);
 
-					if (game->IsKeyDown(DIK_RIGHT)) {
-						hero->SetState(STATE_SLOC_CHAYBENPHAI);
-					}
-					else
-						if (game->IsKeyDown(DIK_LEFT)) {
-							hero->SetState(STATE_SLOC_CHAYBENTRAI);
+			if (true) {
+				if (hero->level == LEVEL_SLDF) {
+					if (!hero->sldf_leoCauThang)
+						if (game->IsKeyDown(DIK_RIGHT))
+						{
+							if (!hero->sldf_namXuong)
+								hero->SetState(STATE_SLDF_DIBENPHAI);
+							else
+								hero->SetState(STATE_SLDF_BOBENPHAI);
 						}
 						else
-						{
+							if (game->IsKeyDown(DIK_LEFT))
+							{
+								if (!hero->sldf_namXuong)
+									hero->SetState(STATE_SLDF_DIBENTRAI);
+								else
+									hero->SetState(STATE_SLDF_BOBENTRAI);
+							}
+							else
+								if (hero->sldf_namXuong)
+									hero->SetState(STATE_SLDF_NAMXUONG);
+								else
+									hero->SetState(STATE_SLDF_DUNGYEN);
+					else
+						if (game->IsKeyDown(DIK_UP))
+							hero->SetState(STATE_SLDF_LEOLENCAUTHANG);
+						else
+							if (game->IsKeyDown(DIK_DOWN))
+								hero->SetState(STATE_SLDF_LEOXUONGCAUTHANG);
+							else
+								hero->SetState(STATE_SLDF_DUNGTRENCAUTHANG);
+				}
+				else {
+
+					if (game->IsKeyDown(DIK_SPACE))
+						hero->SetState(STATE_SLOC_HIGHTJUMP);
+
+					if (game->IsKeyDown(DIK_UP)) {
+						hero->SetState(STATE_SLOC_KEYUP);
+					}
+
+					if (game->IsKeyDown(DIK_LEFT))
+						hero->SetState(STATE_SLOC_CHAYBENTRAI);
+					else
+						if (game->IsKeyDown(DIK_RIGHT)) 
+							hero->SetState(STATE_SLOC_CHAYBENPHAI);
+						else
 							hero->SetState(STATE_SLOC_DUNGYEN);
+
+				}
+			}
+
+			if (false) {
+				if (hero->level == LEVEL_SLDF) {
+					if (!hero->sldf_leoCauThang)
+						if (game->IsKeyDown(DIK_RIGHT))
+						{
+							if (!hero->sldf_namXuong)
+								hero->SetState(STATE_SLDF_DIBENPHAI);
+							else
+								hero->SetState(STATE_SLDF_BOBENPHAI);
 						}
+						else
+							if (game->IsKeyDown(DIK_LEFT))
+							{
+								if (!hero->sldf_namXuong)
+									hero->SetState(STATE_SLDF_DIBENTRAI);
+								else
+									hero->SetState(STATE_SLDF_BOBENTRAI);
+							}
+							else
+								if (hero->sldf_namXuong)
+									hero->SetState(STATE_SLDF_NAMXUONG);
+								else
+									hero->SetState(STATE_SLDF_DUNGYEN);
+					else
+						if (game->IsKeyDown(DIK_UP))
+							hero->SetState(STATE_SLDF_LEOLENCAUTHANG);
+						else
+							if (game->IsKeyDown(DIK_DOWN))
+								hero->SetState(STATE_SLDF_LEOXUONGCAUTHANG);
+							else
+								hero->SetState(STATE_SLDF_DUNGTRENCAUTHANG);
 				}
-				else
-				{
-					hero->SetState(STATE_SLOC_DUNGYEN);
+				else {
+
+					if (game->IsKeyDown(DIK_SPACE))
+						hero->SetState(STATE_SLOC_HIGHTJUMP);
+
+					if (game->IsKeyDown(DIK_LEFT)) {
+						hero->SetState(STATE_SLOC_CHAYBENTRAI);
+
+						if (game->IsKeyDown(DIK_UP)) {
+							hero->SetState(STATE_SLOC_KEYUP);
+						}
+					}
+					else
+						if (game->IsKeyDown(DIK_RIGHT)) {
+							hero->SetState(STATE_SLOC_CHAYBENPHAI);
+
+							if (game->IsKeyDown(DIK_UP)) {
+								hero->SetState(STATE_SLOC_KEYUP);
+							}
+						}
+						else
+							if (game->IsKeyDown(DIK_UP)) {
+								hero->SetState(STATE_SLOC_KEYUP);
+								if (game->IsKeyDown(DIK_RIGHT))
+									hero->SetState(STATE_SLOC_CHAYBENPHAI);
+								else
+									if (game->IsKeyDown(DIK_LEFT))
+										hero->SetState(STATE_SLOC_CHAYBENTRAI);
+									else
+										hero->SetState(STATE_SLOC_DUNGYEN);
+							}
+							else
+								hero->SetState(STATE_SLOC_DUNGYEN);
+
 				}
-	}
+			}
+			
+		}
 }
+#pragma endregion
+
 		

@@ -519,14 +519,41 @@ void CHero::RaKhoiXe()
 		}
 }
 
+void CHero::SpecialSkill(int tag)
+{
+	CPlayScene * playScene = (CPlayScene *)(CGame::GetInstance()->GetCurrentScene());
+	if (tag == 1&& playScene->GetIsChoseItem()==1)
+		for (int i = 0; i < coObjects->size(); i++) {
+			CGameObject *e = coObjects->at(i);
+
+			if (dynamic_cast<CEnemy*>(e) && !this->IsScopeWith(e)) {
+
+
+				CBullet3 *obj = new CBullet3();
+
+				float ix, iy;
+				this->TinhTam(ix, iy);
+				obj->SetPosition(ix - 3, iy - 3);
+				obj->SetState(Bullet_Hero);
+				obj->SetTarget(e);
+
+				listObj->push_back(obj);
+				playScene->Set_iItem1(playScene->Get_iItem1() - 1);
+			}
+		}
+}
+
 void CHero::SetState(int state)
 {
+	CPlayScene * playScene = (CPlayScene*)(CGame::GetInstance()->GetCurrentScene());
+
 	CGameObject::SetState(state);
+
 	if (typeMap_isSL) {
 
 		if (isDeath) return;
 
-		if (state == Bullet3 && level == LEVEL_SLOC) {
+		if (state == Bullet3 && level == LEVEL_SLOC && playScene->Get_iItem1()>0) {
 
 			for (int i = 0; i < coObjects->size(); i++) {
 				CGameObject *e = coObjects->at(i);
@@ -543,7 +570,7 @@ void CHero::SetState(int state)
 					obj->SetTarget(e);
 
 					listObj->push_back(obj);
-
+					playScene->Set_iItem1(playScene->Get_iItem1() - 1);
 				}
 			}
 

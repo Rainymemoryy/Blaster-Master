@@ -39,6 +39,7 @@ CGame *game;
 
 int a = 0, b = 0;
 
+
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message) {
@@ -67,6 +68,8 @@ void Update(DWORD dt)
 */
 void Render()
 {
+	if (CGame::GetInstance()->GetIsStopRender()) return;
+
 	LPDIRECT3DDEVICE9 d3ddv = game->GetDirect3DDevice();
 	LPDIRECT3DSURFACE9 bb = game->GetBackBuffer();
 	LPD3DXSPRITE spriteHandler = game->GetSpriteHandler();

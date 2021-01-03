@@ -142,7 +142,7 @@
     <ClCompile Include="Bullet5.cpp" />
     <ClCompile Include="Car.cpp" />
     <ClCompile Include="Bullet3.cpp" />
-    <ClCompile Include="CEndingScene.cpp" />
+    <ClCompile Include="EndingScene.cpp" />
     <ClCompile Include="Credit.cpp" />
     <ClCompile Include="Enemy10.cpp" />
     <ClCompile Include="Enemy6.cpp" />
@@ -151,6 +151,7 @@
     <ClCompile Include="Enemy9.cpp" />
     <ClCompile Include="OpeningScene.cpp" />
     <ClCompile Include="RollOutScene.cpp" />
+    <ClCompile Include="SelecteMenu.cpp" />
     <ClCompile Include="Stair.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Enemy1.cpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="OpeningScene.h" />
     <ClInclude Include="Portal.h" />
     <ClInclude Include="RollOutScene.h" />
+    <ClInclude Include="SelecteMenu.h" />
     <ClInclude Include="Stair.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Game.h" />

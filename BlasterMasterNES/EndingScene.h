@@ -26,7 +26,7 @@ class CEndingScene : public CScene
 protected:
 
 
-	int cam_x=0, cam_y=0;
+	float cam_x=0, cam_y=0;
 	float cam_vx = ED_Cam_VX;
 	int dt;
 

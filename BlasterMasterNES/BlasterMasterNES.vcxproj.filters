@@ -107,9 +107,6 @@
     <ClCompile Include="OpeningScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="CEndingScene.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Credit.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
@@ -119,12 +116,16 @@
     <ClCompile Include="Block1.cpp">
       <Filter>Brick</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
     <ClCompile Include="RollOutScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="EndingScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="SelecteMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Hero.h" />
@@ -254,6 +255,7 @@
     <ClInclude Include="RollOutScene.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="SelecteMenu.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Bullet">
