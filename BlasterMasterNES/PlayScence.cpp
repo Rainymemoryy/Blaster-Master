@@ -305,6 +305,10 @@ void CPlayScene::Render()
 			CGame::GetInstance()->SetIsStopRender(true);
 			RederStopGame();
 		}
+
+	if (nextScene != -100) {
+		CGame::GetInstance()->SwitchScene(4);
+	}
 }
 
 
@@ -398,7 +402,7 @@ void CPlayScene::RenderSelectMenu()
 
 	if (true)
 	{
-		string str = to_string(iItem_1);
+		string str = to_string(player->Get_iItem1());
 		std::list<char> chars;
 		for (char c : str)
 			chars.push_back(c);
@@ -414,7 +418,7 @@ void CPlayScene::RenderSelectMenu()
 	
 	if (true)
 	{
-		string str = to_string(iItem_2);
+		string str = to_string(player->Get_iItem2());
 		std::list<char> chars;
 		for (char c : str)
 			chars.push_back(c);
@@ -430,7 +434,7 @@ void CPlayScene::RenderSelectMenu()
 
 	if (true)
 	{
-		string str = to_string(iItem_3);
+		string str = to_string(player->Get_iItem3());
 		std::list<char> chars;
 		for (char c : str)
 			chars.push_back(c);
@@ -516,7 +520,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 				break;
 			case DIK_E:
 				if (hero->level == LEVEL_SLOC)
-					hero->SetState(Bullet3);
+					hero->SetState(SLOC_Special_Skill);
 				break;
 			case DIK_SPACE:
 				if (hero->level == LEVEL_SLDF)

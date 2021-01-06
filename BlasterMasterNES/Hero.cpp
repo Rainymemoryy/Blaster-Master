@@ -294,7 +294,11 @@ void CHero::LastUpdate()
 						y += portal->GetSumY();
 						vy = 0;
 						vx = 0;*/
-						CGame::GetInstance()->SwitchScene(4);
+						//CGame::GetInstance()->SwitchScene(4);
+						
+
+						((CPlayScene*)(CGame::GetInstance()->GetCurrentScene()))->SetNextScene(4);
+						
 					}
 					if (dynamic_cast<CItemHp *>(coEvents->at(i)->obj))
 					{
@@ -487,7 +491,7 @@ void CHero::NhayVaoXe()
 					currentWidth = 26;
 					currentHeight = 18;
 					x = car->x;
-					y = car->y + lastHeight - currentHeight;
+					y = car->y/* + lastHeight - currentHeight*/+8;
 					nx = car->nx;
 					car = NULL;
 					listObj->erase(listObj->begin() + i);
@@ -519,28 +523,35 @@ void CHero::RaKhoiXe()
 		}
 }
 
-void CHero::SpecialSkill(int tag)
+
+#define PLS_Select_Skill_1 1
+#define PLS_Select_Skill_2 2
+#define PLS_Select_Skill_3 3
+void CHero::SpecialSkill()
 {
+
+	
 	CPlayScene * playScene = (CPlayScene *)(CGame::GetInstance()->GetCurrentScene());
-	if (tag == 1&& playScene->GetIsChoseItem()==1)
+	int tag = playScene->GetSelectItem();
+	if (tag == PLS_Select_Skill_1) {
+
 		for (int i = 0; i < coObjects->size(); i++) {
 			CGameObject *e = coObjects->at(i);
-
-			if (dynamic_cast<CEnemy*>(e) && !this->IsScopeWith(e)) {
-
-
+			if (dynamic_cast<CEnemy*>(e) && !this->IsScopeWith(e) && iItem_1>0) {
 				CBullet3 *obj = new CBullet3();
-
 				float ix, iy;
 				this->TinhTam(ix, iy);
 				obj->SetPosition(ix - 3, iy - 3);
 				obj->SetState(Bullet_Hero);
 				obj->SetTarget(e);
-
 				listObj->push_back(obj);
-				playScene->Set_iItem1(playScene->Get_iItem1() - 1);
+				iItem_1--;
 			}
 		}
+	}
+	else if (tag == PLS_Select_Skill_2) {}
+	else if (tag == PLS_Select_Skill_3) {}
+
 }
 
 void CHero::SetState(int state)
@@ -553,7 +564,7 @@ void CHero::SetState(int state)
 
 		if (isDeath) return;
 
-		if (state == Bullet3 && level == LEVEL_SLOC && playScene->Get_iItem1()>0) {
+		/*if (state == SLOC_Special_Skill && level == LEVEL_SLOC && playScene->Get_iItem1()>0) {
 
 			for (int i = 0; i < coObjects->size(); i++) {
 				CGameObject *e = coObjects->at(i);
@@ -574,6 +585,10 @@ void CHero::SetState(int state)
 				}
 			}
 
+		}*/
+
+		if (state == SLOC_Special_Skill) {
+			SpecialSkill();
 		}
 
 		if (state == STATE_VAOXE) {
@@ -662,6 +677,24 @@ void CHero::SetState(int state)
 						lastHeight = currentHeight;
 						currentWidth = BOX_SLDF_WIDTH_NAMXUONG;
 						currentHeight = BOX_SLDF_HEIGHT_NAMXUONG;
+
+						for (int i = 0; i < listObj->size(); i++) 
+						{
+							CGameObject * obj = listObj->at(i);
+							if (this->IsScopeWith(obj)&&dynamic_cast<CBrick*>(obj)) {
+								float l, r, t, b;
+								obj->GetBoundingBox(l, t, r, b);
+
+								if (l < x&&x <= r) {
+									x += 4;
+								}
+								else if (l <= x + currentWidth && x + currentWidth < r) {
+									x -= 4;
+								}
+								
+							}
+						}
+
 						sldf_namXuong = true;
 					}
 				}

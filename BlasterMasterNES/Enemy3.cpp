@@ -63,6 +63,9 @@ void CEnemy3::LastUpdate()
 
 			x += min_tx * dx + nx * 0.001f;
 			y += min_ty * dy + ny * 0.001f;
+
+			
+
 			if (nx != 0)vx = 0;
 			if (ny != 0)vy = 0;
 
@@ -100,6 +103,8 @@ void CEnemy3::LastUpdate()
 						x += Enemy3_Box_Width;
 						y -= Enemy3_Box_Height;
 						vy = -Enemy3_V;
+						DebugOut(L"sadasdasd\n");
+						x += 2;
 					}
 					else if (e->ny > 0) {
 						this->nx = 0;
@@ -107,6 +112,7 @@ void CEnemy3::LastUpdate()
 						x -= Enemy3_Box_Width;
 						y -= Enemy3_Box_Height;
 						vx = -Enemy3_V;
+						y -= 2;
 					}
 					else if (e->nx > 0) {
 						this->nx = -1;
@@ -114,6 +120,7 @@ void CEnemy3::LastUpdate()
 						x -= Enemy3_Box_Width;
 						y += Enemy3_Box_Height;
 						vy = -Enemy3_V;
+						x -= 2;
 					}
 					else if (e->ny < 0) {
 						this->nx = 0;
@@ -121,6 +128,7 @@ void CEnemy3::LastUpdate()
 						x += Enemy3_Box_Width;
 						y += Enemy3_Box_Height;
 						vx = Enemy3_V;
+						y += 2;
 					}
 				}
 			}
@@ -152,6 +160,9 @@ void CEnemy3::LastUpdate()
 		}
 		for (UINT i = 0; i < coEvents->size(); i++) delete coEvents->at(i);
 	}
+
+
+
 	if (true) {
 		CHero*hero = ((CPlayScene*)(CGame::GetInstance()->GetCurrentScene()))->GetPlayer();
 		float x1, y1, x2, y2;

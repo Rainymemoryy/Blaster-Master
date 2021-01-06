@@ -65,6 +65,8 @@ protected:
 	void _ParseSeciton_AreaOnMap(string line);
 	
 
+	int  nextScene = -100;
+
 public:
 	CPlayScene(int id, LPCWSTR filePath);
 	virtual void Load();
@@ -90,13 +92,19 @@ public:
 	void SelectItemRight();
 	bool GetIsChoseItem() { return isChoseItem; }
 	void SetIsChoseItem(bool b) { this->isChoseItem = b; }
+	int GetSelectItem(){ return selectItem; }
 
-	void Set_iItem1(int n) { iItem_1 = n; }
+
+
+	void SetNextScene(int k) { nextScene = k; }
+
+	/*void Set_iItem1(int n) { iItem_1 = n; }
 	void Set_iItem2(int n) { iItem_2 = n; }
 	void Set_iItem3(int n) { iItem_3 = n; }
 	int Get_iItem1() { return iItem_1; }
 	int Get_iItem2() { return iItem_2; }
-	int Get_iItem3() { return iItem_3; }
+	int Get_iItem3() { return iItem_3; }*/
+
 };
 
 class CPlayScenceKeyHandler : public CScenceKeyHandler

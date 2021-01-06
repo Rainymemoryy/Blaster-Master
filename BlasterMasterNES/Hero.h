@@ -12,7 +12,7 @@
 #include	"Enemy1.h"
 
 #define AddEnemy	1010014
-#define Bullet3		1010015
+#define SLOC_Special_Skill		1010015
 
 
 #define Hero_MatKiemSoatTocDo 200
@@ -168,6 +168,9 @@ public:
 	float lastX, lastY;
 
 	bool sl_isStopGame = false;
+	int iItem_1 = 9;
+	int iItem_2 = 99;
+	int iItem_3 = 99;
 
 
 public:
@@ -194,5 +197,9 @@ public:
 	void NhayVaoXe();
 	void RaKhoiXe();
 
-	void SpecialSkill(int tag);
+	void SpecialSkill();
+	int Get_iItem1() { return iItem_1; }
+	int Get_iItem2() { return iItem_2; }
+	int Get_iItem3() { return iItem_3; }
+	
 };

@@ -26,6 +26,7 @@ CEnemy1::CEnemy1(float x, float y)
 void CEnemy1::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOBJECT>* listObj)
 {
 	this->listObj = listObj;
+	this->coObjects = coObjects;
 	CGameObject::Update(dt);
 	coEvents->clear();
 
@@ -71,6 +72,7 @@ void CEnemy1::LastUpdate()
 		}
 
 		if (true) {
+			//va cham
 			for (int i = 0; i < coEvents->size(); i++) {
 				CGameObject* e = coEvents->at(i)->obj;
 
@@ -87,6 +89,25 @@ void CEnemy1::LastUpdate()
 				}
 
 			}
+
+			//nam trong
+			for (int i = 0; i < coObjects->size(); i++) {
+				CGameObject* e = coObjects->at(i);
+
+				if (this->IsScopeWith(e)) {
+					if (dynamic_cast<CBullet3 *>(e))
+					{
+						CBullet3 *tmpBullet3 = (CBullet3*)(e);
+						if (tmpBullet3->target == this) hp -= tmpBullet3->GetDamage();
+					}
+					else if (dynamic_cast<CBullet *>(e) && e->GetState() != Bullet_Enemy)
+					{
+						CBullet *tmpBullet = (CBullet*)(e);
+						hp -= tmpBullet->GetDamage();
+					}
+				}
+			}
+
 			if (hp <= 0) {
 				isDelete = true;
 				DropItem();

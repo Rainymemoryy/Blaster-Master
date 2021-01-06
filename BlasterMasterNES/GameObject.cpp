@@ -141,6 +141,7 @@ bool CGameObject::IsScopeWith(CGameObject * obj)
 
 void CGameObject::TinhTam(float &x,float &y)
 {
+	
 	float a, b, c, d;
 	GetBoundingBox(a,b,c,d);
 
