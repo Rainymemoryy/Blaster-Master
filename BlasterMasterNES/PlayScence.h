@@ -6,8 +6,16 @@
 #include "Brick.h"
 #include "Hero.h"
 #include "Map.h"
-
 #include "AreaOnMap.h"
+
+
+//-------------------------------------
+#include "Firework.h"
+
+
+
+
+
 
 #define InDexArea_Start 101
 
@@ -67,6 +75,9 @@ protected:
 
 	int  nextScene = -100;
 
+	//--------------------------------------------
+	vector <Firework*> fireworks;
+
 public:
 	CPlayScene(int id, LPCWSTR filePath);
 	virtual void Load();
@@ -105,6 +116,11 @@ public:
 	int Get_iItem2() { return iItem_2; }
 	int Get_iItem3() { return iItem_3; }*/
 
+
+
+
+	void AddFirework(Firework* firework) { fireworks.push_back(firework); };
+	void ClearFireworks() { fireworks.clear(); };
 };
 
 class CPlayScenceKeyHandler : public CScenceKeyHandler

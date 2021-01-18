@@ -126,6 +126,54 @@
       <Filter>Framework</Filter>
     </ClCompile>
     <ClCompile Include="SelecteMenu.cpp" />
+    <ClCompile Include="Brick21.cpp">
+      <Filter>Brick</Filter>
+    </ClCompile>
+    <ClCompile Include="OvhAlert.cpp">
+      <Filter>Brick</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="tinystr.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxmlerror.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxmlparser.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet21.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBulletmap2.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy23.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy22.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy21.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="BossArm.cpp">
+      <Filter>Enemy\BOSS</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss.cpp">
+      <Filter>Enemy\BOSS</Filter>
+    </ClCompile>
+    <ClCompile Include="Fiework.cpp">
+      <Filter>Enemy\BOSS</Filter>
+    </ClCompile>
+    <ClCompile Include="Vec2.cpp">
+      <Filter>Enemy\BOSS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Hero.h" />
@@ -256,6 +304,48 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="SelecteMenu.h" />
+    <ClInclude Include="Brick21.h">
+      <Filter>Brick</Filter>
+    </ClInclude>
+    <ClInclude Include="OvhAlert.h">
+      <Filter>Brick</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="tinystr.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="tinyxml.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet21.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBulletmap2.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy23.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy22.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy21.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="BossArm.h">
+      <Filter>Enemy\BOSS</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss.h">
+      <Filter>Enemy\BOSS</Filter>
+    </ClInclude>
+    <ClInclude Include="Firework.h">
+      <Filter>Enemy\BOSS</Filter>
+    </ClInclude>
+    <ClInclude Include="Vec2.h">
+      <Filter>Enemy\BOSS</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Bullet">
@@ -275,6 +365,9 @@
     </Filter>
     <Filter Include="Enemy">
       <UniqueIdentifier>{da89b649-a50d-49bb-b602-43158f0d0d98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enemy\BOSS">
+      <UniqueIdentifier>{1142a34c-80c9-4a1a-af3e-f2efb2c09c49}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

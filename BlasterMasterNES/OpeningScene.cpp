@@ -6,6 +6,7 @@
 #include "Textures.h"
 #include "Sprites.h"
 #include "Portal.h"
+#include "Sound.h"
 
 using namespace std;
 
@@ -149,6 +150,9 @@ void COpeningScene::Load()
 
 
 	ani_set = CAnimationSets::GetInstance()->Get(AniSetOpening);
+
+
+	Sound::GetInstance()->Play("Opening", 1, 1);
 }
 
 void COpeningScene::Update(DWORD dt)
@@ -168,6 +172,7 @@ void COpeningScene::Render()
 void COpeningScene::Unload()
 {
 	delete ani_set;
+	Sound::GetInstance()->StopAll();
 }
 
 void COpeningScenceKeyHandler::OnKeyDown(int KeyCode)

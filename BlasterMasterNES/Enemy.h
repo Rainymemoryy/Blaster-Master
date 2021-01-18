@@ -9,7 +9,7 @@ class CEnemy :public CGameObject
 public:
 	float hp;
 	float damage=10;
-
+	bool visible = true;
 	vector<LPGAMEOBJECT> *listObj;
 	vector<LPGAMEOBJECT>* coObjects;
 	CGameObject *targerBullet3 = NULL;

@@ -59,6 +59,7 @@ class CGame
 	bool isTopRender = false;
 
 public:
+	HWND GetHWND() { return hWnd; };
 	bool GetIsStopRender() {
 		return isTopRender;
 	}
@@ -103,7 +104,7 @@ public:
 	void SetCamPos(float x, float y) { cam_x = x; cam_y = y; }
 	void GetCamPos(float &x, float &y) { x = cam_x; y = cam_y; }
 	static CGame * GetInstance();
-
+	void LoadSound();
 	bool IsScope(float l1, float t1, float r1, float b1, float l2, float t2, float r2, float b2);
 	bool ChongLenNhau(float l1, float t1, float r1, float b1, float l2, float t2, float r2, float b2) {
 		if (!(l1 > r2 || r1 < l2 || t1 > b2 || b1 < t2)) return true;

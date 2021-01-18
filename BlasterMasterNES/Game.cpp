@@ -8,6 +8,8 @@
 #include "OpeningScene.h"
 #include "EndingScene.h"
 #include "RollOutScene.h"
+#include "Sound.h"
+
 
 
 CGame * CGame::__instance = NULL;
@@ -412,11 +414,24 @@ void CGame::Load(LPCWSTR gameFile)
 
 	DebugOut(L"[INFO] Loading game file : %s has been loaded successfully\n", gameFile);
 
+
+	DebugOut(L"[INFO] Loading game file : %s has been loaded successfully\n", gameFile);
+	Sound::GetInstance()->LoadSoundResource(SOUND_RESOURCE_UNDERWORLD);
+	Sound::GetInstance()->LoadSoundResource(SOUND_RESOURCE_OVERWORLD);
+	Sound::GetInstance()->LoadSoundResource(SOUND_RESOURCE_ENDING);
+	Sound::GetInstance()->LoadSoundResource(SOUND_RESOURCE_INTRO);
+	Sound::GetInstance()->LoadSoundResource(SOUND_RESOURCE_BOSS);
+	LoadSound();
+
+
 	SwitchScene(current_scene);
 }
 
 void CGame::SwitchScene(int scene_id)
 {
+
+	
+
 	DebugOut(L"[INFO] Switching to scene %d\n", scene_id);
 
 	scenes[current_scene]->Unload();;
@@ -428,5 +443,50 @@ void CGame::SwitchScene(int scene_id)
 	current_scene = scene_id;
 	LPSCENE s = scenes[scene_id];
 	CGame::GetInstance()->SetKeyHandler(s->GetKeyEventHandler());
+
+
+
+	
+	
+
 	s->Load();
+}
+
+
+
+void CGame::LoadSound()
+{
+	Sound::GetInstance()->LoadSound("Sources/Sound/rawSound/Blaster Master SFX (13).wav", "PlayerBulletHitBrick");
+	Sound::GetInstance()->LoadSound("Sources/Sound/rawSound/Blaster Master SFX (7).wav", "PlayerFireUnderWorld");
+	Sound::GetInstance()->LoadSound("Sources/Sound/rawSound/Blaster Master SFX (8).wav", "PlayerFireOverWorld");
+	Sound::GetInstance()->LoadSound("Sources/Sound/rawSound/Blaster Master SFX (9).wav", "BossFire");
+	Sound::GetInstance()->LoadSound("Sources/Sound/rawSound/Blaster Master SFX (10).wav", "PlayerJump");
+	Sound::GetInstance()->LoadSound("Sources/Sound/rawSound/Blaster Master SFX (16).wav", "EnemyBulletBang");
+	Sound::GetInstance()->LoadSound("Sources/Sound/rawSound/Blaster Master SFX (19).wav", "PlayerInjured");
+	Sound::GetInstance()->LoadSound("Sources/Sound/rawSound/Blaster Master SFX (21).wav", "PickingItems");
+	Sound::GetInstance()->LoadSound("Sources/Sound/rawSound/Blaster Master SFX (22).wav", "TeleporterTransform");
+	Sound::GetInstance()->LoadSound("Sources/Sound/rawSound/Blaster Master SFX (27).wav", "Enemydie");
+	Sound::GetInstance()->LoadSound("Sources/Sound/rawSound/Blaster Master SFX (36).wav", "BossIntro");
+	Sound::GetInstance()->LoadSound("Sources/Sound/rawSound/GameOver.wav", "GameOver");
+	Sound::GetInstance()->LoadSound("Sources/Sound/rawSound/LifeLost.wav", "LifeLost");
+	Sound::GetInstance()->LoadSound("Sources/Sound/rawSound/Blaster Master SFX (15).wav", "MineBip");
+	Sound::GetInstance()->LoadSound("Sources/Sound/rawSound/Blaster Master SFX (16).wav", "EnemyBulletBang");
+	Sound::GetInstance()->LoadSound("Sources/Sound/rawSound/Blaster Master SFX (19).wav", "PlayerInjured");
+	Sound::GetInstance()->LoadSound("Sources/Sound/rawSound/Blaster Master SFX (23).wav", "FireRocket");
+	Sound::GetInstance()->LoadSound("Sources/Sound/rawSound/Blaster Master SFX (24).wav", "TransingWeaponScene");
+	Sound::GetInstance()->LoadSound("Sources/Sound/rawSound/Blaster Master SFX (25).wav", "FireHomingMissles");
+	Sound::GetInstance()->LoadSound("Sources/Sound/rawSound/Blaster Master SFX (30).wav", "SkullFire");
+	Sound::GetInstance()->LoadSound("Sources/Sound/rawSound/Blaster Master SFX (35).wav", "BossDie");
+	Sound::GetInstance()->LoadSound("Sources/Sound/rawSound/Blaster Master SFX (29).wav", "TankDie");
+	Sound::GetInstance()->LoadSound("Sources/Sound/rawSound/Blaster Master SFX (22).wav", "Blink");
+	Sound::GetInstance()->LoadSound("Sources/Sound/rawSound/Blaster Master SFX (26).wav", "SwitchScene");
+	Sound::GetInstance()->LoadSound("Sources/Sound/rawSound//Blaster Master SFX (17).wav", "Thunder");
+	Sound::GetInstance()->LoadSound("Sources/Sound/rawSound//Blaster Master SFX (4).wav", "BulletTouchBoss");
+	Sound::GetInstance()->LoadSound("Sources/Sound/Intro/Opening.wav", "Opening");
+	Sound::GetInstance()->LoadSound("Sources/Sound/Intro/CarSplash.wav", "CarSplash");
+	Sound::GetInstance()->LoadSound("Sources/Sound/Intro/CarBackground.wav", "CarBackground");
+	Sound::GetInstance()->LoadSound("Sources/Sound/Ending.wav", "Ending");
+	Sound::GetInstance()->LoadSound("Sources/Sound/Boss.wav", "Boss");
+	Sound::GetInstance()->LoadSound("Sources/Sound/Area2.wav", "Area2");
+	Sound::GetInstance()->LoadSound("Sources/Sound/Ending/Mountain.wav", "Mountain");
 }
