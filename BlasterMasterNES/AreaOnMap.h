@@ -22,6 +22,7 @@
 #include "Enemy7.h"
 #include "Enemy8.h"
 #include "Enemy9.h"
+#include "Enemy10.h"
 
 
 #include "Item.h"
@@ -50,6 +51,7 @@
 #define AreaOnMap_Type_Enemy7	107
 #define AreaOnMap_Type_Enemy8	108
 #define AreaOnMap_Type_Enemy9	109
+#define AreaOnMap_Type_Enemy10	110
 
 
 #define AreaOnMap_Type_ItemHP	201
@@ -158,7 +160,7 @@ public:
 			listObj->push_back(obj);
 			break;
 		case AreaOnMap_Type_Enemy3:
-			obj = new CEnemy3(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16);
+			obj = new CEnemy3(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16, atoi(tokens[3].c_str()), atoi(tokens[4].c_str()), atoi(tokens[5].c_str()), atoi(tokens[6].c_str()));
 			listObj->push_back(obj);
 			break;
 		case AreaOnMap_Type_Enemy4:
@@ -183,6 +185,10 @@ public:
 			break;
 		case AreaOnMap_Type_Enemy9:
 			obj = new CEnemy9(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16 + 6);
+			listObj->push_back(obj);
+			break;
+		case AreaOnMap_Type_Enemy10:
+			obj = new CEnemy10(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16);
 			listObj->push_back(obj);
 			break;
 	

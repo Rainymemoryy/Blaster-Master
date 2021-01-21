@@ -89,8 +89,8 @@ void CBullet5::LastUpdate()
 		float a1, b1, a2, b2;
 		TinhTam(a1, b1);
 		hero->TinhTam(a2, b2);
-		if (a1 < a2) vx = SLOC_VX;
-		else vx = -SLOC_VX;
+		if (a1 < a2) vx = SLOC_VX/3;
+		else vx = -SLOC_VX/3;
 	}
 
 	if (timeTuHuy <= 0) isPhatNo = true;

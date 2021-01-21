@@ -159,6 +159,9 @@ void CEnemy9::BanDan()
 	CBullet5 *obj = new CBullet5();
 	obj->SetPosition(x + 5, y + 5);
 	obj->SetState(Bullet_Enemy);
+	
+
+
 	listObj->push_back(obj);
 
 }

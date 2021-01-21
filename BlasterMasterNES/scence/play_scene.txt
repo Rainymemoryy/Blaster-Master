@@ -7,7 +7,9 @@
 601	textures\BlasterMasterSheet4.png	255	0	255	1
 701	textures\resume.png	255	255	255	1
 801	textures\select_menu.png	255	255	255	1
-
+22	textures\a.png	255	255	255	1
+23	textures\a.png	255	255	255	1
+24	textures\a.png	255	255	255	1
 [SPRITES]
 #---------------menu, pause, left---------------------------------------
 #resume----------------

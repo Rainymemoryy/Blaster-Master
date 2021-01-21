@@ -10,14 +10,21 @@
 
 
 
-CEnemy3::CEnemy3(float x, float y)
+CEnemy3::CEnemy3(float x, float y, int nx, int ny, int vx, int vy)
 {
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(Enemy3_AniSet));
 	this->x = x;
 	this->y = y;
 
-	nx = 1;
-	vx = Enemy3_V;
+	this->nx = nx;
+	this->ny = ny;
+
+	this->vx = vx * Enemy3_V;
+	this->vy = vy * Enemy3_V;
+
+	//vx = Enemy3_V;
+
+
 	hp = Enemy3_HP;
 	dropItem = Item_HP;
 }
@@ -64,79 +71,100 @@ void CEnemy3::LastUpdate()
 			x += min_tx * dx + nx * 0.001f;
 			y += min_ty * dy + ny * 0.001f;
 
-			
 
-			if (nx != 0)vx = 0;
-			if (ny != 0)vy = 0;
+
+			/*if (nx != 0)vx = 0;
+			if (ny != 0)vy = 0;*/
 
 
 
 			for (int i = 0; i < coEventsResult_Block_Brick.size(); i++) {
 				LPCOLLISIONEVENT e = coEventsResult_Block_Brick[i];
+				DebugOut(L"nx:  %f   ny:  %f\n", e->nx, e->ny);
+
 				if (dynamic_cast<CBrick *>(e->obj)) {
 					if (e->nx > 0) {
 						this->nx = 1;
 						this->ny = 0;
 						this->vy = -Enemy3_V;
-
+						this->vx = 0;
+						followHero = false;
 					}
 					else if (e->nx < 0) {
 						this->nx = -1;
 						this->ny = 0;
 						this->vy = Enemy3_V;
+						this->vx = 0;
+						followHero = false;
 					}
 					else if (e->ny > 0) {
 						this->nx = 0;
 						this->ny = 1;
 						this->vx = Enemy3_V;
+						this->vy = 0;
+						followHero = false;
 					}
 					else if (e->ny < 0) {
 						this->nx = 0;
 						this->ny = -1;
 						this->vx = -Enemy3_V;
+						this->vy = 0;
+						followHero = false;
 					}
 				}
+
 				if (dynamic_cast<CBlock1 *>(e->obj)) {
-					if (e->nx < 0) {
-						this->nx = 1;
-						this->ny = 0;
-						x += Enemy3_Box_Width;
-						y -= Enemy3_Box_Height;
-						vy = -Enemy3_V;
-						DebugOut(L"sadasdasd\n");
-						x += 2;
+
+					if(!followHero){
+						if (e->nx < 0) {
+							this->nx = 1;
+							this->ny = 0;
+							x += Enemy3_Box_Width;
+							y -= Enemy3_Box_Height;
+							vy = -Enemy3_V;
+							vx = 0;
+							x += 2;
+						}
+						else if (e->ny > 0) {
+							this->nx = 0;
+							this->ny = -1;
+							x -= Enemy3_Box_Width;
+							y -= Enemy3_Box_Height;
+							vx = -Enemy3_V;
+							vy = 0;
+							y -= 2;
+						}
+						else if (e->nx > 0) {
+							this->nx = -1;
+							this->ny = 0;
+							x -= Enemy3_Box_Width;
+							y += Enemy3_Box_Height;
+							vy = Enemy3_V;
+							vx = 0;
+							x -= 2;
+						}
+						else if (e->ny < 0) {
+							this->nx = 0;
+							this->ny = 1;
+							x += Enemy3_Box_Width;
+							y += Enemy3_Box_Height;
+							vx = Enemy3_V;
+							vy = 0;
+							y += 2;
+						}
+}
+					else {
+						x += -(min_tx * dx + nx * 0.001f)+dx;
+						y += -(min_ty * dy + ny * 0.001f)+dy;
 					}
-					else if (e->ny > 0) {
-						this->nx = 0;
-						this->ny = -1;
-						x -= Enemy3_Box_Width;
-						y -= Enemy3_Box_Height;
-						vx = -Enemy3_V;
-						y -= 2;
-					}
-					else if (e->nx > 0) {
-						this->nx = -1;
-						this->ny = 0;
-						x -= Enemy3_Box_Width;
-						y += Enemy3_Box_Height;
-						vy = -Enemy3_V;
-						x -= 2;
-					}
-					else if (e->ny < 0) {
-						this->nx = 0;
-						this->ny = 1;
-						x += Enemy3_Box_Width;
-						y += Enemy3_Box_Height;
-						vx = Enemy3_V;
-						y += 2;
-					}
+					
 				}
 			}
-			followHero = true;
+			
 
 		}
 
-		if (false) {
+		if (true) {
 			for (int i = 0; i < coEvents->size(); i++) {
 				CGameObject* e = coEvents->at(i)->obj;
 
@@ -174,20 +202,24 @@ void CEnemy3::LastUpdate()
 				if (y1 < y2&&ny>0) {
 					vy = 3 * Enemy3_V;
 					vx = 0;
+					followHero = true;
 				}
 				if (y1 > y2&&ny<0) {
 					vy = -3 * Enemy3_V;
 					vx = 0;
+					followHero = true;
 				}
 		}
 		if (y1 - 5 < y2&&y1 + 5 > y2) {
 			if (x1 < x2&&nx>0) {
 				vy = 0;
 				vx = 3 * Enemy3_V;
+				followHero = true;
 			}
 			if (x1>x2&&nx<0) {
 				vy = 0;
 				vx = -3 * Enemy3_V;
+				followHero = true;
 			}
 		}
 	}

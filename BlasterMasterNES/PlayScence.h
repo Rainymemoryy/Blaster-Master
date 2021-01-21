@@ -27,7 +27,7 @@ class CPlayScene : public CScene
 protected:
 	
 	//dt
-	int dt;
+	int dt=0;
 
 	//Nhân vật
 	CHero *player;	

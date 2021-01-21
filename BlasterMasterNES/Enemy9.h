@@ -19,6 +19,8 @@
 
 #define Enemy9_Damge		25.f
 
+#define Enemy9_Delay		1000
+
 class CEnemy9 : public CEnemy
 {
 	int timeBanDan = 0;

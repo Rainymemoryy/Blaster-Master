@@ -227,6 +227,7 @@ void CPlayScene::Load()
 void CPlayScene::Update(DWORD dt)
 {
 	this->dt = dt;
+	DebugOut(L"Log %d\n", dt);
 
 	if (isStopGame) return;
 	if (isChoseItem) return;
@@ -361,6 +362,7 @@ void CPlayScene::RenderLeft()
 		
 	}
 	timeRenderLeft -= dt;
+	DebugOut(L"time %d\n", timeRenderLeft);
 }
 
 #define SpriteSelectMenu	301

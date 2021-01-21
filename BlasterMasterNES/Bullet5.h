@@ -10,8 +10,8 @@
 #define Bullet5_Ani_Left	0
 #define Bullet5_Ani_Right	1
 
-#define Bullet5_AY			0.0002f
-#define Bullet5_NayLen		0.08f
+#define Bullet5_AY			0.00005f
+#define Bullet5_NayLen		0.02f
 #define Bullet5_TimeTuHuy		2000
 class CBullet5 : public CBullet
 {

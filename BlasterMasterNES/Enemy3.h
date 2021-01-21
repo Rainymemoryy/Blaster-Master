@@ -23,7 +23,7 @@ class CEnemy3 : public CEnemy
 	bool followHero = false;
 public:
 
-	CEnemy3(float x, float y);
+	CEnemy3(float x, float y, int nx, int ny, int vx, int vy);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL, vector<LPGAMEOBJECT> *listObj = NULL);
 	virtual void Render();
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);

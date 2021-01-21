@@ -20,10 +20,10 @@ public:
 	virtual void LastUpdate() {}
 	void DropItem() {
 
-		//srand(time(NULL));
+		
 
 		
-		int n= rand() % 4 + 0;
+		int n= rand() % 2 + 0;
 		if (!n) {
 			DebugOut(L"[Enemy] Drop item: %d\n", dropItem);
 			CGameObject *obj;

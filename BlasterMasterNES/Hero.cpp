@@ -288,16 +288,17 @@ void CHero::LastUpdate()
 				for (int i = 0; i < coEvents->size(); i++) {
 					if (dynamic_cast<CPortal *>(coEvents->at(i)->obj))
 					{
-						/*CPortal *portal = (CPortal *)(coEvents->at(i)->obj);
+						CPortal *portal = (CPortal *)(coEvents->at(i)->obj);
 						((CPlayScene*)(CGame::GetInstance()->GetCurrentScene()))->SetIdArea(portal->GetSceneId());
 						x += portal->GetSumX();
 						y += portal->GetSumY();
 						vy = 0;
-						vx = 0;*/
-						//CGame::GetInstance()->SwitchScene(4);
-						
+						vx = 0;
 
-						((CPlayScene*)(CGame::GetInstance()->GetCurrentScene()))->SetNextScene(4);
+
+
+						//CGame::GetInstance()->SwitchScene(4);
+						//((CPlayScene*)(CGame::GetInstance()->GetCurrentScene()))->SetNextScene(4);
 						
 					}
 					if (dynamic_cast<CItemHp *>(coEvents->at(i)->obj))
