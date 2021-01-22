@@ -35,9 +35,6 @@
     <ClCompile Include="Portal.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
-    <ClCompile Include="Scence.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
     <ClCompile Include="Sprites.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
@@ -132,21 +129,6 @@
     <ClCompile Include="OvhAlert.cpp">
       <Filter>Brick</Filter>
     </ClCompile>
-    <ClCompile Include="Sound.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="tinystr.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="tinyxml.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="tinyxmlerror.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="tinyxmlparser.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
     <ClCompile Include="Bullet21.cpp">
       <Filter>Bullet</Filter>
     </ClCompile>
@@ -174,7 +156,27 @@
     <ClCompile Include="Vec2.cpp">
       <Filter>Enemy\BOSS</Filter>
     </ClCompile>
-    <ClCompile Include="Bullet6.cpp" />
+    <ClCompile Include="Scence.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>Framework\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="tinystr.cpp">
+      <Filter>Framework\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml.cpp">
+      <Filter>Framework\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxmlerror.cpp">
+      <Filter>Framework\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxmlparser.cpp">
+      <Filter>Framework\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet6.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Hero.h" />
@@ -221,9 +223,6 @@
       <Filter>Framework</Filter>
     </ClInclude>
     <ClInclude Include="Portal.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Scence.h">
       <Filter>Framework</Filter>
     </ClInclude>
     <ClInclude Include="Sprites.h">
@@ -311,15 +310,6 @@
     <ClInclude Include="OvhAlert.h">
       <Filter>Brick</Filter>
     </ClInclude>
-    <ClInclude Include="Sound.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="tinystr.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="tinyxml.h">
-      <Filter>Framework</Filter>
-    </ClInclude>
     <ClInclude Include="Bullet21.h">
       <Filter>Bullet</Filter>
     </ClInclude>
@@ -347,7 +337,21 @@
     <ClInclude Include="Vec2.h">
       <Filter>Enemy\BOSS</Filter>
     </ClInclude>
-    <ClInclude Include="Bullet6.h" />
+    <ClInclude Include="Sound.h">
+      <Filter>Framework\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="tinystr.h">
+      <Filter>Framework\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="tinyxml.h">
+      <Filter>Framework\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Scence.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet6.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Bullet">
@@ -370,6 +374,9 @@
     </Filter>
     <Filter Include="Enemy\BOSS">
       <UniqueIdentifier>{1142a34c-80c9-4a1a-af3e-f2efb2c09c49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Sound">
+      <UniqueIdentifier>{ecf018a1-06ca-46fa-bee2-70a598c4b880}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

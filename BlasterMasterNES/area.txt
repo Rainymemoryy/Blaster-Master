@@ -5,7 +5,7 @@
 302	textures\BlasterMasterSheet1.png	255	0	255	1
 401	textures\Items.png	181	165	213	1
 601	textures\BlasterMasterSheet4.png	255	0	255	1
-701	textures\map.png	255	255	255	1
+501	textures\map.png	255	255	255	1
 1000	textures\boss.png	255	0	255	1
 1001	textures\bossclaw.png	255	0	255	1
 105	textures\Firework.png	35	35	35	1
@@ -132,7 +132,7 @@
 40301	3	201	19	217	401
 
 #brick21
-50001	4656	3904	4672	3920	701
+50001	4656	3904	4672	3920	501
 #---------------Bullet-------------------
 
 #bullet

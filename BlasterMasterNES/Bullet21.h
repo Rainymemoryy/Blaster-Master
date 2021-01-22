@@ -18,6 +18,7 @@
 class CBullet21 : public CBullet
 {
 public:
+	vector<LPGAMEOBJECT>* listObj;
 	CBullet21();
 	virtual void LastUpdate();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL, vector<LPGAMEOBJECT> *listObj = NULL);

@@ -8,8 +8,8 @@
 
 #include "Enemy.h"
 
-#define Enemy23_Box_Width	26
-#define Enemy23_Box_Height	26
+#define Enemy23_Box_Width	24
+#define Enemy23_Box_Height	32
 
 #define Enemy23_HP			100
 #define Enemy23_AY			0.014f

@@ -33,7 +33,7 @@ void Map::LoadMatrix(LPCWSTR path)
 	ifstream file;
 
 	file.open(path);
-	this->Matrix = new int*[TotalRowsOfMap];
+	this->Matrix = new int* [TotalRowsOfMap];
 	for (int iRow = 0; iRow < TotalRowsOfMap; iRow++)
 	{
 		this->Matrix[iRow] = new int[TotalColsOfMap];
@@ -44,7 +44,7 @@ void Map::LoadMatrix(LPCWSTR path)
 	}
 	file.close();
 }
-void Map::Render(int cx, int cy)
+void Map::Render(int cx, int cy,int al)
 {
 
 	int col = (cx + CGame::GetInstance()->GetScreenWidth()) / 16 + 1;
@@ -52,13 +52,40 @@ void Map::Render(int cx, int cy)
 
 	int row = (cy + CGame::GetInstance()->GetScreenHeight()) / 16 + 1;
 	row = row >= TotalRowsOfMap ? TotalRowsOfMap : row;
-
+	if (cy < 0) cy = 0;
 	for (int iRow = cy / 16; iRow < row; iRow++)
 	{
+		if (cx < 0) cx = 0;
+
 		for (int iColumn = cx / 16; iColumn < col; iColumn++)
 		{
-			this->Tiles[this->Matrix[iRow][iColumn] - 1]->Draw(iColumn * TILE_WIDTH, iRow*TILE_HEIGHT, 255);
+			this->Tiles[this->Matrix[iRow][iColumn] - 1]->Draw(iColumn * TILE_WIDTH, iRow * TILE_HEIGHT, al);
 		}
+	}
+}
+void Map::Render2(int cx, int cy)
+{
+
+	int col = (cx + CGame::GetInstance()->GetScreenWidth()) / 16 + 1;
+	col = col >= TotalColsOfMap ? TotalColsOfMap : col;
+
+	int row = (cy + CGame::GetInstance()->GetScreenHeight()) / 16 + 1;
+	row = row >= TotalRowsOfMap ? TotalRowsOfMap : row;
+	if (cy < 0) cy = 0;
+	int i = cy / 16;
+	while (i % 16 != 12)
+		i++;
+	for (int iRow = i; iRow <= i; iRow += 16)
+	{
+		if (cx < 0) cx = 0;
+
+		if (iRow % 16 == 12)
+			for (int iColumn = cx / 16; iColumn < col; iColumn++)
+			{
+				this->Tiles[this->Matrix[iRow][iColumn] - 1]->Draw(iColumn * TILE_WIDTH, iRow * TILE_HEIGHT, 255);
+				this->Tiles[this->Matrix[iRow + 1][iColumn] - 1]->Draw(iColumn * TILE_WIDTH, (iRow + 1) * TILE_HEIGHT, 255);
+
+			}
 	}
 }
 int Map::GetMapHeight()

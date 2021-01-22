@@ -11,16 +11,19 @@
 #define Enemy10_Box_Width	18
 #define Enemy10_HP			100
 #define Enemy10_AY			0.0015f
-#define Enemy10_V			0.1f
+#define Enemy10_V			0.06f
 
 #define Enemy10_AniSet		810
 #define Enemy10_Damge       25.f
 
-
+#define Enemy10_thoiGianDoiHuongDoc	1000
+#define Enemy10_thoiGianDoiHuongNgang	10000
 
 class CEnemy10 : public CEnemy
 {
-	
+
+	int thoiGianDoiHuong = 0;
+
 public:
 
 	CEnemy10(float x, float y);

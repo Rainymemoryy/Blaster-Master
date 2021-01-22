@@ -10,7 +10,7 @@
 #include "Bullet1.h"
 #include "Bullet2.h"
 #include "Bullet3.h"
-#include "Bullet6.h"
+#include "Bullet21.h"
 
 #include "Item.h"
 #include "ItemHp.h"
@@ -19,6 +19,9 @@
 #include "Stair.h"
 
 #include "PlayScence.h"
+#include "OvhAlert.h"
+#include "Sound.h"
+#include "Bullet6.h"
 
 CHero::CHero(float x, float y) : CGameObject()
 {
@@ -30,89 +33,137 @@ CHero::CHero(float x, float y) : CGameObject()
 	start_y = y;
 	this->x = x;
 	this->y = y;
-
-	if(false){
-		LSLOC a = new SLOC();
-		a->width = 26;
-		a->height = 18;
-		a->indexAni = 10;
-		sloc_ani_box.push_back(a);
-
-		LSLOC b = new SLOC();
-		b->width = 26;
-		b->height = 26;
-		b->indexAni = 11;
-		sloc_ani_box.push_back(b);
-
-		LSLOC c = new SLOC();
-		c->width = 26;
-		c->height = 28;
-		c->indexAni = 12;
-		sloc_ani_box.push_back(c);
-
-		LSLOC d = new SLOC();
-		d->width = 26;
-		d->height = 30;
-		d->indexAni = 13;
-		sloc_ani_box.push_back(d);
-
-		LSLOC f = new SLOC();
-		f->width = 26;
-		f->height = 34;
-		f->indexAni = 14;
-		sloc_ani_box.push_back(f);
+	if (x > 256 * 16)
+	{
+		this->level = LEVEL_OVH;
+		this->sldf_hp = 160;
 	}
-	if (true) {
-		LSLOC a = new SLOC();
-		a->width = 26;
-		a->height = 18;
-		a->indexAni = 10;
-		sloc_ani_box.push_back(a);
+	if (level != LEVEL_OVH)
+	{
+		if (false) {
+			LSLOC a = new SLOC();
+			a->width = 26;
+			a->height = 18;
+			a->indexAni = 10;
+			sloc_ani_box.push_back(a);
 
-		LSLOC b = new SLOC();
-		b->width = 26;
-		b->height = 18;
-		b->indexAni = 11;
-		sloc_ani_box.push_back(b);
+			LSLOC b = new SLOC();
+			b->width = 26;
+			b->height = 26;
+			b->indexAni = 11;
+			sloc_ani_box.push_back(b);
 
-		LSLOC c = new SLOC();
-		c->width = 26;
-		c->height = 18;
-		c->indexAni = 12;
-		sloc_ani_box.push_back(c);
+			LSLOC c = new SLOC();
+			c->width = 26;
+			c->height = 28;
+			c->indexAni = 12;
+			sloc_ani_box.push_back(c);
 
-		LSLOC d = new SLOC();
-		d->width = 26;
-		d->height = 18;
-		d->indexAni = 13;
-		sloc_ani_box.push_back(d);
+			LSLOC d = new SLOC();
+			d->width = 26;
+			d->height = 30;
+			d->indexAni = 13;
+			sloc_ani_box.push_back(d);
 
-		LSLOC f = new SLOC();
-		f->width = 26;
-		f->height = 18;
-		f->indexAni = 14;
-		sloc_ani_box.push_back(f);
+			LSLOC f = new SLOC();
+			f->width = 26;
+			f->height = 34;
+			f->indexAni = 14;
+			sloc_ani_box.push_back(f);
+		}
+
+		if (true) {
+			LSLOC a = new SLOC();
+			a->width = 26;
+			a->height = 18;
+			a->indexAni = 10;
+			sloc_ani_box.push_back(a);
+
+			LSLOC b = new SLOC();
+			b->width = 26;
+			b->height = 18;
+			b->indexAni = 11;
+			sloc_ani_box.push_back(b);
+
+			LSLOC c = new SLOC();
+			c->width = 26;
+			c->height = 18;
+			c->indexAni = 12;
+			sloc_ani_box.push_back(c);
+
+			LSLOC d = new SLOC();
+			d->width = 26;
+			d->height = 18;
+			d->indexAni = 13;
+			sloc_ani_box.push_back(d);
+
+			LSLOC f = new SLOC();
+			f->width = 26;
+			f->height = 18;
+			f->indexAni = 14;
+			sloc_ani_box.push_back(f);
+		}
 	}
 }
 
 void CHero::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJECT> *listObj)
 {
+	/*if (x > 256 * 16)
+	{
+		this->level = LEVEL_OVH;
+		this->sldf_hp = 160;
+	}*/
 	if (typeMap_isSL) {
 		
-			if (true) {
-				if (isDeath)return;
+		if (true) {
+			if (isDeath)return;
 
-				CGameObject::Update(dt);
+			CGameObject::Update(dt);
 
-				this->listObj = listObj;
-				this->coObjects = coObjects;
+			this->listObj = listObj;
+			this->coObjects = coObjects;
 
-				sldf_coTheVaoXe = false;
-				sloc_ix = sloc_ix >= 400 ? sloc_ix - 400 : sloc_ix;
-				sloc_iy -= dt;
-				sloc_iy = sloc_iy >= 400 ? 400 : sloc_iy;
-				sloc_iy = sloc_iy <= 0 ? 0 : sloc_iy;
+			sldf_coTheVaoXe = false;
+			sloc_ix = sloc_ix >= 400 ? sloc_ix - 400 : sloc_ix;
+			sloc_iy -= dt;
+			sloc_iy = sloc_iy >= 400 ? 400 : sloc_iy;
+			sloc_iy = sloc_iy <= 0 ? 0 : sloc_iy;
+			if (level == LEVEL_OVH)
+			{
+				if ((alertl < x) && (x < alertr - 16)) if
+					((alertb - 27 > y) && (y + 27 > alertt))
+					sldf_hp -= Brick221_Damage;
 
+				if (shoot)
+				{
+					CGameObject* tmpObj = new CBullet21();
+					if (state % 4 == 2)
+					{
+						tmpObj->SetPosition(x + 10, y + 16);
+						tmpObj->SetSpeed(0, -Bullet2_V_DF);
+					}
+					if (state % 4 == 3)
+					{
+						tmpObj->SetPosition(x + 5, y + 14);
+						tmpObj->SetSpeed(0, Bullet2_V_DF);
+					}
+					if (state % 4 == 0)
+					{
+						tmpObj->SetPosition(x + 6, y + 14);
+						tmpObj->SetSpeed(-Bullet2_V_DF, 0);
+					}
+					if (state % 4 == 1)
+					{
+						tmpObj->SetPosition(x - 6, y + 14);
+						tmpObj->SetSpeed(Bullet2_V_DF, 0);
+					}
+					listObj->push_back(tmpObj);
+					Sound::GetInstance()->Play("PlayerFireOverWorld", 0, 1);
+					shoot = false;
+				}
+			}
+			else
+			{
 				if (level == LEVEL_SLDF) {
 					vy += SLDF_AY * dt;
 					if (car != NULL) {
@@ -120,7 +171,7 @@ void CHero::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJEC
 						int yy = y + currentWidth / 2;
 						int xxx = car->x + 26 / 2;
 						int yyy = car->y + 16 / 2;
-						float d = abs(sqrt((xx - xxx)*(xx - xxx) + (yy - yyy)*(yy - yyy)));
+						float d = abs(sqrt((xx - xxx) * (xx - xxx) + (yy - yyy) * (yy - yyy)));
 						if (d < 26) {
 							sldf_coTheVaoXe = true;
 						}
@@ -138,6 +189,7 @@ void CHero::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJEC
 				x = x + lastWidth - (currentWidth + lastWidth) / 2;
 				y = y + lastHeight - currentHeight;
 			}
+		}
 
 		if (true) {
 			coEvents->clear();
@@ -204,8 +256,20 @@ void CHero::LastUpdate()
 					if (dynamic_cast<CBrick *>(e->obj)) {
 						int a = 1;
 						if (ny > 0) a = 10;
-
-						if (level == LEVEL_SLDF) {
+						if (dynamic_cast <COvhAlert*>(e->obj))
+						{
+							if (level == LEVEL_OVH)
+							{
+								x = x + dx;
+								y = y + dy;
+								this->alertl = ((COvhAlert*)(e->obj))->x;
+								this->alertr = ((COvhAlert*)(e->obj))->r;
+								this->alertt = ((COvhAlert*)(e->obj))->y;
+								this->alertb = ((COvhAlert*)(e->obj))->b;
+							}
+						}
+						else
+							if (level == LEVEL_SLDF) {
 							if (ny < 0) sldf_coTheNhay = true;
 							else {
 								sldf_coTheNhay = false;
@@ -216,15 +280,15 @@ void CHero::LastUpdate()
 							sldf_hp -= ((CBrick*)(e->obj))->GetDamage() * dt*a;
 
 						}
-						else {
-							if (ny < 0) sloc_coTheNhay = true;
 							else {
-								sloc_coTheNhay = false;
-								dangNhay = false;
-							}
-							sloc_hp -= ((CBrick*)(e->obj))->GetDamage() * dt*a;
+								if (ny < 0) sloc_coTheNhay = true;
+								else {
+									sloc_coTheNhay = false;
+									dangNhay = false;
+								}
+								sloc_hp -= ((CBrick*)(e->obj))->GetDamage() * dt * a;
 
-						}
+							}
 						sldf_oTrenCauThang = false;
 					}
 					if (dynamic_cast<CStair *>(e->obj)) {
@@ -267,6 +331,9 @@ void CHero::LastUpdate()
 								sloc_hp -= dynamic_cast<CEnemy*>(e->obj)->GetDamage();
 							if (level == LEVEL_SLDF)
 								sldf_hp -= dynamic_cast<CEnemy*>(e->obj)->GetDamage();
+							if (level == LEVEL_OVH)
+								sldf_hp -= dynamic_cast<CEnemy*>(e->obj)->GetDamage();
+							Sound::GetInstance()->Play("PlayerInjured", 0, 1);
 						}
 						if (dynamic_cast<CBullet*>(e->obj)) {
 
@@ -275,7 +342,8 @@ void CHero::LastUpdate()
 								sloc_hp -= dynamic_cast<CBullet*>(e->obj)->GetDamage();
 							if (level == LEVEL_SLDF)
 								sldf_hp -= dynamic_cast<CBullet*>(e->obj)->GetDamage();
-
+							if (level == LEVEL_OVH)
+								sldf_hp -= dynamic_cast<CBullet*>(e->obj)->GetDamage();
 
 						}
 
@@ -289,15 +357,52 @@ void CHero::LastUpdate()
 					if (dynamic_cast<CPortal *>(coEvents->at(i)->obj))
 					{
 						CPortal *portal = (CPortal *)(coEvents->at(i)->obj);
-						((CPlayScene*)(CGame::GetInstance()->GetCurrentScene()))->SetIdArea(portal->GetSceneId());
-						x += portal->GetSumX();
-						y += portal->GetSumY();
-						vy = 0;
-						vx = 0;
+						
+						if(portal->GetSceneId()>=201)
+							if (level == LEVEL_SLOC)
+							{
 
-
-
+							}
+							else
+							{
+								((CPlayScene*)(CGame::GetInstance()->GetCurrentScene()))->SetIdArea(portal->GetSceneId());
+								x += portal->GetSumX();
+								y += portal->GetSumY();
+								Sound::GetInstance()->Play("SwitchScene", 0, 1);
+								level = LEVEL_OVH;
+								start_x = x;
+								start_y = y;
+								vy = 0;
+								vx = 0;
+							}
+						if(portal->GetSceneId() <= 150)
+							if(level==LEVEL_OVH)
+							{
+								((CPlayScene*)(CGame::GetInstance()->GetCurrentScene()))->SetIdArea(portal->GetSceneId());
+								x += portal->GetSumX();
+								y += portal->GetSumY();
+								Sound::GetInstance()->Play("SwitchScene", 0, 1);
+								level = LEVEL_SLDF;
+								start_x = x;
+								start_y = y;
+								vy = 0;
+								vx = 0;
+							}
+							else 
+							{
+								((CPlayScene*)(CGame::GetInstance()->GetCurrentScene()))->SetIdArea(portal->GetSceneId());
+								x += portal->GetSumX();
+								y += portal->GetSumY();
+								Sound::GetInstance()->Play("SwitchScene", 0, 1);
+								//level = LEVEL_SLDF;
+								start_x = x;
+								start_y = y;
+								vy = 0;
+								vx = 0;
+							}
 						//CGame::GetInstance()->SwitchScene(4);
+						
+
 						//((CPlayScene*)(CGame::GetInstance()->GetCurrentScene()))->SetNextScene(4);
 						
 					}
@@ -310,6 +415,10 @@ void CHero::LastUpdate()
 						if (level == LEVEL_SLOC) {
 							sloc_hp += itemhp->GetHP();
 						}
+						if (level == LEVEL_OVH) {
+							sldf_hp += itemhp->GetHP();
+						}
+						Sound::GetInstance()->Play("PickingItems", 0, 1);
 						itemhp->SetDelete(true);
 					}
 				}
@@ -344,8 +453,7 @@ void CHero::LastUpdate()
 		}
 
 		UpdateHP();
-
-		if (slocSoLuongDanChum > 0 && level==LEVEL_SLOC) {
+		if (slocSoLuongDanChum > 0 && level == LEVEL_SLOC) {
 			BanDanChum();
 			slocSoLuongDanChum--;
 		}
@@ -362,7 +470,48 @@ void CHero::Render()
 			untouchable_alpha = 50;
 		}
 		untouchable_nhapnhay = untouchable_nhapnhay <= -100 ? 100 : untouchable_nhapnhay;
+		int ani = -1;
+		if (level == LEVEL_OVH)
+		{
+			//if (state<
+			switch (state)
+			{
+			case STATE_SLDF_OVH_DITREN:
+				ani = ANI_OVH_DITREN;
+				break;
+			case STATE_SLDF_OVH_DIDUOI:
+				ani = ANI_OVH_DIDUOI;
+				break;
+			case STATE_SLDF_OVH_DITRAI:
+				ani = ANI_OVH_DITRAI;
+				break;
+			case STATE_SLDF_OVH_DIPHAI:
+				ani = ANI_OVH_DIPHAI;
+				break;
+			case STATE_SLDF_OVH_TREN:
+				ani = ANI_OVH_TREN;
+				break;
+			case STATE_SLDF_OVH_DUOI:
+				ani = ANI_OVH_DUOI;
+				break;
+			case STATE_SLDF_OVH_TRAI:
+				ani = ANI_OVH_TRAI;
+				break;
+			case STATE_SLDF_OVH_PHAI:
+				ani = ANI_OVH_PHAI;
+				break;
+			}
+			if (isDeath)
+			{
+				animation_set->at(25)->Render(round(x), round(y), 255, -1);
+			}
+			else
+				if (ani != -1)
+					animation_set->at(ani)->Render(round(x), round(y), untouchable_alpha, -1);
+				
 
+		}
+		else
 		if (level == LEVEL_SLDF)
 		{
 			int ani = -1;
@@ -435,7 +584,7 @@ void CHero::Render()
 
 			}
 		}
-		RenderHP();
+		//RenderHP();
 	}
 	
 }
@@ -443,14 +592,35 @@ void CHero::Render()
 void CHero::Reset()
 {
 	if (typeMap_isSL) {
-		SetLevel(LEVEL_SLOC);
-		SetState(STATE_SLOC_DUNGYEN);
+		if (level != LEVEL_OVH)
+		{
+			SetLevel(LEVEL_SLOC);
+			for (int i = 0; i < listObj->size(); i++)
+			{
+				if (car == listObj->at(i)) {
+					lastHeight = currentHeight;
+					lastWidth = currentWidth;
+					currentWidth = 26;
+					currentHeight = 18;
+					car = NULL;
+					listObj->erase(listObj->begin() + i);
+					break;
+				}
+			}
+			SetState(STATE_SLOC_DUNGYEN);
+		}
 
-		SetPosition(start_x, start_y);
+		else {
+			level = LEVEL_OVH;
+			SetState(STATE_SLDF_OVH_PHAI);
+		}
+
+		isDeath = false;
+		x = start_x; y = start_y;
 		SetSpeed(0, 0);
-
 		sloc_hp = 160;
 		sldf_hp = 80;
+		sldf_hp = 160;
 	}
 }
 
@@ -466,6 +636,9 @@ void CHero::RenderHP()
 		if (level == LEVEL_SLOC) {
 			i = sloc_hp / 20;
 		}
+		if (level == LEVEL_OVH) {
+			i = sldf_hp / 10;
+		}
 		CAnimationSets::GetInstance()->Get(901)->at(0)->Render(round(camx + 10), round(camy + CGame::GetInstance()->GetScreenHeight() - 70), 255, i);
 	}
 }
@@ -480,7 +653,16 @@ void CHero::UpdateHP()
 		sldf_hp = sldf_hp >= SLDF_MAXHP ? SLDF_MAXHP : sldf_hp;
 		sldf_hp = sldf_hp <= 0 ? 0 : sldf_hp;
 
-		if (sldf_hp <= 0 || sloc_hp <= 0) isDeath = true;
+		sldf_hp = sldf_hp >= SLOC_MAXHP ? SLOC_MAXHP : sldf_hp;
+		sldf_hp = sldf_hp <= 0 ? 0 : sldf_hp;
+		if (!isDeath)
+			if (sldf_hp <= 0 || sloc_hp <= 0 || sldf_hp <= 0)
+			{
+				isDeath = true;
+				Sound::GetInstance()->Play("TankDie", 0, 1);
+				y = y - 20;
+				//CPlayScene:Unload();
+						}
 	}
 }
 
@@ -537,14 +719,14 @@ void CHero::SpecialSkill()
 {
 
 
-	CPlayScene * playScene = (CPlayScene *)(CGame::GetInstance()->GetCurrentScene());
+	CPlayScene* playScene = (CPlayScene*)(CGame::GetInstance()->GetCurrentScene());
 	int tag = playScene->GetSelectItem();
 	if (tag == PLS_Select_Skill_1) {
 
 		for (int i = 0; i < coObjects->size(); i++) {
-			CGameObject *e = coObjects->at(i);
+			CGameObject* e = coObjects->at(i);
 			if (dynamic_cast<CEnemy*>(e) && !this->IsScopeWith(e) && iItem_1 > 0) {
-				CBullet3 *obj = new CBullet3();
+				CBullet3* obj = new CBullet3();
 				float ix, iy;
 				this->TinhTam(ix, iy);
 				obj->SetPosition(ix - 3, iy - 3);
@@ -567,15 +749,15 @@ void CHero::SpecialSkill()
 				float ix, iy;
 				this->TinhTam(ix, iy);
 
-				CBullet6 *bullet6_1 = new CBullet6(-1, -1, 0, -1);
+				CBullet6* bullet6_1 = new CBullet6(-1, -1, 0, -1);
 				bullet6_1->SetPosition(ix - 3, iy - 3);
 				bullet6_1->SetState(Bullet_Hero);
 
-				CBullet6 *bullet6_2 = new CBullet6(0, -1, 0, -1);
+				CBullet6* bullet6_2 = new CBullet6(0, -1, 0, -1);
 				bullet6_2->SetPosition(ix - 3, iy - 3);
 				bullet6_2->SetState(Bullet_Hero);
 
-				CBullet6 *bullet6_3 = new CBullet6(1, -1, 0, -1);
+				CBullet6* bullet6_3 = new CBullet6(1, -1, 0, -1);
 				bullet6_3->SetPosition(ix - 3, iy - 3);
 				bullet6_3->SetState(Bullet_Hero);
 
@@ -590,15 +772,15 @@ void CHero::SpecialSkill()
 					float ix, iy;
 					this->TinhTam(ix, iy);
 
-					CBullet6 *bullet6_1 = new CBullet6(1, -1, 1, 0);
+					CBullet6* bullet6_1 = new CBullet6(1, -1, 1, 0);
 					bullet6_1->SetPosition(ix - 3, iy - 3);
 					bullet6_1->SetState(Bullet_Hero);
 
-					CBullet6 *bullet6_2 = new CBullet6(1, 0, 1, 0);
+					CBullet6* bullet6_2 = new CBullet6(1, 0, 1, 0);
 					bullet6_2->SetPosition(ix - 3, iy - 3);
 					bullet6_2->SetState(Bullet_Hero);
 
-					CBullet6 *bullet6_3 = new CBullet6(1, 1, 1, 0);
+					CBullet6* bullet6_3 = new CBullet6(1, 1, 1, 0);
 					bullet6_3->SetPosition(ix - 3, iy - 3);
 					bullet6_3->SetState(Bullet_Hero);
 
@@ -611,15 +793,15 @@ void CHero::SpecialSkill()
 					float ix, iy;
 					this->TinhTam(ix, iy);
 
-					CBullet6 *bullet6_1 = new CBullet6(-1, -1, -1, 0);
+					CBullet6* bullet6_1 = new CBullet6(-1, -1, -1, 0);
 					bullet6_1->SetPosition(ix - 3, iy - 3);
 					bullet6_1->SetState(Bullet_Hero);
 
-					CBullet6 *bullet6_2 = new CBullet6(-1, 0, -1, 0);
+					CBullet6* bullet6_2 = new CBullet6(-1, 0, -1, 0);
 					bullet6_2->SetPosition(ix - 3, iy - 3);
 					bullet6_2->SetState(Bullet_Hero);
 
-					CBullet6 *bullet6_3 = new CBullet6(-1, 1, -1, 0);
+					CBullet6* bullet6_3 = new CBullet6(-1, 1, -1, 0);
 					bullet6_3->SetPosition(ix - 3, iy - 3);
 					bullet6_3->SetState(Bullet_Hero);
 
@@ -639,21 +821,20 @@ void CHero::SpecialSkill()
 	}
 
 }
-
 void CHero::BanDanChum()
 {
 
-	
-	CGameObject *tmpObj = new CBullet2();
+
+	CGameObject* tmpObj = new CBullet2();
 	int j = n_iy;
 	int i = n_ix;
 
 	if (j == 4) {
 
-		
+
 		tmpObj->SetPosition(x + currentWidth / 2 - 3, y + currentHeight / 2 - 11);
 		tmpObj->SetSpeed(0, -Bullet2_V_DF);
-		
+
 
 	}
 	if (j == 0) {
@@ -674,7 +855,6 @@ void CHero::BanDanChum()
 	listObj->push_back(tmpObj);
 
 }
-
 void CHero::SetState(int state)
 {
 	CPlayScene * playScene = (CPlayScene*)(CGame::GetInstance()->GetCurrentScene());
@@ -685,6 +865,45 @@ void CHero::SetState(int state)
 
 		if (isDeath) return;
 
+		if (level == LEVEL_OVH)
+		{
+			//if (shoot==true)
+			switch (state)
+			{
+			case STATE_SLDF_OVH_DITREN:
+				vx = 0;
+				vy = -SLDF_VX;
+				currentWidth = 16;
+				currentHeight = 16;
+
+				break;
+			case STATE_SLDF_OVH_DIDUOI:
+				vx = 0;
+				vy = SLDF_VX;
+				currentWidth = 16;
+				currentHeight = 16;
+				break;
+			case STATE_SLDF_OVH_DITRAI:
+				vx = -SLDF_VX;
+				vy = 0;
+				currentWidth = 16;
+				currentHeight = 16;
+				break;
+			case STATE_SLDF_OVH_DIPHAI:
+				vx = SLDF_VX;
+				vy = 0;
+				currentWidth = 16;
+				currentHeight = 16;
+				break;
+			default:
+				vx = 0;
+				vy = 0;
+
+				break;
+			}
+
+			return;
+		}
 
 		if (state == SLOC_Special_Skill) {
 			SpecialSkill();
@@ -702,6 +921,7 @@ void CHero::SetState(int state)
 		if (level == LEVEL_SLDF) {
 			if (state == STATE_SLDF_BANDANDON && !sldf_leoCauThang) {
 				CGameObject *tmpObj = new CBullet1();
+				Sound::GetInstance()->Play("PlayerFireUnderWorld", 0, 1);
 				if (nx > 0) {
 					tmpObj->SetPosition(x + currentWidth / 2 - 2, y + currentHeight / 2 - 2);
 					tmpObj->SetSpeed(Bullet1_V_DF, 0);
@@ -860,7 +1080,6 @@ void CHero::SetState(int state)
 				CGameObject *tmpObj = new CBullet2();
 				int j = sloc_iy / 100;
 				int i = sloc_ix / 100;
-
 				if (j == 4) {
 
 					tmpObj->SetPosition(x + currentWidth / 2 - 3, y + currentHeight / 2 - 11);
@@ -871,8 +1090,6 @@ void CHero::SetState(int state)
 
 						tmpObj->SetPosition(x + currentWidth / 2 - 11, y);
 						tmpObj->SetSpeed(Bullet2_V_DF, 0);
-
-
 					}
 					else {
 
@@ -883,15 +1100,12 @@ void CHero::SetState(int state)
 				tmpObj->SetState(Bullet_Hero);
 				listObj->push_back(tmpObj);
 			}
-
 			if (state == STATE_SLOC_BANDANCHUM) {
 				slocSoLuongDanChum = SLOC_SoLuongDanChum;
 				n_ix = sloc_ix / 100;
-				n_iy= sloc_iy / 100;
+				n_iy = sloc_iy / 100;
+				//BanDanChum();
 			}
-
-
-
 
 			switch (state)
 			{
@@ -913,6 +1127,7 @@ void CHero::SetState(int state)
 				if (sloc_coTheNhay&&vy < 0.1) {
 					vy = -SLOC_VY;
 					sloc_coTheNhay = false;
+					Sound::GetInstance()->Play("PlayerJump", 0, 1);
 					dangNhay = true;
 				}
 				break;
@@ -942,10 +1157,25 @@ void CHero::SetState(int state)
 
 void CHero::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
-	if (typeMap_isSL) {
+	if (typeMap_isSL) 
+		if (level == LEVEL_OVH)
+		{
+			if (state % 4 == 0)
+			{
+				left = x + 4;
+			}
+			else left = x-2;
+			top = y + 16;
+			right = left + 20;
+			bottom = top + 16;
+		}
+		else{
 		left = x;
-		top = y;
+		top = y;		
 		right = x + currentWidth;
 		bottom = y + currentHeight;
-	}
+		
+		}
+	
+	//RenderBoundingBox();
 }

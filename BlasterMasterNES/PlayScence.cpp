@@ -6,6 +6,7 @@
 #include "Textures.h"
 #include "Sprites.h"
 #include "Portal.h"
+#include "Sound.h"
 
 
 using namespace std;
@@ -122,8 +123,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	if (tokens.size() < 3) return;
 
 	int object_type = atoi(tokens[0].c_str());
-	float x = atof(tokens[1].c_str());
-	float y = atof(tokens[2].c_str());
+	float x = atof(tokens[1].c_str())*16;
+	float y = atof(tokens[2].c_str())*16;
 	int ani_set_id = atoi(tokens[3].c_str());
 
 	if (player == NULL)
@@ -216,18 +217,21 @@ void CPlayScene::Load()
 	}
 
 	f.close();
-
+	
 	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
+	//Sound::GetInstance()->Play("Area2", 1, 1);
 }
 #pragma endregion
 
-
+bool haveboss = false;
+int BossAppearCount=0;
 void CPlayScene::Update(DWORD dt)
 {
+	if(!haveboss)
+		Sound::GetInstance()->Play("Area2", 1, 1);
 	this->dt = dt;
-	
 
 	if (isStopGame) return;
 	if (isChoseItem) return;
@@ -236,9 +240,13 @@ void CPlayScene::Update(DWORD dt)
 	CGame::GetInstance()->SetIsStopRender(false);
 
 	CAreaOnMap *curAreaOnMap = listAreaOnMap[indexAreaOnMap];
+	objects = curAreaOnMap->GetAreaOnMap_ListObj();
 	curObjects->clear();
 	curObjects->push_back(player);
-	objects = curAreaOnMap->GetAreaOnMap_ListObj();
+	
+	/*if (player->isDeath <= 0)
+		Unload();*/
+	
 
 
 	GetCam(cx, cy);
@@ -247,9 +255,10 @@ void CPlayScene::Update(DWORD dt)
 	t1 = cy;
 	r1 = cx+CGame::GetInstance()->GetScreenWidth();
 	b1 = cy+CGame::GetInstance()->GetScreenHeight();
-
+	if (player->x >= 305*16 && player->y < 172*16 && player->x < 321*16 && player->y>158*16)
+		haveboss = true;
 	//DebugOut(L"++++++++++++++size %d\n", objects->size());
-
+	if(!haveboss)
 	for (int i = objects->size() - 1; i >= 0; i--) {
 		if (objects->at(i)->isDelete)
 		{
@@ -264,9 +273,41 @@ void CPlayScene::Update(DWORD dt)
 				if(!(l1 > r2 || r1 < l2 || t1 > b2 || b1 < t2))
 					curObjects->push_back(objects->at(i));
 			}
-		
 		}
 	}
+	else
+		if (BossAppearCount>200)
+		
+		for (int i = objects->size() - 1; i >= 0; i--) 
+		{
+			/*if (dynamic_cast<CBoss*>(objects->at(i)))
+				if (objects->at(i)->hp)*/
+			if (objects->at(i)->isDelete)
+			{
+				CGameObject* tmp = objects->at(i);
+				objects->erase(objects->begin() + i);
+				delete tmp;
+			}
+			else {
+				if (dynamic_cast<CBrick*>(objects->at(i))) curObjects->push_back(objects->at(i));
+				else {
+					objects->at(i)->GetBoundingBox(l2, t2, r2, b2);
+					if (!(l1 > r2 || r1 < l2 || t1 > b2 || b1 < t2))
+						curObjects->push_back(objects->at(i));
+				}
+			}
+			/*if (dynamic_cast<CBoss*>(objects->at(i)))
+				curObjects->push_back(objects->at(i));
+			if (dynamic_cast<BossArm*>(objects->at(i)))
+				curObjects->push_back(objects->at(i));*/
+		}
+		else {
+			for (int i = objects->size() - 1; i >= 0; i--)
+			{
+				if (dynamic_cast<CBrick*>(objects->at(i))) curObjects->push_back(objects->at(i));
+			}
+		}
+		
 
 	//DebugOut(L"-------------size %d\n", objects->size());
 
@@ -276,42 +317,103 @@ void CPlayScene::Update(DWORD dt)
 	for (size_t i = 0; i < curObjects->size(); i++) {
 		curObjects->at(i)->LastUpdate();
 	}
-
-
-
-	DebugOut(L"size   %d\n", curObjects->size());
-
+	//DebugOut(L"%d\n", curObjects->size());
 	GetCam(cx, cy);
 	CGame::GetInstance()->SetCamPos(round(cx), round(cy));
 }
-
+int al=255;
+float renderleftttt = true;
 void CPlayScene::Render()
 {
-
-	GetCam(cx, cy);
-	if (map != NULL)
-		map->Render(cx, cy);
-
-	for (int i = 0; i < curObjects->size(); i++)
-		curObjects->at(i)->Render();
-	player->Render();
-
-	RenderLeft(); //render so mang nhan vat
-
-	if(isChoseItem){
-		RenderSelectMenu();
-	}
-	else
-		if (isStopGame) {
-			CGame::GetInstance()->SetIsStopRender(true);
-			RederStopGame();
+	if ((haveboss)&&(BossAppearCount<=201))
+	{
+		BossAppearCount++;
+		if (BossAppearCount == 1)
+		{
+			Sound::GetInstance()->Stop("Area2");
+			Sound::GetInstance()->Play("BossIntro", 1, 100000);
+		}
+		if (BossAppearCount <= 200) {
+			if (BossAppearCount % 10 < 5)
+				al = 100;
+			else
+				al = 255;
+			if (map != NULL)
+				map->Render(cx, cy, al);
+		}
+		else
+		{
+			Sound::GetInstance()->Stop("BossIntro");
+			Sound::GetInstance()->Play("Boss", 1, 100000);
+			al =0;
+			map->Render(cx, cy, al);
+			//BossAppearCount = 0;
+			/*CGame::GetInstance()->SetCamPos(32, 0);
+			player->SetPosition(148, 192);*/
 		}
 
-	if (nextScene != -100) {
-		CGame::GetInstance()->SwitchScene(4);
+		GetCam(cx, cy);
+		if (map != NULL)
+			map->Render(cx, cy, al);
+		for (int i = 0; i < curObjects->size(); i++)
+			curObjects->at(i)->Render();
+		player->Render();
+		/*if (player->isDeath)
+			if(renderleftttt)
+			timeRenderLeft = TimeRenderLeft;
+	*/	RenderLeft(); //render so mang nhan vat
+		player->RenderHP();
+
+	}
+	else
+	{
+		GetCam(cx, cy);
+		if (map != NULL)
+			map->Render(cx, cy, al);
+		for (int i = 0; i < curObjects->size(); i++)
+			curObjects->at(i)->Render();
+		player->Render();
+		if(!haveboss)
+		if (player->x > 256 * 16)
+			if (player->y > 140 * 16)
+			{
+				if (map != NULL)
+					map->Render2(cx, cy);
+			}
+			else
+			{
+				CAreaOnMap* curAreaOnMap = listAreaOnMap[indexAreaOnMap];
+				if (player->y > curAreaOnMap->GetAreaOnMap_Bottom() - 95)
+					map->Render2(cx, cy);
+			}
+		//if (player->isDeath)
+		//	if (renderleftttt)
+		//	{
+		//		timeRenderLeft = TimeRenderLeft;
+		//		renderleftttt = false;
+		//	}
+		RenderLeft();
+		 //render so mang nhan vat
+		player->RenderHP();
+
+		if (isChoseItem) {
+			RenderSelectMenu();
+		}
+		else
+			if (isStopGame) {
+				CGame::GetInstance()->SetIsStopRender(true);
+				RederStopGame();
+			}
+
+		if (nextScene != -100) {
+			CGame::GetInstance()->SwitchScene(4);
+		}
+		if (fireworks.size() != 0) {
+			for (int i = 0; i < fireworks.size(); i++)
+				fireworks.at(i)->Render();
+		}
 	}
 }
-
 
 
 void CPlayScene::GetCam(float & cx, float & cy)
@@ -319,9 +421,40 @@ void CPlayScene::GetCam(float & cx, float & cy)
 	CGame *game = CGame::GetInstance();
 	CAreaOnMap *curAreaOnMap = listAreaOnMap[indexAreaOnMap];
 
-	float l = curAreaOnMap->GetAreaOnMap_X(), t = curAreaOnMap->GetAreaOnMap_Y(), r = curAreaOnMap->GetAreaOnMap_Right(), b = curAreaOnMap->GetAreaOnMap_Bottom();
+	int l, t, r, b;
 
 	player->TinhTam(cx, cy);
+	if ((cx > 256 * 16) && (cy > 126 * 16))
+	{
+		l = ((int)cx)/16;
+		if (l <= 270)
+		{
+			l = curAreaOnMap->GetAreaOnMap_X();
+			r=l+ 18 * 16;
+		}
+		else
+		{
+			while ((l-14) % 16 != 0)
+				l--;
+			l = l * 16;
+
+			r = l + 20 * 16;
+		}
+		
+		
+		t = ((int)cy-16)/16;
+		
+		while ((t-12) % 16 != 0)
+			t--;
+		t = t * 16;
+		b = t + 20 * 16;
+		
+		
+	}
+	else
+	{
+		l = curAreaOnMap->GetAreaOnMap_X(), t = curAreaOnMap->GetAreaOnMap_Y(), r = curAreaOnMap->GetAreaOnMap_Right(), b = curAreaOnMap->GetAreaOnMap_Bottom();
+	}
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
 	cx = cx < l ? l : cx;
@@ -344,7 +477,16 @@ void CPlayScene::RederStopGame()
 #define SpriteLeft_Y	106
 void CPlayScene::RenderLeft()
 {
-	if (timeRenderLeft <= 0) return;
+	if (timeRenderLeft <= 0) 
+		return;
+	/*if (timeRenderLeft < 3000)
+		if(player->isDeath&&!renderleftttt)
+	{
+		player->Reset();
+		renderleftttt = true;
+		soMangTrongGame -= 1;
+	}*/
+
 	GetCam(cx, cy);
 	float _x = cx + SpriteLeft_X, _y = cy + SpriteLeft_Y;
 	CSprites::GetInstance()->Get(SpriteLeft)->Draw(round(_x), round(_y), 255);
@@ -361,8 +503,8 @@ void CPlayScene::RenderLeft()
 		_x += 7;
 		
 	}
-	timeRenderLeft -= dt;
-	
+	timeRenderLeft -= dt;	
+	DebugOut(L"time %d\n", timeRenderLeft);
 }
 
 #define SpriteSelectMenu	301
@@ -466,13 +608,15 @@ void CPlayScene::SelectItemRight()
 
 void CPlayScene::Unload()
 {
-	/*for (int i = 0; i < objects.size(); i++)
-		delete objects[i];
+	CAreaOnMap* curAreaOnMap = listAreaOnMap[indexAreaOnMap];
+	objects = curAreaOnMap->GetAreaOnMap_ListObj();
+	for (int i = 0; i < objects->size(); i++)
+		delete objects->at(i);
 
-	objects.clear();
+	objects->clear();
 	player = NULL;
 
-	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);*/
+	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }
 
 #pragma region KeyBorad
@@ -480,7 +624,21 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
 	CPlayScene* playScene = (CPlayScene*)scence;
 	CHero *hero = playScene->GetPlayer();
+	if (hero->level == LEVEL_OVH)
+	{
 
+		if (KeyCode == DIK_D)
+			hero->shoot = true;
+		else hero->shoot = false;
+		if (KeyCode == DIK_A)
+			hero->Reset();
+		//if (playScene->GetIsStopGame()) {
+			if (KeyCode == DIK_ESCAPE)
+				((CPlayScene*)scence)->StopOrResumeGame();
+		
+
+	}
+	else
 	if (playScene->GetIsChoseItem()) {
 		switch (KeyCode)
 		{
@@ -501,7 +659,6 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			break;
 		}
 	}
-
 	else
 		if (playScene->GetIsStopGame()) {
 			if(KeyCode==DIK_ESCAPE)
@@ -554,7 +711,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 				else
 					hero->SetState(STATE_SLOC_BANDANDON);
 				break;
-			case DIK_C: 
+			case DIK_C:
 				hero->SetState(STATE_SLOC_BANDANCHUM);
 				break;
 			case DIK_UP:
@@ -579,7 +736,36 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	CPlayScene* playScene = (CPlayScene*)scence;
 	CHero *hero = playScene->GetPlayer();
 
-
+	if (hero->level == LEVEL_OVH)
+	{
+		if (game->IsKeyDown(DIK_UP))
+		{
+			hero->SetState(STATE_SLDF_OVH_DITREN);
+		}
+		else
+			if (game->IsKeyDown(DIK_DOWN))
+			{
+				hero->SetState(STATE_SLDF_OVH_DIDUOI);
+			}
+			else
+				if (game->IsKeyDown(DIK_LEFT))
+				{
+					hero->SetState(STATE_SLDF_OVH_DITRAI);
+				}
+				else
+					if (game->IsKeyDown(DIK_RIGHT))
+					{
+						hero->SetState(STATE_SLDF_OVH_DIPHAI);
+					}
+					else
+					{
+						if (hero->state > STATE_SLDF_OVH_PHAI)
+							hero->SetState(hero->state - 4);
+						if (hero->state < STATE_SLDF_OVH_TREN)
+							hero->SetState(STATE_SLDF_OVH_PHAI);
+					}
+	}
+	else
 
 	if (playScene->GetIsChoseItem()) {
 
@@ -627,8 +813,10 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 				else {
 
 					if (game->IsKeyDown(DIK_SPACE))
+					{
 						hero->SetState(STATE_SLOC_HIGHTJUMP);
-
+						//Sound::GetInstance()->Play("PlayerJump", 0, 1);
+					}
 					if (game->IsKeyDown(DIK_UP)) {
 						hero->SetState(STATE_SLOC_KEYUP);
 					}
@@ -679,8 +867,10 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 				else {
 
 					if (game->IsKeyDown(DIK_SPACE))
+					{
 						hero->SetState(STATE_SLOC_HIGHTJUMP);
-
+						//Sound::GetInstance()->Play("PlayerJump", 0, 1);
+					}
 					if (game->IsKeyDown(DIK_LEFT)) {
 						hero->SetState(STATE_SLOC_CHAYBENTRAI);
 

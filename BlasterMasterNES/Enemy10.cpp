@@ -12,7 +12,7 @@
 
 CEnemy10::CEnemy10(float x, float y)
 {
-	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(Enemy10_AniSet));
+	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(Enemy5_AniSet));
 	this->x = x;
 	this->y = y;
 
@@ -39,6 +39,7 @@ void CEnemy10::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOB
 
 void CEnemy10::LastUpdate()
 {
+	thoiGianDoiHuong -= dt;
 
 	if (coEvents->size() == 0) {
 		x += dx;
@@ -67,38 +68,39 @@ void CEnemy10::LastUpdate()
 		}
 	}
 
-		if (false) {
-			for (int i = 0; i < coEvents->size(); i++) {
-				CGameObject* e = coEvents->at(i)->obj;
+	if (false) {
+		for (int i = 0; i < coEvents->size(); i++) {
+			CGameObject* e = coEvents->at(i)->obj;
 
-				if (dynamic_cast<CBullet3 *>(e))
-				{
-					CBullet3 *tmpBullet3 = (CBullet3*)(e);
-					if (tmpBullet3->target == this) hp -= tmpBullet3->GetDamage();
-				}
-				else if (dynamic_cast<CBullet *>(e) && e->GetState() != Bullet_Enemy)
-				{
-					CBullet *tmpBullet = (CBullet*)(e);
-					hp -= tmpBullet->GetDamage();
-				}
-
+			if (dynamic_cast<CBullet3 *>(e))
+			{
+				CBullet3 *tmpBullet3 = (CBullet3*)(e);
+				if (tmpBullet3->target == this) hp -= tmpBullet3->GetDamage();
 			}
-			if (hp <= 0) {
-				isDelete = true;
-				DropItem();
+			else if (dynamic_cast<CBullet *>(e) && e->GetState() != Bullet_Enemy)
+			{
+				CBullet *tmpBullet = (CBullet*)(e);
+				hp -= tmpBullet->GetDamage();
 			}
 
 		}
+		if (hp <= 0) {
+			isDelete = true;
+			DropItem();
+		}
 
-		for (UINT i = 0; i < coEvents->size(); i++) delete coEvents->at(i);
-	
+	}
+
+	for (UINT i = 0; i < coEvents->size(); i++) delete coEvents->at(i);
+
 }
 
 
 
 void CEnemy10::Render()
 {
-	RenderBoundingBox();
+
+	animation_set->at(0)->Render(round(x), round(y), 255, -1);
 }
 
 void CEnemy10::GetBoundingBox(float & left, float & top, float & right, float & bottom)

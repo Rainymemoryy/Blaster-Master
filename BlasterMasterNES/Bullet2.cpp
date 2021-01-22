@@ -1,6 +1,7 @@
 #include "Bullet2.h"
 
 #include "Brick2.h"
+#include "Sound.h"
 
 CBullet2::CBullet2()
 {
@@ -90,6 +91,7 @@ void CBullet2::LastUpdate()
 
 				LPGAMEOBJECT e = coEventsResult->at(i)->obj;
 				if (dynamic_cast<CBrick2 *>(e)) {
+					Sound::GetInstance()->Play("PlayerBulletHitBrick", 0, 1);
 					e->SetDelete(true);
 				}
 				isPhatNo = true;

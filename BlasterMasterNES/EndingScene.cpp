@@ -6,6 +6,7 @@
 #include "Textures.h"
 #include "Sprites.h"
 #include "Portal.h"
+#include "Sound.h"
 
 using namespace std;
 
@@ -191,10 +192,12 @@ void CEndingScene::Update(DWORD dt)
 	if (timeLine < ED_TimeLine_NuiLuaBatDauHoatDong)//Nui lua chua hoat dong
 	{
 		CGame::GetInstance()->SetCamPos(round(cam_x), round(cam_y));
+		
 	}
 	else
 		if (timeLine < ED_TimeLine_NuiLuaNgungHoatDong) //Nui lua dang hoat dong
 		{
+			Sound::GetInstance()->Play("Mountain", 1, 1);
 			nuiLua->SetSpeed(0, 0.0055);
 			int n = rand() % 6 + -3;
 			CGame::GetInstance()->SetCamPos(round(cam_x), round(cam_y + n));
@@ -202,6 +205,9 @@ void CEndingScene::Update(DWORD dt)
 		else
 			if (timeLine < ED_TimeLine_KetThucMiniScene_1) //Di chuyen camera
 			{
+				Sound::GetInstance()->Stop("Mountain");
+				Sound::GetInstance()->Play("Ending", 1, 1);
+
 				cam_x += dt * cam_vx;
 				cam_x = cam_x >= MiniScece1_Background_Width ? MiniScece1_Background_Width : cam_x;
 				CGame::GetInstance()->SetCamPos(round(cam_x), round(cam_y));
@@ -210,6 +216,11 @@ void CEndingScene::Update(DWORD dt)
 			else
 				if (timeLine < ED_TimeLine_KetThucCredit_Scene2)//Mini scene 2 chay credit tac gia
 				{
+				
+					//Sound::GetInstance()->Play("Ending", 1, 1);
+
+
+
 					if (indexCredit < listCredit_String->size()) {
 						is_mini_scene1 = false;
 						is_mini_scene2 = true;

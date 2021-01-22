@@ -7,14 +7,14 @@ class CScene
 {
 protected:
 	CKeyEventHandler * key_handler;
-	int id;
+	
 	int typeScene = -1;
 	int nextScene;
 	LPCWSTR sceneFilePath;
 
 public:
 	CScene(int id, LPCWSTR filePath);
-
+	int id;
 	CKeyEventHandler * GetKeyEventHandler() { return key_handler; }
 	virtual void Load() = 0;
 	virtual void Unload() = 0;

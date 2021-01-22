@@ -1,6 +1,7 @@
 #include "Firework.h"
 #include "Game.h"
 #include "Animations.h"
+#include "PlayScence.h"
 
 Firework::Firework()
 {
@@ -19,7 +20,11 @@ void Firework::Render()
 		ani_set->at(0)->Render(this->x, this->y, 50,-1);
 	}
 	else
+	{
+		((CPlayScene*)(CGame::GetInstance()->GetCurrentScene()))->SetNextScene(4);
 		Firework::~Firework();
+		
+	}
 }
 
 Firework::~Firework()

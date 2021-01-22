@@ -11,7 +11,7 @@ class BossArm : public CEnemy
 
 	virtual void LastUpdate();
 	virtual void Render();
-
+	
 private:
 
 	CBoss* Boss;

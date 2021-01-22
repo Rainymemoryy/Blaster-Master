@@ -62,7 +62,7 @@ void CEnemy9::LastUpdate()
 			x += min_tx * dx + nx * 0.001f;
 			y += min_ty * dy + ny * 0.001f;
 
-			if (nx != 0) vx =0;
+			if (nx != 0) vx = 0;
 			if (ny != 0) {
 				vy = 0;
 				vx = 0;
@@ -104,10 +104,10 @@ void CEnemy9::LastUpdate()
 		hero->TinhTam(tamHero_X, tamHero_Y);
 		float tam_X, tam_Y;
 		TinhTam(tam_X, tam_Y);
-		if (tamHero_X - 10< tam_X&& tamHero_X + 10 > tam_X) {
+		if (tamHero_X - 10 < tam_X&& tamHero_X + 10 > tam_X) {
 			{
-				
-				if (timeNgungBanDan <0)
+
+				if (timeNgungBanDan < 0)
 				{
 					vy = -3;
 					timeNgungBanDan = Enemy9_TimeNgungBanDan;
@@ -122,12 +122,12 @@ void CEnemy9::LastUpdate()
 void CEnemy9::Render()
 {
 
-	
+
 	if (timeAniBanDan >= 0)
 	{
 		if (vx < 0) animation_set->at(Enemy9_Ani_Left)->Render(round(x), round(y), 255, 1);
 		else animation_set->at(Enemy9_Ani_Right)->Render(round(x), round(y), 255, 1);
-		
+
 
 	}
 	else {
@@ -135,7 +135,7 @@ void CEnemy9::Render()
 		else animation_set->at(Enemy9_Ani_Right)->Render(round(x), round(y), 255, 0);
 	}
 
-	
+
 
 
 }
@@ -159,7 +159,7 @@ void CEnemy9::BanDan()
 	CBullet5 *obj = new CBullet5();
 	obj->SetPosition(x + 5, y + 5);
 	obj->SetState(Bullet_Enemy);
-	
+
 
 
 	listObj->push_back(obj);

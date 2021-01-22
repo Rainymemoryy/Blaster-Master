@@ -6,7 +6,7 @@
 #include "Textures.h"
 #include "Sprites.h"
 #include "Portal.h"
-
+#include "Sound.h"
 using namespace std;
 
 CRollOutScene::CRollOutScene(int id, LPCWSTR filePath) :
@@ -150,14 +150,23 @@ void CRollOutScene::Load()
 
 	ani_set = CAnimationSets::GetInstance()->Get(AniSetRollOut);
 }
-
+float i=true;
 void CRollOutScene::Update(DWORD dt)
 {
 	timeLine += dt;
 	DebugOut(L"%d\n", timeLine);
+	
+	if (timeLine > RO_TimeLine_1)
+		if (i)
+		{
+			Sound::GetInstance()->Play("CarSplash", 0, 1);
+			i = false;
+		}
 	if (timeLine > RO_TimeLine_2)
+	{
 		CGame::GetInstance()->SwitchScene(GetNextScene());
-
+		Sound::GetInstance()->StopAll();
+	}
 }
 void CRollOutScene::Render()
 {
@@ -176,8 +185,8 @@ void CRollOutScene::Unload()
 
 void CRollOutScenceKeyHandler::OnKeyDown(int KeyCode)
 {
-	if (KeyCode == DIK_SPACE || KeyCode == DIK_ESCAPE)
-		CGame::GetInstance()->SwitchScene(CGame::GetInstance()->GetCurrentScene()->GetNextScene());
+	/*if (KeyCode == DIK_SPACE || KeyCode == DIK_ESCAPE)
+		CGame::GetInstance()->SwitchScene(CGame::GetInstance()->GetCurrentScene()->GetNextScene());*/
 }
 
 void CRollOutScenceKeyHandler::KeyState(BYTE *states)

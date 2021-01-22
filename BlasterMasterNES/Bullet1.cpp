@@ -1,4 +1,5 @@
 #include "Bullet1.h"
+#include "Sound.h"
 
 CBullet1::CBullet1()
 {
@@ -21,7 +22,8 @@ void CBullet1::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOB
 
 void CBullet1::LastUpdate()
 {
-	if (isPhatNo)  timeDelete -= dt;
+	if (isPhatNo) { timeDelete -= dt; Sound::GetInstance()->Play("EnemyBulletBang", 0, 1);
+	}
 	else {
 		if (coEvents->size() == 0)
 		{

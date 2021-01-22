@@ -147,11 +147,7 @@ void COpeningScene::Load()
 	f.close();
 	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
-
-
 	ani_set = CAnimationSets::GetInstance()->Get(AniSetOpening);
-
-
 	Sound::GetInstance()->Play("Opening", 1, 1);
 }
 
@@ -160,8 +156,13 @@ void COpeningScene::Update(DWORD dt)
 	timeLine += dt;
 	DebugOut(L"%d\n", timeLine);
 	
-	if(timeLine>= OP_TimeLine)
+	if (timeLine >= OP_TimeLine)
+	{
+		Sound::GetInstance()->Stop("Opening");
 		CGame::GetInstance()->SwitchScene(GetNextScene());
+		if (this->id == 1)
+			Sound::GetInstance()->Play("CarBackground", 0, 1);
+	}
 	
 }
 void COpeningScene::Render()
@@ -172,13 +173,18 @@ void COpeningScene::Render()
 void COpeningScene::Unload()
 {
 	delete ani_set;
-	Sound::GetInstance()->StopAll();
+	//Sound::GetInstance()->StopAll();
 }
 
 void COpeningScenceKeyHandler::OnKeyDown(int KeyCode)
 {
-	if(KeyCode==DIK_SPACE||KeyCode==DIK_ESCAPE)
-		CGame::GetInstance()->SwitchScene(CGame::GetInstance()->GetCurrentScene()->GetNextScene());
+	if (KeyCode == DIK_SPACE || KeyCode == DIK_ESCAPE)
+	if (this->scence->id == 1)
+	{
+		Sound::GetInstance()->Stop("Opening");
+		CGame::GetInstance()->SwitchScene(CGame::GetInstance()->GetCurrentScene()->GetNextScene());		
+		Sound::GetInstance()->Play("CarBackground", 0, 1);
+	}
 }
 
 void COpeningScenceKeyHandler::KeyState(BYTE *states)

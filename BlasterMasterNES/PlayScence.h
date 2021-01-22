@@ -21,13 +21,13 @@
 
 #define TimeHienThiSoMangTrongGame 2000
 #define SoMangMacDinh	2
-#define TimeRenderLeft	2000
+#define TimeRenderLeft	4000
 class CPlayScene : public CScene
 {
 protected:
 	
 	//dt
-	int dt=0;
+	int dt;
 
 	//Nhân vật
 	CHero *player;	

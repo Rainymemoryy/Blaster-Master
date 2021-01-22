@@ -122,6 +122,8 @@ void CEnemy23::LastUpdate()
 		}
 		if(i%3==0)
 		BanDan();
+		if (i > 10)
+			i = 0;
 	}
 	
 }

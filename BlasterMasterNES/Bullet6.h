@@ -20,7 +20,7 @@ public:
 
 	CBullet6(int x1, int y1, int x2, int y2);
 	virtual void LastUpdate();
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL, vector<LPGAMEOBJECT> *listObj = NULL);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL, vector<LPGAMEOBJECT>* listObj = NULL);
 	virtual void Render();
-	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
+	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 };

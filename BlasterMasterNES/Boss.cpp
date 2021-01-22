@@ -274,6 +274,7 @@ void CBoss::HandleDieState()
 		dynamic_cast<CPlayScene*> (CGame::GetInstance()->GetCurrentScene())->ClearFireworks();
 		//dynamic_cast<CPlayScene*>(CGame::GetInstance()->GetCurrentScene())->SetEndingCount(); //Call EndingScene
 		Sound::GetInstance()->Stop("BossDie");
+		((CPlayScene*)(CGame::GetInstance()->GetCurrentScene()))->SetNextScene(4);
 	}
 }
 
@@ -388,8 +389,9 @@ void CBoss::Shoot()
 
 	CBulleteny1* bullet1 = new CBulleteny1();
 	bullet1->SetState(Bullet_Enemy);
-	bullet1->SetSpeed(0.0f, 0.1f / 4);
+	bullet1->SetSpeed(0.0f, 0.1f );
 	bullet1->SetPosition(this->x + 20, this->y + 20);
+	bullet1->SetmaxD(1000);
 	//bullet1->SetStartPositon(this->x + 20, this->y + 20);
 
 	listObj->push_back(bullet1);

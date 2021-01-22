@@ -8,7 +8,7 @@
 
 #define Bullet1_AniSet		711
 
-#define Bullet1_Damage_DF	30
+#define Bullet1_Damage_DF	20
 
 #define Bullet1_V_DF		0.3
 

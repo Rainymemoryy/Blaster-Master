@@ -23,11 +23,11 @@ void CBullet6::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOB
 	CGameObject::Update(dt);
 	coEvents->clear();
 
-	vector<LPGAMEOBJECT> *tmpCoo =  new vector<LPGAMEOBJECT>();
+	vector<LPGAMEOBJECT>* tmpCoo = new vector<LPGAMEOBJECT>();
 	for (int i = 0; i < coObjects->size(); i++) {
 		if (dynamic_cast<CEnemy*>(coObjects->at(i)))
 			tmpCoo->push_back(coObjects->at(i));
-		
+
 	}
 	CalcPotentialCollisions(tmpCoo, *coEvents);
 	delete tmpCoo;
@@ -46,7 +46,7 @@ void CBullet6::LastUpdate()
 		{
 
 
-			if (maxD1 - Bullet6_V_DF*dt > 0)
+			if (maxD1 - Bullet6_V_DF * dt > 0)
 			{
 				x += dx;
 				y += dy;
@@ -63,14 +63,14 @@ void CBullet6::LastUpdate()
 				vx = x2 * Bullet6_V_DF;
 				vy = y2 * Bullet6_V_DF;
 
-				if (maxD - sqrt(dx*dx + dy * dy) > 0)
+				if (maxD - sqrt(dx * dx + dy * dy) > 0)
 				{
 					x += dx;
 					y += dy;
-					maxD -= sqrt(dx*dx + dy * dy);
+					maxD -= sqrt(dx * dx + dy * dy);
 				}
 				else if (maxD >= 0) {
-					float t = maxD / sqrt(dx*dx + dy * dy);
+					float t = maxD / sqrt(dx * dx + dy * dy);
 					x += t * dx;
 					y += t * dy;
 					maxD = -1;
@@ -89,7 +89,7 @@ void CBullet6::LastUpdate()
 			float min_tx, min_ty, nx = 0, ny;
 			float rdx = 0;
 			float rdy = 0;
-			vector<LPCOLLISIONEVENT> *coEventsResult = new vector<LPCOLLISIONEVENT>();
+			vector<LPCOLLISIONEVENT>* coEventsResult = new vector<LPCOLLISIONEVENT>();
 
 
 			FilterCollision(*coEvents, *coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
@@ -143,7 +143,7 @@ void CBullet6::Render()
 	}
 }
 
-void CBullet6::GetBoundingBox(float & left, float & top, float & right, float & bottom)
+void CBullet6::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x;
 	right = x + Bullet6_Box_Width;

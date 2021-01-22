@@ -1,4 +1,5 @@
 #include "EnemyBulletmap2.h"
+#include "OvhAlert.h"
 
 CBulleteny1::CBulleteny1()
 {
@@ -70,11 +71,24 @@ void CBulleteny1::LastUpdate()
 
 			x += min_tx * dx + nx * 0.001f;
 			y += min_ty * dy + ny * 0.001f;
+			for (int i = 0; i < coEventsResult->size(); i++) {
 
-			if (coEventsResult->size() != 0) {
+				LPGAMEOBJECT e = coEventsResult->at(i)->obj;
+				
+				if (dynamic_cast<COvhAlert*>(e)) {
+					x += dx;
+					y += dy;
+				}
+				else {
+					isPhatNo = true;
+					isTouthtable = false;
+					break;
+				}
+			}
+			/*if (coEventsResult->size() != 0) {
 				isPhatNo = true;
 				isTouthtable = false;
-			}
+			}*/
 
 
 			delete coEventsResult;

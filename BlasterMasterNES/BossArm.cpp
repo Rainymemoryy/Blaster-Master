@@ -6,13 +6,14 @@ void BossArm::GetBoundingBox(float& left, float& top, float& right, float& botto
 	top = y;
 	right = x + 16;
 	bottom = y + 32;
+	damage = 20;
 }
 void BossArm::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOBJECT>* listObj)
 {
 	this->listObj = listObj;
 	CGameObject::Update(dt);
 	coEvents->clear();
-
+	
 	vector<LPGAMEOBJECT>* tmp = new vector<LPGAMEOBJECT>();
 	for (int i = 0; i < coObjects->size(); i++)
 		if (coObjects->at(i)->isTouthtable) tmp->push_back(coObjects->at(i));

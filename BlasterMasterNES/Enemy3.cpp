@@ -115,7 +115,7 @@ void CEnemy3::LastUpdate()
 
 				if (dynamic_cast<CBlock1 *>(e->obj)) {
 
-					if(!followHero){
+					if (!followHero) {
 						if (e->nx < 0) {
 							this->nx = 1;
 							this->ny = 0;
@@ -152,15 +152,15 @@ void CEnemy3::LastUpdate()
 							vy = 0;
 							y += 2;
 						}
-}
-					else {
-						x += -(min_tx * dx + nx * 0.001f)+dx;
-						y += -(min_ty * dy + ny * 0.001f)+dy;
 					}
-					
+					else {
+						x += -(min_tx * dx + nx * 0.001f) + dx;
+						y += -(min_ty * dy + ny * 0.001f) + dy;
+					}
+
 				}
 			}
-			
+
 
 		}
 
@@ -198,17 +198,17 @@ void CEnemy3::LastUpdate()
 		this->TinhTam(x1, y1);
 		hero->TinhTam(x2, y2);
 
-		if (x1 - 5 < x2&&x1 + 5 > x2) {	
-				if (y1 < y2&&ny>0) {
-					vy = 3 * Enemy3_V;
-					vx = 0;
-					followHero = true;
-				}
-				if (y1 > y2&&ny<0) {
-					vy = -3 * Enemy3_V;
-					vx = 0;
-					followHero = true;
-				}
+		if (x1 - 5 < x2&&x1 + 5 > x2) {
+			if (y1 < y2&&ny>0) {
+				vy = 3 * Enemy3_V;
+				vx = 0;
+				followHero = true;
+			}
+			if (y1 > y2&&ny < 0) {
+				vy = -3 * Enemy3_V;
+				vx = 0;
+				followHero = true;
+			}
 		}
 		if (y1 - 5 < y2&&y1 + 5 > y2) {
 			if (x1 < x2&&nx>0) {
@@ -216,7 +216,7 @@ void CEnemy3::LastUpdate()
 				vx = 3 * Enemy3_V;
 				followHero = true;
 			}
-			if (x1>x2&&nx<0) {
+			if (x1 > x2&&nx < 0) {
 				vy = 0;
 				vx = -3 * Enemy3_V;
 				followHero = true;
@@ -230,13 +230,13 @@ void CEnemy3::LastUpdate()
 void CEnemy3::Render()
 {
 	RenderBoundingBox();
-	
+
 	if (nx < 0) animation_set->at(1)->Render(round(x), round(y), 255, -1);
-	else if(nx>0)animation_set->at(3)->Render(round(x), round(y), 255, -1);
+	else if (nx > 0)animation_set->at(3)->Render(round(x), round(y), 255, -1);
 	else if (ny > 0)animation_set->at(2)->Render(round(x), round(y), 255, -1);
 	else if (ny < 0)animation_set->at(0)->Render(round(x), round(y), 255, -1);
 
-	
+
 }
 
 void CEnemy3::GetBoundingBox(float & left, float & top, float & right, float & bottom)

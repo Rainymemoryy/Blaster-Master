@@ -19,7 +19,7 @@
 
 #define	LEVEL_SLDF		211
 #define	LEVEL_SLOC		212
-
+#define LEVEL_OVH		213
 #define HERO_UNTOUCHABLE_TIME	2000
 
 #define STATE_NHAYKHOIXE		1201
@@ -50,6 +50,18 @@
 #define STATE_SLDF_LEOXUONGCAUTHANG	1112
 #define STATE_SLDF_DUNGTRENCAUTHANG	1113
 
+#define STATE_SLDF_OVH_TREN			2114
+#define STATE_SLDF_OVH_DUOI			2115
+#define STATE_SLDF_OVH_TRAI			2116
+#define STATE_SLDF_OVH_PHAI			2117
+#define STATE_SLDF_OVH_DITREN		2118
+#define STATE_SLDF_OVH_DIDUOI		2119
+#define STATE_SLDF_OVH_DITRAI		2120
+#define STATE_SLDF_OVH_DIPHAI		2121
+#define STATE_SLOVH_BANDAN			2122
+
+
+
 #define ANI_SLDF_NHINTRAI				0
 #define ANI_SLDF_NHINPHAI				1
 #define ANI_SLDF_DIBENTRAI				2
@@ -62,6 +74,15 @@
 #define Ani_Sldf_ChetBenPhai			9
 #define Ani_Sldf_LeoCauThang			16
 //10 11 12 13 14 15 da duoc xai
+#define ANI_OVH_TREN					17
+#define ANI_OVH_DUOI					18
+#define ANI_OVH_TRAI					19
+#define ANI_OVH_PHAI					20
+#define ANI_OVH_DITREN					21
+#define ANI_OVH_DIDUOI					22
+#define ANI_OVH_DITRAI					23
+#define ANI_OVH_DIPHAI					24
+
 
 #define BOX_SLDF_WIDTH_DI				10
 #define BOX_SLDF_HEIGHT_DI				17
@@ -77,6 +98,15 @@
 
 #define BOX_DFMAP_WIDTH_LEOTHANG		12
 #define BOX_DFMAP_HEIGHT_LEOTHANG		16
+
+#define BOX_OVH_WIDTH_TREN				20
+#define BOX_OVH_HEIGHT_TREN				31
+#define BOX_OVH_WIDTH_DUOI				20
+#define BOX_OVH_HEIGHT_DUOI				31
+#define BOX_OVH_WIDTH_TRAI				24
+#define BOX_OVH_HEIGHT_TRAI				32
+#define BOX_OVH_WIDTH_PHAI				24
+#define BOX_OVH_HEIGHT_PHAI				32
 #pragma endregion
 
 #pragma region  SLOC
@@ -84,7 +114,6 @@
 #define SLOC_VX		0.1f
 #define SLOC_VY		0.215f
 #define SLOC_MAXHP	160.f
-#define SLOC_SoLuongDanChum	3
 
 #define STATE_SLOC_CHAYBENTRAI	1121
 #define STATE_SLOC_CHAYBENPHAI	1122
@@ -96,11 +125,11 @@
 #define STATE_SLOC_KEYUP		1130
 #define	STATE_SLOC_HIGHTJUMP	1131
 #define	STATE_SLOC_BANDANCHUM	1135
+#define SLOC_SoLuongDanChum	3
 
 #define ANI_SLOC_NOXE			15
 #define BOX_SLOC_WIDTH_NOXE		45
 #define BOX_SLOC_HEIGHT_NOXE	40
-
 #pragma endregion
 
 struct SLOC
@@ -115,21 +144,17 @@ class CHero : public CGameObject
 {
 public: 
 	float typeMap_isSL = true;
-
-
-
 	int untouchable=0;
 	int untouchable_nhapnhay =  100;
-
-
-	float start_x;		
+	float alertl, alertt, alertr, alertb;
+	float start_x;
 	float start_y;
 
 	float delta_x, delta_y;
 
 	
 
-
+	bool shoot;
 	int currentWidth = BOX_SLDF_WIDTH_DUNG;
 	int currentHeight = BOX_SLDF_HEIGHT_DUNG;
 	int lastWidth = BOX_SLDF_WIDTH_DUNG;
@@ -162,12 +187,11 @@ public:
 	vector<LSLOC> sloc_ani_box;
 	bool sloc_coTheNhay = false;
 	float sloc_hp = SLOC_MAXHP;
+	float slovh_hp = SLDF_MAXHP;
 	int sloc_ix = 0;
 	int sloc_iy = 0;
-
 	int slocSoLuongDanChum = 0;
 	int n_ix, n_iy;
-
 	bool dangNhay = false;
 
 	float lastX, lastY;
@@ -185,7 +209,7 @@ public:
 	virtual void Render();
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	virtual void LastUpdate();
-
+	
 
 
 	void SetState(int state);
@@ -201,14 +225,10 @@ public:
 
 	void NhayVaoXe();
 	void RaKhoiXe();
-
+	void CHero::BanDanChum();
 	void SpecialSkill();
 	int Get_iItem1() { return iItem_1; }
 	int Get_iItem2() { return iItem_2; }
 	int Get_iItem3() { return iItem_3; }
-
-
-
-	void BanDanChum();
 	
 };

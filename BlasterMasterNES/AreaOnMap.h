@@ -12,6 +12,9 @@
 #include "Brick2.h"
 #include "Stair.h"
 #include "Block1.h"
+#include "Brick21.h"
+#include "OvhAlert.h"
+
 
 #include "Enemy1.h"
 #include "Enemy2.h"
@@ -23,7 +26,12 @@
 #include "Enemy8.h"
 #include "Enemy9.h"
 #include "Enemy10.h"
+#include "Enemy21.h"
+#include "Enemy22.h"
+#include "Enemy23.h"
 
+#include "Boss.h"
+#include "BossArm.h"
 
 #include "Item.h"
 #include "ItemHp.h"
@@ -40,6 +48,9 @@
 #define AreaOnMap_Type_Stair	3
 #define AreaOnMap_Type_Block1	4
 
+#define OvhMap_Type_Alert		21
+#define AreaOnMap_Type_Brick21	22
+
 #define AreaOnMap_Type_Portal	20
 
 #define AreaOnMap_Type_Enemy1	101
@@ -52,6 +63,11 @@
 #define AreaOnMap_Type_Enemy8	108
 #define AreaOnMap_Type_Enemy9	109
 #define AreaOnMap_Type_Enemy10	110
+#define AreaOnMap_Type_Enemy21	301
+#define AreaOnMap_Type_Enemy22	302
+#define AreaOnMap_Type_Enemy23	303
+#define AreaOnMap_Type_BOSS	16
+
 
 
 #define AreaOnMap_Type_ItemHP	201
@@ -135,15 +151,22 @@ public:
 			obj = new CBrick2(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16, atof(tokens[3].c_str()) * 16, atof(tokens[4].c_str()) * 16);
 			listObj->push_back(obj);
 			break;
+		case AreaOnMap_Type_Brick21:
+			obj = new CBrick21(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16, atof(tokens[3].c_str()) * 16, atof(tokens[4].c_str()) * 16);
+			listObj->push_back(obj);
+			break;
 		case AreaOnMap_Type_Stair:
 			obj = new CStair(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16, atof(tokens[3].c_str()) * 16, atof(tokens[4].c_str()) * 16);
+			listObj->push_back(obj);
+			break;
+		case OvhMap_Type_Alert:
+			obj = new COvhAlert(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16, atof(tokens[3].c_str()) * 16, atof(tokens[4].c_str()) * 16);
 			listObj->push_back(obj);
 			break;
 		case AreaOnMap_Type_Block1:
 			obj = new CBlock1(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16);
 			listObj->push_back(obj);
 			break;
-
 		case AreaOnMap_Type_ItemHP:
 			obj = new CItemHp(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16);
 			listObj->push_back(obj);
@@ -180,7 +203,7 @@ public:
 			listObj->push_back(obj);
 			break;
 		case AreaOnMap_Type_Enemy8:
-			obj = new CEnemy8(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16+6);
+			obj = new CEnemy8(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16 + 6);
 			listObj->push_back(obj);
 			break;
 		case AreaOnMap_Type_Enemy9:
@@ -193,13 +216,35 @@ public:
 			break;
 	
 
+		case AreaOnMap_Type_Enemy21:
+			obj = new CEnemy21(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16);
+			listObj->push_back(obj);
+			break;
+		case AreaOnMap_Type_Enemy22:
+			obj = new CEnemy22(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16);
+			listObj->push_back(obj);
+			break;
+		case AreaOnMap_Type_Enemy23:
+			obj = new CEnemy23(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16);
+			listObj->push_back(obj);
+			break;
 		case AreaOnMap_Type_Portal:
 			obj = new CPortal(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16, atof(tokens[3].c_str()) * 16, atof(tokens[4].c_str()) * 16, atoi(tokens[5].c_str()), atof(tokens[6].c_str()) * 16, atof(tokens[7].c_str()) * 16);
 			listObj->push_back(obj);
 			break;
-			
-		}
+
+
+		case AreaOnMap_Type_BOSS:
 		
+			obj = new CBoss();
+			dynamic_cast<CBoss*>(obj)->SetStartPosition(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16);
+			BossArm* left = new BossArm(dynamic_cast<CBoss*>(obj), TYPE_LEFT_CLAW);
+			listObj->push_back(left);
+			BossArm* right = new BossArm(dynamic_cast<CBoss*>(obj), TYPE_RIGHT_CLAW);
+			listObj->push_back(right);
+			break;
+					
+		}
 	}
 
 	float GetAreaOnMap_Right() { return map_r*16; }

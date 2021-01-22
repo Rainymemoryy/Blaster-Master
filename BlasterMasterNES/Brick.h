@@ -5,10 +5,10 @@
 class CBrick : public CGameObject
 {
 protected:
-	float r, b;
+	
 	float damage=0;
 public:
-	
+	float r, b;
 	CBrick(float l, float t, float r, float b);
 
 	virtual void Render();

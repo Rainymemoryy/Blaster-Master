@@ -20,7 +20,8 @@ public:
 	~Map();
 	void CreateTilesFromTileSet();
 	void LoadMatrix(LPCWSTR path);
-	void Render(int x, int y);
+	void Render(int x, int y,int al);
+	void Render2(int cx, int cy);
 	int GetTotalColsOfMap() { return this->TotalColsOfMap; }
 	int GetTotalRowsOfMap() { return this->TotalRowsOfMap; }
 	int GetMapHeight();

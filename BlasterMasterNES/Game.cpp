@@ -443,8 +443,9 @@ void CGame::SwitchScene(int scene_id)
 	current_scene = scene_id;
 	LPSCENE s = scenes[scene_id];
 	CGame::GetInstance()->SetKeyHandler(s->GetKeyEventHandler());
-
-
+	
+	/*if (scene_id>=3)
+		Sound::GetInstance()->Play("Area2", 1, 1);*/
 
 	
 	

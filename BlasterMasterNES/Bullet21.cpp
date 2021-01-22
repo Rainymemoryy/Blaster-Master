@@ -2,6 +2,7 @@
 #include "OvhAlert.h"
 #include "Brick21.h"
 #include "Boss.h"
+#include "Sound.h"
 CBullet21::CBullet21()
 {
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(Bullet21_AniSet));
@@ -11,6 +12,7 @@ CBullet21::CBullet21()
 
 void CBullet21::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, vector<LPGAMEOBJECT>* listObj)
 {
+	this->listObj = listObj;
 	if (isPhatNo)return;
 	CGameObject::Update(dt);
 	coEvents->clear();
@@ -77,8 +79,24 @@ void CBullet21::LastUpdate()
 				LPGAMEOBJECT e = coEventsResult->at(i)->obj;
 				if (dynamic_cast<CBrick21 *>(e)) 
 				{
+					Sound::GetInstance()->Play("PlayerBulletHitBrick", 0, 1);
 					e->SetDelete(true);
-								
+					int n = rand() % 4 + 0;
+					if (!n) {
+						DebugOut(L"[Enemy] Drop item: %d\n", 1);
+						CGameObject* obj;
+						float ix, iy;
+						this->TinhTam(ix, iy);
+						switch (201)
+						{
+						case Item_HP:
+							obj = new CItemHp(ix - 8, iy - 8);
+							listObj->push_back(obj);
+							break;
+						default:
+							break;
+						}
+					}
 				}
 				
 				if (dynamic_cast <CBoss*>(e))
@@ -107,6 +125,7 @@ void CBullet21::Render()
 {
 
 	if (isPhatNo) {
+		Sound::GetInstance()->Play("EnemyBulletBang", 0, 1);
 		if (vy != 0)
 			animation_set->at(1)->Render(round(x - 5), round(y - 8), 255, -1);
 		else

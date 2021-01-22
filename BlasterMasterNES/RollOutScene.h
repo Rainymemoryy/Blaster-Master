@@ -10,7 +10,7 @@
 #define AniSetRollOut	1
 
 #define RO_TimeLine_1	2500
-#define RO_TimeLine_2	5000
+#define RO_TimeLine_2	4000
 
 class CRollOutScene : public CScene
 {
