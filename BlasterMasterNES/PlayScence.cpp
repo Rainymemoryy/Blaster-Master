@@ -227,7 +227,7 @@ void CPlayScene::Load()
 void CPlayScene::Update(DWORD dt)
 {
 	this->dt = dt;
-	DebugOut(L"Log %d\n", dt);
+	
 
 	if (isStopGame) return;
 	if (isChoseItem) return;
@@ -279,7 +279,7 @@ void CPlayScene::Update(DWORD dt)
 
 
 
-	//DebugOut(L"%d\n", curObjects->size());
+	DebugOut(L"size   %d\n", curObjects->size());
 
 	GetCam(cx, cy);
 	CGame::GetInstance()->SetCamPos(round(cx), round(cy));
@@ -362,7 +362,7 @@ void CPlayScene::RenderLeft()
 		
 	}
 	timeRenderLeft -= dt;
-	DebugOut(L"time %d\n", timeRenderLeft);
+	
 }
 
 #define SpriteSelectMenu	301
@@ -501,6 +501,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			break;
 		}
 	}
+
 	else
 		if (playScene->GetIsStopGame()) {
 			if(KeyCode==DIK_ESCAPE)
@@ -552,6 +553,9 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 					hero->SetState(STATE_SLDF_BANDANDON);
 				else
 					hero->SetState(STATE_SLOC_BANDANDON);
+				break;
+			case DIK_C: 
+				hero->SetState(STATE_SLOC_BANDANCHUM);
 				break;
 			case DIK_UP:
 				if (hero->level == LEVEL_SLDF) {

@@ -10,7 +10,7 @@
 #include "Bullet1.h"
 #include "Bullet2.h"
 #include "Bullet3.h"
-
+#include "Bullet6.h"
 
 #include "Item.h"
 #include "ItemHp.h"
@@ -344,6 +344,11 @@ void CHero::LastUpdate()
 		}
 
 		UpdateHP();
+
+		if (slocSoLuongDanChum > 0 && level==LEVEL_SLOC) {
+			BanDanChum();
+			slocSoLuongDanChum--;
+		}
 	}
 	
 }
@@ -531,14 +536,14 @@ void CHero::RaKhoiXe()
 void CHero::SpecialSkill()
 {
 
-	
+
 	CPlayScene * playScene = (CPlayScene *)(CGame::GetInstance()->GetCurrentScene());
 	int tag = playScene->GetSelectItem();
 	if (tag == PLS_Select_Skill_1) {
 
 		for (int i = 0; i < coObjects->size(); i++) {
 			CGameObject *e = coObjects->at(i);
-			if (dynamic_cast<CEnemy*>(e) && !this->IsScopeWith(e) && iItem_1>0) {
+			if (dynamic_cast<CEnemy*>(e) && !this->IsScopeWith(e) && iItem_1 > 0) {
 				CBullet3 *obj = new CBullet3();
 				float ix, iy;
 				this->TinhTam(ix, iy);
@@ -551,7 +556,122 @@ void CHero::SpecialSkill()
 		}
 	}
 	else if (tag == PLS_Select_Skill_2) {}
-	else if (tag == PLS_Select_Skill_3) {}
+	else if (tag == PLS_Select_Skill_3) {
+		if (iItem_3 > 0) {
+
+
+			int j = sloc_iy / 100;
+			int i = sloc_ix / 100;
+			if (j == 4) {
+
+				float ix, iy;
+				this->TinhTam(ix, iy);
+
+				CBullet6 *bullet6_1 = new CBullet6(-1, -1, 0, -1);
+				bullet6_1->SetPosition(ix - 3, iy - 3);
+				bullet6_1->SetState(Bullet_Hero);
+
+				CBullet6 *bullet6_2 = new CBullet6(0, -1, 0, -1);
+				bullet6_2->SetPosition(ix - 3, iy - 3);
+				bullet6_2->SetState(Bullet_Hero);
+
+				CBullet6 *bullet6_3 = new CBullet6(1, -1, 0, -1);
+				bullet6_3->SetPosition(ix - 3, iy - 3);
+				bullet6_3->SetState(Bullet_Hero);
+
+				listObj->push_back(bullet6_1);
+				listObj->push_back(bullet6_2);
+				listObj->push_back(bullet6_3);
+				iItem_3--;
+			}
+			if (j == 0) {
+
+				if (vx > 0) {
+					float ix, iy;
+					this->TinhTam(ix, iy);
+
+					CBullet6 *bullet6_1 = new CBullet6(1, -1, 1, 0);
+					bullet6_1->SetPosition(ix - 3, iy - 3);
+					bullet6_1->SetState(Bullet_Hero);
+
+					CBullet6 *bullet6_2 = new CBullet6(1, 0, 1, 0);
+					bullet6_2->SetPosition(ix - 3, iy - 3);
+					bullet6_2->SetState(Bullet_Hero);
+
+					CBullet6 *bullet6_3 = new CBullet6(1, 1, 1, 0);
+					bullet6_3->SetPosition(ix - 3, iy - 3);
+					bullet6_3->SetState(Bullet_Hero);
+
+					listObj->push_back(bullet6_1);
+					listObj->push_back(bullet6_2);
+					listObj->push_back(bullet6_3);
+					iItem_3--;
+				}
+				if (vx < 0) {
+					float ix, iy;
+					this->TinhTam(ix, iy);
+
+					CBullet6 *bullet6_1 = new CBullet6(-1, -1, -1, 0);
+					bullet6_1->SetPosition(ix - 3, iy - 3);
+					bullet6_1->SetState(Bullet_Hero);
+
+					CBullet6 *bullet6_2 = new CBullet6(-1, 0, -1, 0);
+					bullet6_2->SetPosition(ix - 3, iy - 3);
+					bullet6_2->SetState(Bullet_Hero);
+
+					CBullet6 *bullet6_3 = new CBullet6(-1, 1, -1, 0);
+					bullet6_3->SetPosition(ix - 3, iy - 3);
+					bullet6_3->SetState(Bullet_Hero);
+
+					listObj->push_back(bullet6_1);
+					listObj->push_back(bullet6_2);
+					listObj->push_back(bullet6_3);
+					iItem_3--;
+				}
+
+			}
+
+
+
+
+		}
+
+	}
+
+}
+
+void CHero::BanDanChum()
+{
+
+	
+	CGameObject *tmpObj = new CBullet2();
+	int j = n_iy;
+	int i = n_ix;
+
+	if (j == 4) {
+
+		
+		tmpObj->SetPosition(x + currentWidth / 2 - 3, y + currentHeight / 2 - 11);
+		tmpObj->SetSpeed(0, -Bullet2_V_DF);
+		
+
+	}
+	if (j == 0) {
+		if (nx > 0) {
+
+			tmpObj->SetPosition(x + currentWidth / 2 - 11, y);
+			tmpObj->SetSpeed(Bullet2_V_DF, 0);
+
+
+		}
+		else {
+
+			tmpObj->SetPosition(x + currentWidth / 2 - 11, y);
+			tmpObj->SetSpeed(-Bullet2_V_DF, 0);
+		}
+	}
+	tmpObj->SetState(Bullet_Hero);
+	listObj->push_back(tmpObj);
 
 }
 
@@ -565,28 +685,6 @@ void CHero::SetState(int state)
 
 		if (isDeath) return;
 
-		/*if (state == SLOC_Special_Skill && level == LEVEL_SLOC && playScene->Get_iItem1()>0) {
-
-			for (int i = 0; i < coObjects->size(); i++) {
-				CGameObject *e = coObjects->at(i);
-
-				if (dynamic_cast<CEnemy*>(e) && !this->IsScopeWith(e)) {
-
-
-					CBullet3 *obj = new CBullet3();
-
-					float ix, iy;
-					this->TinhTam(ix, iy);
-					obj->SetPosition(ix - 3, iy - 3);
-					obj->SetState(Bullet_Hero);
-					obj->SetTarget(e);
-
-					listObj->push_back(obj);
-					playScene->Set_iItem1(playScene->Get_iItem1() - 1);
-				}
-			}
-
-		}*/
 
 		if (state == SLOC_Special_Skill) {
 			SpecialSkill();
@@ -762,6 +860,7 @@ void CHero::SetState(int state)
 				CGameObject *tmpObj = new CBullet2();
 				int j = sloc_iy / 100;
 				int i = sloc_ix / 100;
+
 				if (j == 4) {
 
 					tmpObj->SetPosition(x + currentWidth / 2 - 3, y + currentHeight / 2 - 11);
@@ -772,6 +871,8 @@ void CHero::SetState(int state)
 
 						tmpObj->SetPosition(x + currentWidth / 2 - 11, y);
 						tmpObj->SetSpeed(Bullet2_V_DF, 0);
+
+
 					}
 					else {
 
@@ -782,6 +883,15 @@ void CHero::SetState(int state)
 				tmpObj->SetState(Bullet_Hero);
 				listObj->push_back(tmpObj);
 			}
+
+			if (state == STATE_SLOC_BANDANCHUM) {
+				slocSoLuongDanChum = SLOC_SoLuongDanChum;
+				n_ix = sloc_ix / 100;
+				n_iy= sloc_iy / 100;
+			}
+
+
+
 
 			switch (state)
 			{

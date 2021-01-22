@@ -84,6 +84,7 @@
 #define SLOC_VX		0.1f
 #define SLOC_VY		0.215f
 #define SLOC_MAXHP	160.f
+#define SLOC_SoLuongDanChum	3
 
 #define STATE_SLOC_CHAYBENTRAI	1121
 #define STATE_SLOC_CHAYBENPHAI	1122
@@ -94,6 +95,7 @@
 #define STATE_SLOC_CHET			1127
 #define STATE_SLOC_KEYUP		1130
 #define	STATE_SLOC_HIGHTJUMP	1131
+#define	STATE_SLOC_BANDANCHUM	1135
 
 #define ANI_SLOC_NOXE			15
 #define BOX_SLOC_WIDTH_NOXE		45
@@ -163,6 +165,9 @@ public:
 	int sloc_ix = 0;
 	int sloc_iy = 0;
 
+	int slocSoLuongDanChum = 0;
+	int n_ix, n_iy;
+
 	bool dangNhay = false;
 
 	float lastX, lastY;
@@ -201,5 +206,9 @@ public:
 	int Get_iItem1() { return iItem_1; }
 	int Get_iItem2() { return iItem_2; }
 	int Get_iItem3() { return iItem_3; }
+
+
+
+	void BanDanChum();
 	
 };
