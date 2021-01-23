@@ -174,7 +174,7 @@ public:
 	bool oTrongXe = true;
 	bool isDeath = false;
 	int timeNgapChet = Time_NgapChet;
-
+	bool upgradeitem=false;
 	float sldf_hp = SLDF_MAXHP;
 	bool sldf_coTheNhay = false;
 	bool sldf_namXuong = false;

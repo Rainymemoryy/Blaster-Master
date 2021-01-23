@@ -5,7 +5,7 @@ CBulleteny1::CBulleteny1()
 {
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(Bullet1_AniSet));
 	damage = Bullet1_Damage_DF;
-	maxD = 100;
+	maxD = 1000;
 
 }
 
@@ -102,7 +102,7 @@ void CBulleteny1::LastUpdate()
 
 void CBulleteny1::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 	if (isPhatNo) {
 		animation_set->at(1)->Render(round(x - 6), round(y - 6), 255, -1);
 	}

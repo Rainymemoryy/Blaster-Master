@@ -102,7 +102,7 @@ void CEnemy4::LastUpdate()
 
 void CEnemy4::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 	
 	if (vx < 0) animation_set->at(Enemy4_Ani_Left)->Render(round(x), round(y), 255, -1);
 	else animation_set->at(Enemy4_Ani_Right)->Render(round(x), round(y), 255, -1);

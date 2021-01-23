@@ -39,6 +39,7 @@
 #include "Item1.h"
 #include "Item2.h"
 #include "Item3.h"
+#include "ItemBonus.h"
 
 
 
@@ -83,6 +84,8 @@
 #define AreaOnMap_Type_Item2	204
 #define AreaOnMap_Type_Item3	205
 #define AreaOnMap_Type_ItemH	206
+#define AreaOnMap_Type_ItemBonus	207
+
 
 
 //typedef CAreaOnMap * LPAreaOnMap;
@@ -197,7 +200,10 @@ public:
 			obj = new CItem3(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16);
 			listObj->push_back(obj);
 			break;
-
+		case AreaOnMap_Type_ItemBonus:
+			obj = new CItemBonus(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16);
+			listObj->push_back(obj);
+			break;
 
 		case AreaOnMap_Type_Enemy1:
 			obj = new CEnemy1(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16);

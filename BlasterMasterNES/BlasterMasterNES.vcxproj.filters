@@ -189,6 +189,9 @@
     <ClCompile Include="ItemH.cpp">
       <Filter>Items</Filter>
     </ClCompile>
+    <ClCompile Include="ItemBonus.cpp">
+      <Filter>Items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Hero.h" />
@@ -374,6 +377,9 @@
       <Filter>Items</Filter>
     </ClInclude>
     <ClInclude Include="ItemH.h">
+      <Filter>Items</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemBonus.h">
       <Filter>Items</Filter>
     </ClInclude>
   </ItemGroup>

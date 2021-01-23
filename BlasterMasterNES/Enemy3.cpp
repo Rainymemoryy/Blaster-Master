@@ -229,7 +229,7 @@ void CEnemy3::LastUpdate()
 
 void CEnemy3::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 
 	if (nx < 0) animation_set->at(1)->Render(round(x), round(y), 255, -1);
 	else if (nx > 0)animation_set->at(3)->Render(round(x), round(y), 255, -1);

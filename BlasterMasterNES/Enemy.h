@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include "Item.h"
 #include "ItemHp.h"
+#include "ItemH.h"
 class CEnemy :public CGameObject
 {
 public:
@@ -33,6 +34,11 @@ public:
 			{
 			case Item_HP:
 				obj = new CItemHp(ix-8, iy-8);
+				listObj->push_back(obj);
+				break;
+			
+			case Item_H:
+				obj = new CItemH(ix - 8, iy - 8);
 				listObj->push_back(obj);
 				break;
 			default:

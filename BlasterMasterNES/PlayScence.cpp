@@ -718,6 +718,11 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
 	CPlayScene* playScene = (CPlayScene*)scence;
 	CHero *hero = playScene->GetPlayer();
+	if (KeyCode == DIK_Q)
+	{
+		hero->Reset();
+		hero->timeNgapChet = Time_NgapChet;
+	}
 	if (hero->level == LEVEL_OVH)
 	{
 
@@ -830,7 +835,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	CGame *game = CGame::GetInstance();
 	CPlayScene* playScene = (CPlayScene*)scence;
 	CHero *hero = playScene->GetPlayer();
-
+	
 	if (hero->level == LEVEL_OVH)
 	{
 		if (game->IsKeyDown(DIK_UP))

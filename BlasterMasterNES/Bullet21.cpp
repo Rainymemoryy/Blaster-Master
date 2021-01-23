@@ -3,6 +3,13 @@
 #include "Brick21.h"
 #include "Boss.h"
 #include "Sound.h"
+#include "Item1.h"
+#include "Item3.h"
+
+#include "Item2.h"
+
+#include "ItemH.h"
+
 CBullet21::CBullet21()
 {
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(Bullet21_AniSet));
@@ -82,16 +89,35 @@ void CBullet21::LastUpdate()
 					Sound::GetInstance()->Play("PlayerBulletHitBrick", 0, 1);
 					e->SetDelete(true);
 					int n = rand() % 4 + 0;
-					if (!n) {
+					if (!n) 
+					{
 						DebugOut(L"[Enemy] Drop item: %d\n", 1);
 						CGameObject* obj;
 						float ix, iy;
+						int m = rand() % 5 + 0;
 						this->TinhTam(ix, iy);
-						switch (201)
+						switch (m)
 						{
-						case Item_HP:
-							obj = new CItemHp(ix - 8, iy - 8);
+						case 1:
+							obj = new CItemHp(ix , iy );
 							listObj->push_back(obj);
+							break;
+							
+						case 2:
+							obj = new CItem1(ix , iy );
+							listObj->push_back(obj);
+							break;
+						case 3:
+							obj = new CItem2(ix, iy);
+							listObj->push_back(obj);
+							break;
+						case 4:
+							obj = new CItem3(ix, iy );
+							listObj->push_back(obj);
+						case 5:
+							obj = new CItemH(ix, iy );
+							listObj->push_back(obj);
+							break;
 							break;
 						default:
 							break;

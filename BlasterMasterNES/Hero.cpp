@@ -22,6 +22,7 @@
 #include "OvhAlert.h"
 #include "Sound.h"
 #include "Bullet6.h"
+#include "ItemBonus.h"
 
 CHero::CHero(float x, float y) : CGameObject()
 {
@@ -453,6 +454,12 @@ void CHero::LastUpdate()
 						//iItem_H++;
 						itemH->SetDelete(true);
 					}
+					if (dynamic_cast<CItemBonus*>(coEvents->at(i)->obj))
+					{
+						CItemBonus* itemBonus = (CItemBonus*)(coEvents->at(i)->obj);
+						this->upgradeitem = true;
+						itemBonus->SetDelete(true);
+					}
 				}
 
 			}
@@ -585,7 +592,7 @@ void CHero::Render()
 		}
 		else {
 			if (isDeath) {
-				animation_set->at(15)->Render(round(x), round(y), 255, -1);
+				animation_set->at(15)->Render(round(x), round(y-22), 255, -1);
 			}
 			else {
 				int j = sloc_iy / 100;
@@ -660,26 +667,22 @@ void CHero::Reset()
 
 void CHero::RenderHP()
 {
-	
-		float camx, camy;
-		CGame::GetInstance()->GetCamPos(camx, camy);
-		int i = 0;
-		if (level == LEVEL_SLDF) {
-			i = sldf_hp / 10;
-			CAnimationSets::GetInstance()->Get(910)->at(0)->Render(round(camx + 10), round(camy + CGame::GetInstance()->GetScreenHeight() - 98), 255, 0);
-		}
-		if (level == LEVEL_SLOC) {
-			i = sloc_hp / 20;
-			CAnimationSets::GetInstance()->Get(910)->at(0)->Render(round(camx + 10), round(camy + CGame::GetInstance()->GetScreenHeight() - 98), 255, 0);
-		}
-		if (level == LEVEL_OVH) {
-			i = sldf_hp / 10;
-			CAnimationSets::GetInstance()->Get(910)->at(0)->Render(round(camx + 10), round(camy + CGame::GetInstance()->GetScreenHeight() - 130), 255, 1);
-		}
-		CAnimationSets::GetInstance()->Get(901)->at(0)->Render(round(camx + 10), round(camy + CGame::GetInstance()->GetScreenHeight() - 70), 255, i);
-
-		
-	
+	float camx, camy;
+	CGame::GetInstance()->GetCamPos(camx, camy);
+	int i = 0;
+	if (level == LEVEL_SLDF) {
+		i = sldf_hp / 10;
+		CAnimationSets::GetInstance()->Get(910)->at(0)->Render(round(camx + 10), round(camy + CGame::GetInstance()->GetScreenHeight() - 98), 255, 0);
+	}
+	if (level == LEVEL_SLOC) {
+		i = sloc_hp / 20;
+		CAnimationSets::GetInstance()->Get(910)->at(0)->Render(round(camx + 10), round(camy + CGame::GetInstance()->GetScreenHeight() - 98), 255, 0);
+	}
+	if (level == LEVEL_OVH) {
+		i = sldf_hp / 10;
+		CAnimationSets::GetInstance()->Get(910)->at(0)->Render(round(camx + 10), round(camy + CGame::GetInstance()->GetScreenHeight() - 130), 255, 1);
+	}
+	CAnimationSets::GetInstance()->Get(901)->at(0)->Render(round(camx + 10), round(camy + CGame::GetInstance()->GetScreenHeight() - 70), 255, i);	
 }
 
 void CHero::UpdateHP()
@@ -760,6 +763,7 @@ void CHero::SpecialSkill()
 
 	CPlayScene* playScene = (CPlayScene*)(CGame::GetInstance()->GetCurrentScene());
 	int tag = playScene->GetSelectItem();
+	Sound::GetInstance()->Play("FireRocket", 0, 1);
 	if (tag == PLS_Select_Skill_1) {
 
 		for (int i = 0; i < coObjects->size(); i++) {
@@ -864,7 +868,7 @@ void CHero::BanDanChum()
 {
 
 
-	CGameObject* tmpObj = new CBullet2();
+	CGameObject* tmpObj = new CBullet2(upgradeitem);
 	int j = n_iy;
 	int i = n_ix;
 
@@ -1116,7 +1120,7 @@ void CHero::SetState(int state)
 		}
 		else {
 			if (state == STATE_SLOC_BANDANDON) {
-				CGameObject *tmpObj = new CBullet2();
+				CGameObject *tmpObj = new CBullet2(upgradeitem);
 				int j = sloc_iy / 100;
 				int i = sloc_ix / 100;
 				if (j == 4) {
@@ -1137,6 +1141,7 @@ void CHero::SetState(int state)
 					}
 				}
 				tmpObj->SetState(Bullet_Hero);
+				
 				listObj->push_back(tmpObj);
 			}
 			if (state == STATE_SLOC_BANDANCHUM) {

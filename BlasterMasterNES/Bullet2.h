@@ -15,7 +15,9 @@
 class CBullet2 : public CBullet
 {
 public:
-	CBullet2();
+	
+	CBullet2(bool c);
+	bool upgrade = false;
 	virtual void LastUpdate();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL, vector<LPGAMEOBJECT> *listObj = NULL);
 	virtual void Render();

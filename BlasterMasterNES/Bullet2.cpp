@@ -3,10 +3,11 @@
 #include "Brick2.h"
 #include "Sound.h"
 
-CBullet2::CBullet2()
+CBullet2::CBullet2(bool c)
 {
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(Bullet2_AniSet));
 	damage = Bullet2_Damage_DF;
+	this->upgrade = c;
 	maxD = 200;
 }
 
@@ -90,7 +91,8 @@ void CBullet2::LastUpdate()
 			for (int i = 0; i < coEventsResult->size(); i++) {
 
 				LPGAMEOBJECT e = coEventsResult->at(i)->obj;
-				if (dynamic_cast<CBrick2 *>(e)) {
+				if (dynamic_cast<CBrick2 *>(e))
+					if(upgrade){
 					Sound::GetInstance()->Play("PlayerBulletHitBrick", 0, 1);
 					e->SetDelete(true);
 				}

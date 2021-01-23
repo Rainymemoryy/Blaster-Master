@@ -107,7 +107,7 @@ void CBullet1::LastUpdate()
 
 void CBullet1::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 	if (isPhatNo) {
 		animation_set->at(1)->Render(round(x - 6), round(y - 6), 255, -1);
 	}

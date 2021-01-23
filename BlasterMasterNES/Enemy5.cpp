@@ -108,7 +108,7 @@ void CEnemy5::LastUpdate()
 
 void CEnemy5::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 	if(followHero)
 	animation_set->at(1)->Render(round(x), round(y), 255, -1);
 	else animation_set->at(0)->Render(round(x), round(y), 255, -1);

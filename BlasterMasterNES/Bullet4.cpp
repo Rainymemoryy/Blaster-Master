@@ -92,7 +92,7 @@ void CBullet4::LastUpdate()
 
 void CBullet4::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 	if (isPhatNo) {
 		animation_set->at(1)->Render(round(x - 4), round(y - 4), 255, -1);
 		vx = 0; vy = 0;
