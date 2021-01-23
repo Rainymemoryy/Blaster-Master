@@ -35,6 +35,14 @@
 
 #include "Item.h"
 #include "ItemHp.h"
+#include "ItemH.h"
+#include "Item1.h"
+#include "Item2.h"
+#include "Item3.h"
+
+
+
+
 
 
 #define AreaOnMap_UnKnown	0
@@ -71,8 +79,10 @@
 
 
 #define AreaOnMap_Type_ItemHP	201
-
-
+#define AreaOnMap_Type_Item1	203
+#define AreaOnMap_Type_Item2	204
+#define AreaOnMap_Type_Item3	205
+#define AreaOnMap_Type_ItemH	206
 
 
 //typedef CAreaOnMap * LPAreaOnMap;
@@ -171,7 +181,22 @@ public:
 			obj = new CItemHp(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16);
 			listObj->push_back(obj);
 			break;
-
+		case AreaOnMap_Type_ItemH:
+			obj = new CItemH(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16);
+			listObj->push_back(obj);
+			break;
+		case AreaOnMap_Type_Item1:
+			obj = new CItem1(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16);
+			listObj->push_back(obj);
+			break;
+		case AreaOnMap_Type_Item2:
+			obj = new CItem2(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16);
+			listObj->push_back(obj);
+			break;
+		case AreaOnMap_Type_Item3:
+			obj = new CItem3(atof(tokens[1].c_str()) * 16, atof(tokens[2].c_str()) * 16);
+			listObj->push_back(obj);
+			break;
 
 
 		case AreaOnMap_Type_Enemy1:
@@ -242,6 +267,7 @@ public:
 			listObj->push_back(left);
 			BossArm* right = new BossArm(dynamic_cast<CBoss*>(obj), TYPE_RIGHT_CLAW);
 			listObj->push_back(right);
+			listObj->push_back(obj);
 			break;
 					
 		}

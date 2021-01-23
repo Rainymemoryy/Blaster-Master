@@ -177,6 +177,18 @@
     <ClCompile Include="Bullet6.cpp">
       <Filter>Bullet</Filter>
     </ClCompile>
+    <ClCompile Include="Item1.cpp">
+      <Filter>Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Item2.cpp">
+      <Filter>Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Item3.cpp">
+      <Filter>Items</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemH.cpp">
+      <Filter>Items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Hero.h" />
@@ -351,6 +363,18 @@
     </ClInclude>
     <ClInclude Include="Bullet6.h">
       <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Item1.h">
+      <Filter>Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Item2.h">
+      <Filter>Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Item3.h">
+      <Filter>Items</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemH.h">
+      <Filter>Items</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

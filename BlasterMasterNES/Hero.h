@@ -130,6 +130,8 @@
 #define ANI_SLOC_NOXE			15
 #define BOX_SLOC_WIDTH_NOXE		45
 #define BOX_SLOC_HEIGHT_NOXE	40
+
+#define Time_NgapChet	3000
 #pragma endregion
 
 struct SLOC
@@ -171,6 +173,7 @@ public:
 	int level = LEVEL_SLOC;
 	bool oTrongXe = true;
 	bool isDeath = false;
+	int timeNgapChet = Time_NgapChet;
 
 	float sldf_hp = SLDF_MAXHP;
 	bool sldf_coTheNhay = false;

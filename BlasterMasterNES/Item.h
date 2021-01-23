@@ -3,6 +3,12 @@
 
 
 #define Item_HP	201
+#define Item_1	203
+#define Item_2	204
+#define Item_3	205
+#define Item_H	206
+
+
 
 
 class CItem :public CGameObject

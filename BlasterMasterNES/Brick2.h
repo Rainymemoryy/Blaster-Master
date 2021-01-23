@@ -2,7 +2,7 @@
 #include "GameObject.h"
 #include "Brick.h"
 
-#define Brick2_AniSet	903
+#define Brick2_AniSet	913
 
 class CBrick2 : public CBrick
 {

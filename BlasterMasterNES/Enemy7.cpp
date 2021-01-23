@@ -14,7 +14,7 @@ CEnemy7::CEnemy7(float x, float y, float min_x, float max_x)
 
 	vy = 0;
 	vx = -Enemy7_VX;
-	dropItem = Item_HP;
+	dropItem = Item_H;
 	hp = Enemy7_HP;
 
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(Enemy7_AniSet));

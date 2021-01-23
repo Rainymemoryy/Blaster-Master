@@ -78,13 +78,15 @@ protected:
 	//--------------------------------------------
 	vector <Firework*> fireworks;
 
+	bool heroChet = false;
+
 public:
 	CPlayScene(int id, LPCWSTR filePath);
 	virtual void Load();
 	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();
-
+	virtual void ReLoad();
 	CHero * GetPlayer() { return player; }
 	void SetIdArea(int idArea) {
 		this->indexAreaOnMap = idArea;
@@ -121,6 +123,8 @@ public:
 
 	void AddFirework(Firework* firework) { fireworks.push_back(firework); };
 	void ClearFireworks() { fireworks.clear(); };
+	void SetHeroChet(bool b) { this->heroChet = b; }
+	
 };
 
 class CPlayScenceKeyHandler : public CScenceKeyHandler

@@ -203,7 +203,15 @@ void CHero::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJEC
 void CHero::LastUpdate()
 {
 	if (typeMap_isSL) {
-		if (isDeath)return;
+		if (isDeath) {
+			timeNgapChet -= dt;
+			if (timeNgapChet < 0) {
+				
+					((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->SetHeroChet(true);
+					
+			}
+			return;
+		}
 		untouchable -= dt;
 
 		sldf_oGanCauThang = false;
@@ -421,6 +429,30 @@ void CHero::LastUpdate()
 						Sound::GetInstance()->Play("PickingItems", 0, 1);
 						itemhp->SetDelete(true);
 					}
+					if (dynamic_cast<CItem1*>(coEvents->at(i)->obj))
+					{
+						CItem1* item1= (CItem1*)(coEvents->at(i)->obj);
+						iItem_1++;
+						item1->SetDelete(true);
+					}
+					if (dynamic_cast<CItem2*>(coEvents->at(i)->obj))
+					{
+						CItem2* item2 = (CItem2*)(coEvents->at(i)->obj);
+						iItem_2++;
+						item2->SetDelete(true);
+					}
+					if (dynamic_cast<CItem3*>(coEvents->at(i)->obj))
+					{
+						CItem3* item3 = (CItem3*)(coEvents->at(i)->obj);
+						iItem_3++;
+						item3->SetDelete(true);
+					}
+					if (dynamic_cast<CItemH*>(coEvents->at(i)->obj))
+					{
+						CItemH* itemH = (CItemH*)(coEvents->at(i)->obj);
+						//iItem_H++;
+						itemH->SetDelete(true);
+					}
 				}
 
 			}
@@ -457,6 +489,8 @@ void CHero::LastUpdate()
 			BanDanChum();
 			slocSoLuongDanChum--;
 		}
+
+		
 	}
 	
 }
@@ -626,21 +660,26 @@ void CHero::Reset()
 
 void CHero::RenderHP()
 {
-	if (typeMap_isSL) {
+	
 		float camx, camy;
 		CGame::GetInstance()->GetCamPos(camx, camy);
 		int i = 0;
 		if (level == LEVEL_SLDF) {
 			i = sldf_hp / 10;
+			CAnimationSets::GetInstance()->Get(910)->at(0)->Render(round(camx + 10), round(camy + CGame::GetInstance()->GetScreenHeight() - 98), 255, 0);
 		}
 		if (level == LEVEL_SLOC) {
 			i = sloc_hp / 20;
+			CAnimationSets::GetInstance()->Get(910)->at(0)->Render(round(camx + 10), round(camy + CGame::GetInstance()->GetScreenHeight() - 98), 255, 0);
 		}
 		if (level == LEVEL_OVH) {
 			i = sldf_hp / 10;
+			CAnimationSets::GetInstance()->Get(910)->at(0)->Render(round(camx + 10), round(camy + CGame::GetInstance()->GetScreenHeight() - 130), 255, 1);
 		}
 		CAnimationSets::GetInstance()->Get(901)->at(0)->Render(round(camx + 10), round(camy + CGame::GetInstance()->GetScreenHeight() - 70), 255, i);
-	}
+
+		
+	
 }
 
 void CHero::UpdateHP()
@@ -660,7 +699,7 @@ void CHero::UpdateHP()
 			{
 				isDeath = true;
 				Sound::GetInstance()->Play("TankDie", 0, 1);
-				y = y - 20;
+	
 				//CPlayScene:Unload();
 						}
 	}

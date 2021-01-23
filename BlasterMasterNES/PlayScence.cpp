@@ -320,11 +320,31 @@ void CPlayScene::Update(DWORD dt)
 	//DebugOut(L"%d\n", curObjects->size());
 	GetCam(cx, cy);
 	CGame::GetInstance()->SetCamPos(round(cx), round(cy));
+
+
+
+
 }
 int al=255;
 float renderleftttt = true;
 void CPlayScene::Render()
 {
+	if (heroChet) {
+		if (soMangTrongGame-1 > 0) {
+			int t = soMangTrongGame;
+			ReLoad();
+			soMangTrongGame =  t-1;
+
+		}
+		else {
+			Sound::GetInstance()->StopAll();
+			CGame::GetInstance()->SwitchScene(4);
+		}
+		heroChet = false;
+
+		return;
+	}
+
 	if ((haveboss)&&(BossAppearCount<=201))
 	{
 		BossAppearCount++;
@@ -605,6 +625,80 @@ void CPlayScene::SelectItemRight()
 	selectItem++;
 	selectItem = selectItem > Item_3 ? Item_3 : selectItem;
 }
+void CPlayScene::ReLoad()
+{
+	if (true) {
+
+		player = new CHero();
+		indexAreaOnMap = InDexArea_Start;
+		cx = 0, cy = 0;
+		last_cx = 0, last_cy = 0;
+		isStopGame = false;
+		soMangTrongGame = SoMangMacDinh;
+		timeHienThiSoMangTrongGame = TimeHienThiSoMangTrongGame;
+		timeRenderLeft = TimeRenderLeft;
+		selectItem = 1;
+		isChoseItem = false;
+
+	
+		listAreaOnMap.clear();
+
+		//Danh sách đối tượng
+		objects = new vector<LPGAMEOBJECT>();
+		curObjects = new vector<LPGAMEOBJECT>();
+
+	}
+	if (true) {
+		DebugOut(L"[INFO] Start re loading scene resources from : %s \n", sceneFilePath);
+
+		ifstream f;
+		f.open(sceneFilePath);
+
+		int section = SCENE_SECTION_UNKNOWN;
+
+		char str[MAX_SCENE_LINE];
+		while (f.getline(str, MAX_SCENE_LINE))
+		{
+			string line(str);
+
+			if (line[0] == '#') continue;
+			if (line == "[TEXTURES]") { section = SCENE_SECTION_TEXTURES; continue; }
+			if (line == "[SPRITES]") {
+				section = SCENE_SECTION_SPRITES; continue;
+			}
+			if (line == "[ANIMATIONS]") {
+				section = SCENE_SECTION_ANIMATIONS; continue;
+			}
+			if (line == "[ANIMATION_SETS]") {
+				section = SCENE_SECTION_ANIMATION_SETS; continue;
+			}
+			if (line == "[OBJECTS]") {
+				section = Scene_Section_Objects; continue;
+			}
+			if (line == "[MAP]") {
+				section = Scene_Section_Map; continue;
+			}
+			if (line == "[AREAONMAP]") {
+				section = Scene_Section_AreaOnMap; continue;
+			}
+
+			if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
+
+
+			switch (section)
+			{
+
+			case Scene_Section_Objects: _ParseSection_OBJECTS(line); break;
+			case Scene_Section_AreaOnMap: _ParseSeciton_AreaOnMap(line); break;
+			}
+		}
+
+		f.close();
+
+		DebugOut(L"[INFO] Done re loading scene resources %s\n", sceneFilePath);
+	}
+
+}
 
 void CPlayScene::Unload()
 {
@@ -631,7 +725,8 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			hero->shoot = true;
 		else hero->shoot = false;
 		if (KeyCode == DIK_A)
-			hero->Reset();
+			playScene->ReLoad();
+			//hero->Reset();
 		//if (playScene->GetIsStopGame()) {
 			if (KeyCode == DIK_ESCAPE)
 				((CPlayScene*)scence)->StopOrResumeGame();
@@ -676,7 +771,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 				playScene->StopOrResumeGame();
 				break;
 			case DIK_A:
-				hero->Reset();
+				playScene->ReLoad();;
 				break;
 			case DIK_E:
 				if (hero->level == LEVEL_SLOC)

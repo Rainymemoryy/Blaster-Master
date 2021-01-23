@@ -68,7 +68,7 @@ void CEnemy10::LastUpdate()
 		}
 	}
 
-	if (false) {
+	if (true) {
 		for (int i = 0; i < coEvents->size(); i++) {
 			CGameObject* e = coEvents->at(i)->obj;
 

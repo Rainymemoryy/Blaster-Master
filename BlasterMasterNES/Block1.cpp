@@ -12,7 +12,7 @@ CBlock1::CBlock1(float x, float y)
 
 void CBlock1::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CBlock1::GetBoundingBox(float &l, float &t, float &r, float &b)

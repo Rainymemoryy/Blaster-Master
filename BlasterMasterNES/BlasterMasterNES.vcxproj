@@ -159,6 +159,10 @@
     <ClCompile Include="Enemy9.cpp" />
     <ClCompile Include="EnemyBulletmap2.cpp" />
     <ClCompile Include="Fiework.cpp" />
+    <ClCompile Include="Item1.cpp" />
+    <ClCompile Include="Item2.cpp" />
+    <ClCompile Include="Item3.cpp" />
+    <ClCompile Include="ItemH.cpp" />
     <ClCompile Include="OpeningScene.cpp" />
     <ClCompile Include="OvhAlert.cpp" />
     <ClCompile Include="RollOutScene.cpp" />
@@ -229,6 +233,10 @@
     <ClInclude Include="EnemyBulletmap2.h" />
     <ClInclude Include="Firework.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="Item1.h" />
+    <ClInclude Include="Item2.h" />
+    <ClInclude Include="Item3.h" />
+    <ClInclude Include="ItemH.h" />
     <ClInclude Include="ItemHp.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="OpeningScene.h" />
